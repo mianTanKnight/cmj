@@ -1,0 +1,312 @@
+\documentclass[12pt]{article}
+\usepackage[a4paper,margin=2.2cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{hyperref}
+\usepackage{cleveref}
+
+% 中文（xelatex）
+\usepackage{fontspec}
+\usepackage{xeCJK}
+\setCJKmainfont{Noto Serif CJK SC}
+
+\title{Phase 2 Function API}
+\date{}
+\begin{document}
+\maketitle
+
+\subsection*{Q1.基础映射, 已知道$f(x) = x^{2} - 3x$ 求: 1.$f(-2)$,2.$f(a+1)$展开并化简}
+1.$f(-2)$: \\
+= $(-2)^{2} - 3(-2)$ \\
+= $4 + 6$ \\ 
+= $10$ \\
+1.$f(a+1)$: \\ 
+= $(a+1)^{2} - 3(a+1)$ \\ 
+= $a^{2} + 2a + 1 - 3a - 3$ \\
+= $a^{2} - a -2$ \\ 
+
+\subsection*{Q2.复合函数(Chain Rule前置), 已知道$f(x) = \sqrt{x}$,$g(x) = 1- x^{2}$.
+1.求 $f(g(x))$的表达式 定义域是什么? $(1-x^{2} >= 0)$
+2.求 $g(f(x))$的表达式.}
+1.$f(g(x))$: \\ 
+=  $\sqrt{1- x^{2}}$ \\    
+定义域: \\ 
+\[    
+\{x\in\mathbb{R} \mid -1 <= x <= 1\}
+\]
+1.$g(f(x))$:
+= $1-(\sqrt{x})^{2}$
+
+\subsection*{Q3. 差商实战 (Again) 对于 $f(x)=\frac{1}{x+2}$,计算:
+$\frac{f(x+h) - f(x)}{h}$}
+
+= $\frac{\frac{1}{(x+h) + 2} - \frac{1}{x +2}}{h}$
+= $\frac{\frac{(x+2) - (x+h +2)}{(x+ h + 2)(x+2)}}{h}$
+= $\frac{\frac{ x + 2 - x - h - 2}{(x+ h + 2)(x+2)}}{h}$
+= $\frac{\frac{-h}{(x+ h + 2)(x+2)}}{h}$
+= $\frac{-1}{(x+ h + 2)(x+2)}$
+= $-\frac{1}{ x^{2} + 2x + xh+ 2h + 2x +4}$
+= $-\frac{1}{ x^{2} + xh+ 2h + 4x +4}$
+
+
+
+
+\subsection*{Q1. 图像变化(Transformation)}
+已知 $f(x) = x^{2}$ (抛物线,顶点在原点)\\
+请写出下列变换后的解析式，并描述顶点坐标：\\
+
+1.向上平移3个单位
+= $g(x) = f(x)+3$
+
+2.向右平移2个单位
+= $h(x) = f(x-2)$
+
+3.先向左平移 1，再向下平移 
+= $p(x) = f(x + 1) - 4$
+
+
+\subsection*{Q2. 对称性 (Symmetry)}
+
+1.$f(x) = \sqrt{x}.$ 写出 $f(-x)$的表达式,它的图像和原图关于什么轴对称? \\
+  $f(-x)$的表达式 ->  $\sqrt{-x}$  \\ 
+在实数域根的定义中 $\sqrt{(x)}$ (x) >= 0 \\  
+那么 f(x) = $\sqrt{x}.$ x >= 0 \\
+那么 f(-x) = $\sqrt{-x}.$ x <= 0 \\ 
+两个函数图像的交点是0,0 以y轴对称 \\ 
+
+2.写出 $-f(x)$的表达式 它关于什么轴对称\\
+   $y = \sqrt{x}$ \\
+   $-f(x)$ 是对这个y 取负 \\
+已知道 f(x) 在x,y为正的象限 \\
+那么对y取负 那么就在x为正 y为负的象限  \\ 
+以x轴对称 \\
+
+\subsection*{Q3. 绝对值挑战}
+$y = |x|$ \\
+这个图像存在顶点吗? 也就是 y = 0(最小) 是否存在 \\
+x = 0 则存在 而是 y 之可能 >= 0 所以它是处于1,2象限的 V \\  
+$y = |x - 5|$ \\ 
+这个图像存在顶点吗? 存在 x = 5 \\  
+所以这是明显的右移动 \\ 
+
+$y = |x - 5| + 1$ \\ 
+这个图像存在顶点吗? 也存在 但最小值不是 0 而是 1 \\
+所以这是明显的上移动 \\ 
+
+
+\title{Phase 2 - Day 3: 反函数 (Inverse Functions)}
+
+\section*{Q1.基础反解}
+求 $f(x) = 2x-5$ 的反函数 $f^{-1}(x)$ \\
+$f(x) = 2x-5$ 是单射吗? 是 x和y一一对应 不存在 y 可以对应多个输入x \\
+= $y = 2x -5$ \\ 
+= $x = 2y -5$ \\ 
+= $\frac{x+5}{2} = y $ \\  
+$f^{-1}(x)$ = $\frac{x+5}{2}$ \\ 
+
+计算 f(3)\\ 
+= $y = 2 \cdot 3 - 5$\\
+= 1\\
+计算 $f^{-1}(1)$\\
+= $\frac{1+5}{2}$\\
+= 3 \\
+推回 x = 3 \\
+
+\section*{Q2. 分式反函数 (Boss)}
+求 $f(x) = \frac{x}{x+1}$
+x 不能为0 不然分式无意义 $x \in \mathbb{R} \mid x\neq-1$
+= $y = \frac{x}{x+1}$
+= $x = \frac{y}{y+1}$
+= $x \cdot (y+ 1) = y$
+= $xy + x = y$
+= $y - xy = x$
+= $y(1-x) = x$
+= $y = \frac{x}{(1-x)}$
+
+\section*{Q3. 复合验证 (Identity)}
+
+$f(3)$ -> $f(f^{-1}(x))$
+= $2(\frac{3+5}{2}) - 5$
+= $2 \cdot 4 - 5$
+= $3$
+
+
+\title{Phase 2 - Day 4: 复合函数(Composite Functions)}
+
+
+\section*{Q1. 洋葱分解 (Decomposition)}
+1.$y = (3x+2)^{5}$\\
+u = g(x) = $3x+2$\\
+y = f(u) = $x^{5}$\\
+
+2.$y= \frac{1}{x^{2}+4}$\\
+u = g(x) = $x^{2}+4$\\
+y = f(u) = $\frac{1}{x}$  $x^{2} \in \mathbb{R}$ 因为 $x^{2} 不可能为负数$\\
+
+3.$y = \sqrt{\frac{x}{x-1}}$\\
+u = g(x) = $\frac{x}{x-1}$\\
+y = f(u) = $\sqrt{x}$\\   $\frac{x}{x-1} \geq 0 $
+
+
+\section*{Q2. 组合计算}
+已知$f(x)=x^{2}, g(x) = x-3$
+
+请计算并化简下列函数的解析式：
+
+1.f(g(x))
+= $(x-3)^{2}$
+
+2.g(f(x))
+= $(x^{2})-3$
+
+3.f(f(x))
+= $(x^{2})^{2}$
+
+
+\section*{Q3.复合函数的差商 (Boss)}
+设 $F(x) = (x + 1)^{2}$ 我们把它看作复合函数。
+请直接计算差商:
+$\frac{F(x+h) - F(x)}{h}$
+
+我们 把 $\frac{F(x+h) - F(x)}{h}$ 拆称 g(u) 模式\\
+u = f(x) = $f(x+ h) - f(x)$\\
+f = g(u) = $\frac{x}{h}$\\
+= $(x+h+1)^{2} - (x+1)^2$\\
+// 使用平方差公式 \\
+= $((x+h+1) +(x+1)) ((x+h+1) - (x+1))$\\
+= $(2x+h+2)h$\\
+u = $(2x+h+2)h$\\
+g(u) = $\frac{(2x+h+2)h}{h}$\\
+f = $2x+h+2$\\
+
+
+\title{Phase 2 - Day 5: 极限的直觉 (Limits Intuition)}
+\section*{Q1.图形直觉}
+已知函数 $f(x) = \frac{x^{2}-1}{x-1}$ \\
+1.计算f(1). 有定义吗?\\
+分母为0 无意义 不存在定义\\
+2.对分子因式分解，化简函数表达式。\\
+= $\frac{x^{2}- 1^{2}}{x-1}$\\
+= $\frac{(x+1)(x-1)}{x-1}$\\
+= $x+1$\\
+3.计算$\lim_{x \to 1}f(x)$ \\
+极限的定义 \\ 
+$ 0 < |x - 1| < δ $ \\
+我们分析这个定义 \\ 
+1: 为什么要定义|x-1| 绝对值? \\
+这是一种无法方向(左右)的表达式 \\ 
+x-1 就是距离 当然 x-1 = 0时 物理意义是"到达" \\
+所以 0 < |x - 1| 就是离目的地的距离 \\
+< δ 这个 δ 就是这个右边界 \\
+它就是到达目的地的起点 就是距离 \\ 
+
+把 x->1 带入 \\
+= $\lim_{x \to  1}f(x) = 2$ \\
+
+$0 < |f(x) - 2| < ε$ \\
+= $0 < |x + 1 - 2| < ε$ \\
+= $0 < |x - 1 | < ε$ \\
+
+so $ δ = ε $ \\
+
+
+\section*{Q2. 代数求极限 (Algebraic Limits)}
+计算下列极限 \\
+1.$\lim_{x \to 2}\frac{x^{2}-4}{x-2}$
+= $\lim_{x \to 2}f(x) = x + 2$
+= $\lim_{x \to 2}f(x) = 4$
+
+2.$\lim_{h \to 0}\frac{(3+h)^{2}-9}{h}$
+化简分式
+= $\frac{(3+h)^{2} - 3^{2}}{h}$
+= $\frac{(3+h+3)h}{h}$
+= $\lim_{h \to 0}f(x) = 6+h $
+= $\lim_{h \to 0}f(x) = 6$
+
+\section*{Q3. 根号极限 (Conjugate Limits)}
+计算: $\lim_{x \to 0}{\frac{\sqrt{x+4}-2}{x}}$
+化简分式
+= $\frac{\sqrt{x+4}-\sqrt{4}}{x}$
+= $\frac{\sqrt{x+4}-\sqrt{4}}{x} \cdot \frac{\sqrt{x+4}+\sqrt{4}}{\sqrt{x+4}+\sqrt{4}}$
+= $\frac{(\sqrt{x+4}-\sqrt{4}) \cdot (\sqrt{x+4}+\sqrt{4})}{x \cdot (\sqrt{x+4}+\sqrt{4}) }$
+= $\frac{(\sqrt{x+4})^{2} + \sqrt{4}\sqrt{x+4} -\sqrt{4}\sqrt{x+4} - (\sqrt{4})^{2}}{x \cdot (\sqrt{x+4}+\sqrt{4})}$
+= $\frac{(\sqrt{x+4})^{2} + \sqrt{4}\sqrt{x+4} -\sqrt{4}\sqrt{x+4} - (\sqrt{4})^{2}}{x \cdot (\sqrt{x+4}+\sqrt{4})}$
+= $\frac{x+4-4}{x \cdot (\sqrt{x+4}+\sqrt{4})}$
+= $\frac{1}{\sqrt{x+4}+\sqrt{4}}$
+= $\frac{1}{\sqrt{x+4}+2}$
+
+= $\lim_{x \to 0}f(x) = \frac{1}{4}$
+
+
+\title{Phase 2 Final Exam}
+
+\section*{Q1.定义域检测(Domain Check)}
+求函数 $f(x) = \frac{\sqrt{x+1}}{x-2}$ 的定义域\\
+$x -2 ! = 0 and  x + 1 >=0 $ \\
+= $x \in \mathbb{R} \mid x \neq 2  \mid  x \geq -1$\\
+
+
+\section*{Q2.逆向工程 (Inverse)}
+求$f(x) = \frac{2x-1}{x+3}$ 的反函数 $f^{-1}(x)$\\
+= $y = \frac{2x-1}{x+3}$\\
+= $x = \frac{2y -1}{y +3}$\\
+= $x = (2y - 1) \cdot \frac{1}{(y+3)}$\\
+= $x * (y +3) = 2y -1 $\\
+= $xy + 3x = 2y -1$\\
+= $xy - 2y = -1 - 3x$\\
+= $y(x-2) =  -1 -3x$\\
+= $y = \frac{-1-3x}{x-2}$\\
+
+
+\section*{Q3.洋葱求值 (Composition)}
+已知 $f(x) = x^{2}+1, g(x)=\sqrt{x-2}$ \\ 
+
+1.计算$f(g(6))$\\
+= $\sqrt{6-2}$\\
+= 2 \\
+= $2^{2} + 1$  \\
+= 5
+
+2.写出f(g(x))的解析式，并化简
+= $(\sqrt{x-2}) ^2  + 1$\\
+= $x-2 +1 $\\
+= $x+1$\\
+
+\section*{Q4.图形变换}
+已知函数 $y = |x|$ \\ 
+如果你想得到 $y = |x+3|-2 $，你需要对原图像做什么操作？\\
+先向左平移3 再向下平移2\\
+
+\section*{Q5.代数求极限 (Algebraic Limit)}
+计算:\\
+$\lim_{x \to 3}\frac{x^{2}-2x-3}{x-3}$ \\ 
+使用十字相乘 \\ 
+= $y = \frac{(x-3)(x+1)}{x-3}$ \\ 
+= $y = x + 1$ \\ 
+= $\lim_{x \to 3} y(x) = 3 + 1$ \\  
+=  $\lim_{x \to 3} y(x) = 4$ \\ 
+
+\section*{Q6. 差商求极限 (The Derivative Definition)}
+已知 $f(x) = x^{2}$ \\
+计算:\\
+$\lim_{h \to 0}\frac{f(2+h)-f(2)}{h}$ \\
+= $\frac{(2+h)^{2} - 2^{2}}{h}$ \\ 
+= $\frac{(2+h-2)(2+h+2)}{h}$ \\ 
+= $4+h$ \\ 
+带入h = 0  \\ 
+= $\lim_{h \to 0} f(x) = 4$ \\  
+
+\section*{Q6. 根号极限 (Conjugate Limit)}
+计算:
+$\lim_{x \to 0}\frac{\sqrt{1+x}-1}{x}$ \\ 
+化简分式 \\ 
+= $\frac{\sqrt{1+x}- 1^{2}}{x}$ \\   
+= $\frac{(\sqrt{1+x}- \sqrt{1}) \cdot (\sqrt{1+x}+ \sqrt{1})}{x\cdot (\sqrt{1+x} + \sqrt{1})}$\\
+= $\frac{1+x-1}{x\cdot (\sqrt{1+x} + \sqrt{1})}$\\
+= $\frac{1}{\sqrt{1+x} + \sqrt{1}}$\\
+带入x = 0 \\ 
+ = $\frac{1}{\sqrt{1} + \sqrt{1}}$ \\ 
+ = $\frac{1}{2}$ \\ 
+ = $\lim_{x \to 0}f(x) = \frac{1}{2}$ \\
+
+
+\end{document}

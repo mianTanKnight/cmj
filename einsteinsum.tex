@@ -1,0 +1,101 @@
+\documentclass[12pt]{article}
+\usepackage[a4paper,margin=2.2cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{hyperref}
+\usepackage{cleveref}
+
+% 中文（xelatex）
+\usepackage{fontspec}
+\usepackage{xeCJK}
+\setCJKmainfont{Noto Serif CJK SC}
+
+\title{Einstein Sum}
+\date{}
+\begin{document}
+\maketitle
+
+\vspace{0.5em}
+\noindent\textbf{1: 向量的点乘（1维）}\\
+向量 $u,v \in \mathbb{R}^{n}$,
+使用 $\sum$ 写出 $\vec{u} \cdot \vec{v}$ 的点积式
+
+$\vec{u} \cdot \vec{v}$  = $\sum_{i = 1}^{n}u_{i}v_{i} = u_{i}v_{i}(Einstein Sum)$
+i 是 哑标 不存在 自由标
+
+
+\vspace{0.5em}
+\noindent\textbf{2: 矩阵乘向量}\\
+矩阵 $A \in \mathbb{R}^{m \times n}$,$\vec{v} \in \mathbb{R}^{n}$ \\
+$\vec{y} = Ax, \;\; \vec{y} \in \mathbb{R}^{m}$
+
+1: 使用 $\sum$ 符号写 $y_{i}$
+
+$y_{i} = \sum_{j = 1}^{n}A_{ij}x_{j}$
+
+
+2: 使用 爱因斯坦求和约定
+
+$y_{i} = A_{ij}x_{j}$
+
+3: 哪个字母是自由指标？哪个字母是哑标?
+
+i 是自由标, j 是哑标
+
+\vspace{0.5em}
+
+向量 $\vec{v} \in \mathbb{R}^{1 \times m}$(也是矩阵) \\
+$B \in \mathbb{R}^{m \times n}$ \\
+$\vec{z} = vB, \;\; \vec{z} \in  \mathbb{R}^{1 \times n}$ \\
+
+1: 使用 $\sum$ 符号写 $z_{k}$
+
+$z_{k} = \sum_{j = 1}^{m}v_{1j}B_{jk}$
+
+
+2: 使用 爱因斯坦求和约定
+$z_{k} = v_{1j}B_{jk}$
+
+
+3: 哪个字母是自由指标？哪个字母是哑标?
+
+k 是自由标, j 是哑标
+
+
+\vspace{0.5em}
+\noindent\textbf{3: 矩阵乘矩阵}
+
+$A \in \mathbb{R}^{m \times p}$, $B \in \mathbb{R}^{p \times n}$
+$C = AB, C \in \mathbb{R}^{m \times n}$
+
+矩阵 C 的 第 i 行, 第 k 列, 记 $C_{ik}$
+
+1:使用 $\sum$ 符号写 $C_{ik}$
+
+$C_{ik} = \sum_{j = 1}^{p} A_{ij}B_{jk}$
+
+2: 使用 爱因斯坦求和约定
+$C_{ik} = A_{ij}B_{jk}$
+
+3: 哪个字母是自由指标？哪个字母是哑标?
+
+ik 是自由标, j 是哑标
+
+
+\vspace{0.5em}
+\noindent\textbf{5: tr(XY) = tr(YX)}
+
+$X,Y \in \mathbb{R}^{n \times n}$
+
+1: $tr(XY)$
+
+\begin{align}
+    XY_{ik} = \sum_{j = 1}^{n}X_{ij}Y_{jk}                               \\
+    tr(XY) =  \sum_{j = 1}^{n}XY_{ii}                                    \\
+    tr(XY) = \sum_{i = 1}^{n}(\sum_{j = 1}^{n}X_{ij}Y_{ji}) = \mathbb{R} \\
+    tr(XY) = X_{ij}Y_{ji}(EinsteinSum)
+\end{align}
+
+
+
+
+\end{document}

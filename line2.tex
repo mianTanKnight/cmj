@@ -1,0 +1,413 @@
+\documentclass[12pt]{article}
+\usepackage[a4paper,margin=2.2cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{hyperref}
+\usepackage{cleveref}
+
+% 中文（xelatex）
+\usepackage{fontspec}
+\usepackage{xeCJK}
+
+\usepackage{fontspec}
+\usepackage{xeCJK}
+\setCJKmainfont{Noto Serif CJK SC}
+
+\title{Linear Algebra}
+\date{}
+\begin{document}
+\maketitle
+
+\subsection*{Q1}
+\begin{flushleft}
+向量:\\
+$\vec{a} = \begin{bmatrix}
+    2 \\
+    2 
+\end{bmatrix},\vec{b} = \begin{bmatrix}
+    3  \\
+    0 
+\end{bmatrix}$
+
+1.计算 $\vec{a} \cdot \vec{b}$
+\begin{align}
+     \vec{a} \cdot \vec{b} = x1x2  +  y1y2 \\
+      = 2\cdot 3 +  2 \cdot 0 
+      = 6 
+\end{align}
+
+2.计算 $\cos \delta$
+\begin{align}
+     \vec{a} \cdot \vec{b} = |\vec{a}| |\vec{b}| \cos\delta \\
+     = 6 = \sqrt{2^{2} + 2^{2}} \cdot \sqrt{3^{2} + 0^{2}} \cdot \cos\delta \\
+     = 6 = \sqrt{72} \cdot \cos\delta \\
+     = 6 = \sqrt{6^{2} \cdot 2} \cdot \cos\delta\\ 
+     = 6 = 6\sqrt{2}\cdot \cos\delta\\ 
+     cos\delta  = \frac{6}{6\sqrt{2}} \\
+                = \frac{1}{\sqrt{2}} \\
+                = \frac{\sqrt{2}}{2}
+\end{align}
+
+3.计算$\vec{a}$ 在 $\vec{b}$ 上的投影长度
+\begin{align}
+    = |\vec{a}| \cdot \frac{\sqrt{2}}{2}
+    = 2\sqrt{2} \frac{\sqrt{2}}{2} \\ 
+    = 2
+\end{align}
+\end{flushleft}
+
+
+\subsection*{Q1}
+\subsection*{写出逆时针旋转90度的矩阵R}
+\begin{flushleft}
+$R = \begin{bmatrix}
+    1 & 0\\ 
+    0 & 1
+\end{bmatrix}$ \\ 
+基向量 $i = [1 0], j = [0 1]$ \\
+在标准R 中 i和j是标准90度夹角 \\ 
+新的 基向量 $i = [0 1], j = [-1 0]$ \\
+旋转90度之后 \\ 
+$R = \begin{bmatrix}
+    0 & -1 \\
+    1 & 0 
+\end{bmatrix}$
+\end{flushleft}
+
+\subsection*{Q3}
+\subsection*{矩阵法解方程}
+\begin{flushleft}
+ 方程组:
+    \[
+     \begin{cases}
+        2x + y  = 3 \\
+        x - y = 0 
+     \end{cases}
+     \]
+
+1.写出A$\vec{x} = \vec{b}$
+\[
+\begin{bmatrix}
+    2 & 1 \\
+    1 & -1 
+\end{bmatrix} @ \begin{bmatrix}
+    x \\
+    y
+\end{bmatrix} = \begin{bmatrix}
+    3 \\ 
+    0
+\end{bmatrix} 
+\]
+2.写出逆矩阵公式
+\[
+step1:
+  2 \cdot -1 - 1 \cdot1 != 0  \text{ (exists an inverse matrix.)} 
+\]
+\[
+  step2:
+  \text{逆矩阵公式：}
+\] 
+$\frac{1}{ad - bc}\cdot \begin{bmatrix}
+    d & -b \\
+    -c & a
+\end{bmatrix}$ \\ 
+
+3.计算出x,y \\
+$
+= \frac{1}{-3} * \begin{bmatrix}
+    -1 & -1 \\ 
+    -1 & 2
+\end{bmatrix} @ \begin{bmatrix}
+    3 \\ 
+    0
+\end{bmatrix}
+$\\
+$
+=  \frac{1}{-3} * \begin{bmatrix}
+    -3 \\
+    -3
+\end{bmatrix}
+$\\
+$
+= \begin{bmatrix}
+    1 \\
+    1
+\end{bmatrix}
+$
+\end{flushleft}
+
+\section*{Eigenvalue}
+\subsection{Q1-Visual Inspection}
+\begin{flushleft}
+$
+R = \begin{bmatrix}
+    3 & 0 \\
+    0 & 1
+\end{bmatrix}
+$ \\
+
+1.向量$\vec{i}=\begin{bmatrix}
+    1 & 0
+\end{bmatrix}$ 变换后变成了什么？它还是x轴上吗 如果是 伸缩倍数$\lambda_{1}$是多少? \\
+$
+\vec{i}_{n} =
+R @ \vec{i}
+= 
+\begin{bmatrix}
+    3 \\
+    0
+\end{bmatrix}$ \\
+$\vec{i}_{n} = \vec{i} \cdot \lambda_{1} ?$ \\ 
+$\lambda_{1} = 3 $ \\
+
+2.向量$\vec{j}=\begin{bmatrix}
+    0 & 1
+\end{bmatrix}$ 变换后变成了什么？它还是y轴上吗 如果是 伸缩倍数$\lambda_{2}$是多少? \\
+$
+\vec{j}_{n} =
+R @ \vec{j}
+= 
+\begin{bmatrix}
+    0 \\
+    1
+\end{bmatrix}$ \\ 
+$\vec{j}_{n} = \vec{j} \cdot \lambda_{2} ?$ \\ 
+$\lambda_{2} = 1 $ \\
+
+1.向量$\vec{w}=\begin{bmatrix}
+    1 & 1
+\end{bmatrix}$ 它还在原来的方向（45度）上吗？（如果不在，说明它不是特征向量） \\
+$
+\vec{w}_{n} =
+R @ \vec{w}
+= 
+\begin{bmatrix}
+    3 \\
+    1
+\end{bmatrix}$ \\
+
+确定斜率 = $\frac{3-0}{1-0}$  ($\vec{w}_{n}$ 和 ${0,0}$ 两个点) \\
+$ = 3 \neq 1$ ($\vec{w}$的斜率)
+证明 $\vec{w}_{n}$ 和 $\vec{w}$ 不在一个方向上,不是特征向量
+\end{flushleft}
+
+
+\subsection{Q2-Verification}
+\begin{flushleft}
+方向由什么决定？斜率 \\
+是否存在$\lambda$ 的由斜率是否相同确定 \\
+已知矩阵 $B = \begin{bmatrix}
+    4 & 1 \\
+    2 & 3
+\end{bmatrix}$ \\ 
+有人声称$\vec{v} = \begin{bmatrix}
+    1 \\
+    1
+\end{bmatrix}$ 是它的特征向量。\\ 
+
+1.请计算 $B\vec{v}$
+$
+= \begin{bmatrix}
+    5 \\
+    5
+\end{bmatrix}
+$ \\
+2.与$\vec{v}的关系$ \\
+1.step
+斜率是否相同 5/5 == 1/1 ?
+相等\\
+5倍 \\
+
+3.特征值$\lambda$ \\
+$\lambda$ = 5
+\end{flushleft}
+
+\subsection*{Eigenvector}
+\begin{flushleft}
+基础公式 \\
+$A\vec{u} = \lambda \vec{u}$ \\ 
+移项 \\
+$A\vec{v} - \lambda \vec{v} = 0$ \\ 
+$(A - \lambda I)\vec{u} = 0$
+
+\end{flushleft}
+
+\subsection*{Eigenvector-1}
+\begin{flushleft}
+推导公式: \\
+$A\vec{u} = \lambda\vec{u}$ \\
+= 
+$(A-\lambda I)\vec{u} =  0$ \\
+= 
+$M\vec{u} = 0$ \\
+
+
+
+
+% 矩阵 A = $\begin{bmatrix}
+%     4 & 1 \\
+%     2 & 3
+% \end{bmatrix}$ \\
+% 1.写出矩阵 $A - \lambda I$. \\
+% = $\begin{bmatrix}
+%     4 & 1 \\
+%     2 & 3
+% \end{bmatrix} -  \begin{bmatrix}
+%     \lambda & 0 \\
+%     0 & \lambda  \\ 
+% \end{bmatrix}$ \\ 
+% = $\begin{bmatrix}
+%    4 - \lambda & 1 \\
+%    2  & 3 - \lambda \\
+% \end{bmatrix}$ \\ 
+
+% 2.计算它的行列式 $\det(A-\lambda I)$\\
+% = $ ((4- \lambda)  * (3 - \lambda))-2 $ = 0 \\
+% = $ (12 - 4\lambda - 3\lambda  + \lambda^{2}) - 2 = 0$\\
+% = $ 10 - 7\lambda + \lambda^{2} = 0$\\
+% = $ \lambda^{2} - 7\lambda + 10 = 0$\\
+% = $ (\lambda-2) * (\lambda-5) = 0$\\
+% = $\lambda = 2 \| \lambda = 5$ \\
+
+
+
+
+
+% 我对特征向量和特征值的理解一直不是很清晰
+% $A\vec{u} = \lambda\vec{u}$ \\
+% 那么
+% $A\vec{u} - \lambda\vec{u} = \vec{0}$
+
+
+% 这里有个很有意思的地方 $M\vec{u}  = \vec{0}$
+% 这里这个$\vec{0}$ as 0b 和上一个$\vec{0}$ as 0a 的意义是不同的
+% 就如你所说的0a 是相似度 也就是$\lambda\vec{u}$ 和 $A\vec{u}$ 
+% 在同一个地方?(或者我理解的有问题？) 而 0b 是把 $\vec{u}$ 扯回原点(0,0)??
+
+% 所以这个M 是非常有意思的 首先它是一个矩阵 又基向量ij 组成 也就是说它对改变的环境
+% 对所有向量都会生效 但如果存在一个向量$\vec{u}$被M 运算 变成了 $\vec{0}$ 则证明
+% $\vec{u}$ 被"消失"了 而这个消失代表的什么意思呢 ？ 为什么这个消失会和行列式有关系
+% 为什么又能表达特征性质呢？ 我可能有点笨 我无法理解
+
+
+% 我继续问一些问题和使用我自己的语言表述下理解(我需要使用自己的语言简洁干净的表达出来 则证明我有可能理解了)
+% $A\vec{u} = \lambda\vec{u}$ \\
+% 上面这行公式其实隐藏了一个 $\begin{bmatrix}
+%     1 & 0 \\
+%     0 & 1  
+% \end{bmatrix}$ \\ 
+% = 
+% $A\vec{u} - (\lambda \cdot \begin{bmatrix}
+%     1 & 0 \\
+%     0 & 1 
+% \end{bmatrix})\vec{u} = \vec{0}$
+% 这个$\vec{0}$ 来至两个向量的相减 它很清晰也就是代表着两个向量的位置是重叠的 \\ 
+% (我这里使用的是重叠  也就是说 它不止是方向相同 而是位置完全相等 或者说我理解错了？) \\
+
+% 我们把上面的公式变化下形态 \\
+% = 
+% $(A - \lambda \cdot \begin{bmatrix}
+%     1 & 0 \\
+%     0 & 1 
+% \end{bmatrix})\vec{u} = \vec{0}$ \\ 
+% = 
+% $M\vec{u} = \vec{0}$ \\
+
+% 上面的式子也很清晰 一个向量$\vec{u}$ 被矩阵M 运算变化之后的结果是 $\vec{0}$ 也就是原点(0) \\
+% 那么我们会得到下面信息: \\
+% 1: $\vec{u}$ 非0 (如果是0 就没有意义了) \\
+% 2: $\vec{u}$ 完全被丢失了 找不回了 \\
+% 3: M 的行列式为0 行列式为0的矩阵和向量运算时 才会存在"降维"甚至消失(压回到0点) \\
+% 因为行列式的本质是 一个向量经过矩阵变化之后的体积变化率(这是二维的 三维是体积 依次) \\ 
+
+% 那么我们仔细思考下M 到底是怎么诞生的 (A - \lambda \cdot \begin{bmatrix}
+%     1 & 0 \\
+%     0 & 1 
+% \end{bmatrix}) 是两个矩阵相减的？
+% 那么两个矩阵相减到底是什么几何性质呢 ？ + 呢 ？ 乘除呢 ？
+\end{flushleft}
+
+
+\begin{flushleft}
+% 第一题（手算）：矩阵 A=[0−110]A = \begin{bmatrix} 0 & -1 \\ 1 & 0 \end{bmatrix}
+% A=[01​−10​]，不写代码，用纸笔回答：
+
+
+% e1⃗=[1,0]\vec{e_1} = [1, 0]
+% e1​​=[1,0] 变换后去了哪里？
+
+% e2⃗=[0,1]\vec{e_2} = [0, 1]
+% e2​​=[0,1] 变换后去了哪里？
+
+% 这个变换在几何上是什么操作？
+% 向量 [3,2][3, 2]
+% [3,2] 变换后是什么？（用"基向量去哪了"的思路算，不要用矩阵乘法公式硬算）
+
+$\vec{e1} = [1, 0] -> [0, 1]$ \\
+$[1,0]$ 在二维是标准的右边运动 \\
+$[0,1]$ 是正上方运动 \\
+
+$\vec{e2} = [0, 1] -> [-1, 0] $
+$[0,1]$ 是正上方运动 \\
+$[-1,0]$ 在二维是标准的左边运动 \\
+
+这个变换在几何上是什么操作？
+所以这个变化就是把向量 逆时针旋转到第二象限 90度
+
+向量
+[3,2] as v 变换后是什么？（用"基向量去哪了"的思路算，不要用矩阵乘法公式硬算）
+$A\vec{v} = 
+3 \cdot \vec{e1} +  2 \cdot \vec{e2}$ \\
+\begin{flushleft}
+    已知 $\vec{v1} = [a1, b1, c1] 和 \vec{v2} = [a2, b2, c2]$，\\
+    求一个$\vec{n} = [x, y, z] 使用n 同时垂直于v1和v2$ \\
+    
+    "同时垂直于两个", 就是两个点积都等于 0: \\ 
+    $$
+    \left\{ 
+    \begin{aligned}
+        a1x + b1y + c1z = 0 \\ 
+        a2x + b2y + c2z = 0
+    \end{aligned} 
+    \right.$$
+
+\end{flushleft}
+
+= $ \begin{bmatrix}
+    0 \\
+    3
+\end{bmatrix} + \begin{bmatrix}
+    -2\\ 
+     0
+\end{bmatrix}$ \\
+= $\begin{bmatrix}
+    -2\\
+    3
+\end{bmatrix}$
+\end{flushleft}
+
+
+\begin{flushleft}
+    已知 $\vec{v1} = [a1, b1, c1] 和 \vec{v2} = [a2, b2, c2]$，\\
+    求一个$\vec{n} = [x, y, z] 使用n 同时垂直于v1和v2$ \\
+    
+    "同时垂直于两个", 就是两个点积都等于 0: \\ 
+    $$
+    \left\{ 
+    \begin{aligned}
+        a1x + b1y + c1z = 0 \\ 
+        a2x + b2y + c2z = 0
+    \end{aligned} 
+    \right.$$
+
+\end{flushleft}
+
+
+
+
+
+
+
+
+
+
+\end{document}

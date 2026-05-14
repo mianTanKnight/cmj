@@ -1,0 +1,235 @@
+ \documentclass[12pt]{article}
+\usepackage[a4paper,margin=2.2cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{hyperref}
+\usepackage{cleveref}
+
+% 中文（xelatex）
+\usepackage{fontspec}
+\usepackage{xeCJK}
+
+\usepackage{fontspec}
+\usepackage{xeCJK}
+\setCJKmainfont{Noto Serif CJK SC}
+
+\title{Linear Algebra-Ega2}
+\date{}
+\begin{document}
+\maketitle
+\newcommand{\step}[1]{\par\vspace{0.5em}\noindent\textbf{#1}\par}
+
+\section{线性变换}
+向量是严格的列向量: $ x \in \mathbb{R}^{n \times 1}。$ \\
+矩阵 $ A \in \mathbb{R}^{m \times n}$ 对 $x$ 施加变换 写作:
+\[
+    y =Ax
+\]
+当我们需要同时对 k 个向量进行相同的变换时, 在代数上, 我们将这个 k 个列向量并排拼接, 形成一个矩阵 $X \in \mathbb{R}^{n \times k}$: \\
+\[
+    X = [x_{1} \;  x_{2} \; \cdots \;x_{k}]
+\]
+对整个矩阵进行左乘, 等价于对每个列向量独立进行变换: \\
+\[
+    Y =  AX  =  A[x_{1} \;  x_{2} \;  \cdots \; x_{k}] = [Ax_{1} \; Ax_{2} \; \cdots \; Ax_{k}]
+\]
+结果 $Y \in \mathbb{R}^{m \times k}$ 的每一列, 就是对应原向量的变换结果 \\
+
+\step{Step 1: 代数计算}
+
+$A = \begin{bmatrix}
+        2 & 1 \\
+        1 & 2
+    \end{bmatrix},\vec{v} = \begin{bmatrix}
+        3 \\
+        2
+    \end{bmatrix},\vec{m} = \begin{bmatrix}
+        4 \\
+        1
+    \end{bmatrix}$
+
+$ Av = \begin{bmatrix}
+        2 \cdot 3 + 1 \cdot 2 \\
+        1 \cdot 3 + 2 \cdot 2
+    \end{bmatrix} = \begin{bmatrix}
+        8 \\
+        7
+    \end{bmatrix}, Am = \begin{bmatrix}
+        2 \cdot 4 + 1 \cdot 1 \\
+        1 \cdot 4 + 2 \cdot 1
+    \end{bmatrix} = \begin{bmatrix}
+        9 \\
+        6
+    \end{bmatrix} $
+
+$ X  = \begin{bmatrix}
+        3 & 4 \\
+        2 & 1
+    \end{bmatrix}$
+
+$ AX  = \begin{bmatrix}
+        2 \cdot 3 + 1 \cdot 2 & 2 \cdot 4 + 1 \cdot 1 \\
+        1 \cdot 3 + 2 \cdot 2 & 1 \cdot 4 + 2 \cdot 1 \\
+    \end{bmatrix} = \begin{bmatrix}
+        8 & 9 \\
+        7 & 6
+    \end{bmatrix}$
+
+
+\step{Step 2: 行与列的视角问题}
+
+我们从纯粹的代数计算来说:
+\[
+    Y =  AX  =  A[x_{1} \;  x_{2} \;  \cdots \; x_{k}] = [Ax_{1} \; Ax_{2} \; \cdots \; Ax_{k}]
+\]
+是成立的 \\
+我们这里会发现 矩阵和向量的关系 $-> 矩阵是向量的容器 线性变换的本质是 矩阵乘法(行 \cdot 列)的 可加性与齐次性$
+我们知道矩阵变换的代数公式 :  \\
+$ f(ax + by) = af(x) + bf(y) = bf(y) + af(x) $ \\
+其实行与列是不同视角看同一个结果的方式 ?
+上述其代数是非常标准的行 $\cdot$ 列视角, 现在我们切换成列视角: \\
+$A = \vec{e1} + \vec{e2}$   \\
+$Av = \vec{e1} \cdot v[0] + \vec{e2} \cdot v[1] = y$ \\
+这个视角我们发现它是非常标准的 线性变换代数式 也就是说列视角 才是矩阵变换 线性变换的本来形态 \\
+y 的 最终位置 是由 n 份 e1 + k 份 e2 组成 \\
+$Av  = \begin{bmatrix}
+        2 & 1 \\
+        1 & 2
+    \end{bmatrix}\vec{v} = 3 \cdot \begin{bmatrix}
+        2 \\
+        1
+    \end{bmatrix} + 2 \cdot \begin{bmatrix}
+        1 \\
+        2
+    \end{bmatrix} = \begin{bmatrix}
+        8 \\
+        7
+    \end{bmatrix}$ \\
+那么 $AX$ 呢?  \\
+$Y = AX$ \\
+$Y_{col1} = Av $ \\
+$Y_{col2} = Am$ \\
+思考一个问题 :\\
+如果 $a1 = k \cdot a2$ 呢 ?
+
+\[ Av  =  \vec{a1} \cdot v[0] + \vec{a2} \cdot v[1]  =  k \vec{a2} \cdot v[0] + \vec{a2} \cdot v[1]
+    =  (k \cdot v[0] + v[1])\vec{a2}  = y \]
+
+最终目的地 y 只会沿着 e2 做伸缩动作  = $det(A) = 0$ y 被降维了 而且维度只是 1, Rank = 1 ?
+
+如果一个变换存在降维, 那么是否有可能使用向量完全消失呢, 把向量拍到零空间呢 ?
+
+\step{3: Rank, Null Space, Nullity }
+Rank 是与矩阵的维度直接相关
+
+$A \in \mathbb{R}^{m \times n}$
+
+一个矩阵的维度与列向量数量直接相关 如果矩阵的每列都是"独一"的 不满足被其他列 代数替换性 $-> c1 = kc2 $ 也就是列不存在线性关系
+
+那么 Rank = min(m, n) m 是维度 是列向量的元素数, 如果存在 $c1 = kc2 $ 那么要 - 存在线性关系类数
+而 Rank 就是矩阵变化之后 $y = Ax$ 所有 y 向量集合 的维度
+
+Null Space 是经过矩阵运算之后 压回原点的原始向量 x 集合
+
+Nullity 压回原点的原始向量 x 集合的维度 这个维度是 它们物理位置拼凑出了一个什么形状？这个形状是几维的
+
+我们回到代数式 $ (k \cdot v[0] + v[1])\vec{a2}  = y$
+
+满足这个代数式的矩阵 Rank = 1
+
+那么什么样子的向量会被 压到 Null Space 呢 ?
+也就是 $ (k \cdot v[0] + v[1])\vec{a2}  = 0 \; and \; \vec{a2} \; != 0$
+
+$ =  k \cdot v[0] + v[1] = 0 $ \\
+$ =  k \cdot v[0] = -v[1] $ \\
+
+很明显 v[0] 和 v[1] 是存在线性关系的 \\
+向量 v 是存在两个分量的 $ \in \mathbb{R}^{2}$ \\
+但  $ =  k \cdot v[0] = -v[1] $ \\ 可以代数转换成 $y = -kx$ 是一个线性关系函数, 是一条直线 \\
+也就是说 在这条直线上的所有向量集合 都会被压到零空间
+
+只要变换存在降维(Rank(A)<n)，就必然存在非零向量被拍到零空间
+
+
+向量真的死了吗？
+向量是客观存在的实体（比如空间里的一根箭）。
+矩阵是一次主观的“观测动作”或“投影动作”（比如拿手电筒打影子）。
+当一个向量不幸落入“零空间(Null Space)”时, 并不是这个向量在客观物理世界中粉碎了。而是矩阵A
+的观测方式太狭隘了（因为它降维了, Rank不足),导致它完全捕捉不到这个向量在特定方向上的信息。
+零空间(死亡名单), 本质上就是矩阵A 的**“观测盲区”**
+
+
+\section{复数}
+$z_{1} = r_{1}e^{iθ_{1}}, z_{2} = r_{2}e^{iθ_{2}}$ \\
+$ =  z_{1} \cdot z_{2} = r_{1} \cdot r_{2} \cdot e^{(iθ_{1} + iθ_{2})}$
+
+$A^{2}x$ 的结果我们一眼就能看出来 先旋转 180度之后再 拉伸 2倍 \\
+$(2i)(2i)x =  4i^{2}x$
+180度之后再 拉伸 2倍 = $4i^{2}x$
+$i^{2} = -1$ \\
+$4i^{2}x = -4x$
+
+假如这个矩阵A 是  2x2 存在两个特征值 \\
+$ \lambda_{1} , \lambda_{2}$ \\
+我们知道特征向量的定义是不改变方向 也就是说在同一方向做伸缩动作 \\
+如果 $\lambda_{1} = 2i  = -1$ 这是符合这个定义的 翻转 也是一种负向的拉伸 \\
+为了“抵消”掉这个逆时针旋转 90 度带来的虚数部分，保证整个宏观物理系统依然是实数底色，你凭借直觉猜测，这个矩阵
+A 必定还隐藏着另一个什么样的特征值 $λ_{2}$	​？它对应的物理动作是什么？这个问题我没明白??
+
+我刚才没表达清楚 我觉得 那么代表“顺时针转 90 度，拉伸 2 倍”的那个复数 $λ_{2}$ ，在代数上应该写成什么？\\
+应该写成 $2(-i) = -2i$ 这个-是负号不是减法 \\
+我们现在看共轭公式 :
+\[
+    \lambda_{1} = a + bi  \\
+    \lambda_{2} = a - bi
+\]
+
+a 是一个常数量 它是一个线性距离 也就是离出发点的距离 那么我们把相加 \\
+$ \lambda_{1} + \lambda_{2} =   a + bi  + a - bi  =  2a  $
+为什么一个共轭操作 不是完全抵消 会成为2倍的a呢 ?
+$ \lambda_{1} \cdot \lambda_{2} =   (a + bi)  \cdot (a - bi)  =
+    a^{2} -abi + abi - bi^{2}  = a^{2} -b^{2} \cdot (-1)  = a^{2} + b^{2}$ ???
+很明显是常数结果 但依然没有完全抵消?
+
+
+\section{Trace and Determinant}
+
+\begin{flushleft}
+    $A = \begin{bmatrix}
+            a & b \\
+            c & d
+        \end{bmatrix}$
+    它存在两个特征值 $\lambda_{1}$ 和 $\lambda_{2}$
+
+    特征多项式  $det(\lambda I - A)$
+
+    \begin{align*}
+        p(\lambda) = det \begin{bmatrix}
+                             \lambda - a & -b         \\
+                             -c          & \lambda -d
+                         \end{bmatrix}       \\
+        = (\lambda - a ) (\lambda -d) - (-b)(-c)        \\
+        = (\lambda - a ) (\lambda -d) - bc              \\
+        = \lambda^{2} -\lambda d  - a\lambda + ad  - bc \\
+        = \lambda^{2} -(a + d)\lambda  +  (ad - bc)
+    \end{align*}
+    为 $\lambda_{1}, \lambda_{2}$ 是这个多项式的根 转换成因式分解为: \\
+    \begin{align}
+        p(\lambda) = (\lambda -  \lambda_{1}) (\lambda - \lambda_{2}) \\
+        = \lambda^{2} - (\lambda_{1} + \lambda_{2}) + \lambda_{1}\lambda_{2}
+    \end{align}
+    so: \\
+    $ a + d = (\lambda_{1} + \lambda_{2}) $ \\
+    $(ad - bc) = \lambda_{1}\lambda_{2} $
+
+
+\end{flushleft}
+
+
+
+
+$c^{2} =a^{2} + b^{2}$
+
+
+
+
+\end{document}

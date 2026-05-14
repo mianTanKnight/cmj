@@ -1,0 +1,724 @@
+\documentclass[12pt]{article}
+\usepackage[a4paper,margin=2.2cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{hyperref}
+\usepackage{cleveref}
+
+% 中文（xelatex）
+\usepackage{fontspec}
+\usepackage{xeCJK}
+
+\usepackage{fontspec}
+\usepackage{xeCJK}
+\setCJKmainfont{Noto Serif CJK SC}
+
+\title{Linear Algebra-Ega}
+\date{}
+\begin{document}
+\maketitle
+
+\paragraph{S1}
+\begin{flushleft}
+    1: 求特征值和特征向量 A = $\begin{bmatrix}
+            2 & 1 \\
+            1 & 2
+        \end{bmatrix}$ \\
+    = $\begin{bmatrix}
+            2 - \lambda & 1          \\
+            1           & 2- \lambda
+        \end{bmatrix}$ \\
+    = $(2 - \lambda)^{2} - 1 = 0$ \\
+    = $(2 - \lambda)^{2} = 1$ \\
+    = $\lambda = 3 || \lambda = 1$ \\
+    if $\lambda = 3$: \\
+    = \begin{align}
+        -x + y = 0 \\
+        x - y = 0
+    \end{align} \\
+    so:  $x = y \& \forall x,y  \ $  \\
+    $\vec{v} = \begin{bmatrix}
+            1 \\
+            1
+        \end{bmatrix}$ \\
+    if $\lambda = 1$: \\
+    = \begin{align}
+        x + y = 0 \\
+        x + y = 0
+    \end{align}
+    so : $ x = -y \&  \forall x,y $ \\
+    $\vec{v} = \begin{bmatrix}
+            1 \\
+            -1
+        \end{bmatrix}$ \\
+
+\end{flushleft}
+
+
+\paragraph{S2}
+\begin{flushleft}
+    1: 求特征值和特征向量 A = $\begin{bmatrix}
+            1 & 2 \\
+            2 & 4
+        \end{bmatrix}$ \\
+    = $\begin{bmatrix}
+            1 - \lambda & 2          \\
+            2           & 4- \lambda
+        \end{bmatrix}$ \\
+    = $(1 - \lambda)(4 - \lambda) - 4 = 0$  \\
+    = $ 4- 4 \lambda - \lambda  +\lambda^{2} - 4 = 0$
+    = $ -5 \lambda  + \lambda^{2} = 0$
+    = $\lambda^{2} - 5\lambda = 0$ \\
+    so : $\lambda = 0  || \lambda = 5$ \\
+    if $\lambda = 0$:  \\
+    \begin{align}
+        x + 2y = 0
+        2x + 4y = 0
+    \end{align} : \\
+    = x +2y = 2x + 4y  \\
+    = -2y = x \\
+    = y = $-\frac{x}{2}$ \\
+    so: $x = 2  y= -1$ \\
+    $\vec{v} = \begin{bmatrix}
+            2 \\
+            -1
+        \end{bmatrix}$ \\
+    if $\lambda = 5$:  \\
+    \begin{align}
+        4x - 2y = 0
+        2x -y = 0
+    \end{align} : \\
+    = 4x - 2y = 2x - y  \\
+    = 2x = y \\
+    = y = 2x \\
+    so: $x = 1  y= 2$ \\
+    $\vec{v} = \begin{bmatrix}
+            1 \\
+            2
+        \end{bmatrix}$ \\
+
+    $\begin{bmatrix}
+            \lambda_{1} & 0           \\
+            0           & \lambda_{2}
+        \end{bmatrix} \cdot \begin{bmatrix}
+            a & c \\
+            b & d
+        \end{bmatrix}$ \\
+    l11 = $\lambda_{1}a  + 0b$ \\
+    l12 = $0a  + \lambda_{2}b$ \\
+    l21 = $lambda_{1}c  + 0d$ \\
+    l23 = $0c  + \lambda_{2}d$ \\
+    = $\begin{bmatrix}
+            \lambda_{1}a & \lambda_{1}c \\
+            \lambda_{2}b & \lambda_{2}d
+        \end{bmatrix}$
+\end{flushleft}
+
+\paragraph{$P\cdot D \cdot P^{-1}$}
+\begin{flushleft}
+    \begin{itemize}
+        \item 对公式$P\cdot D \cdot P^{-1}$的思考与理解
+        \item 1: 矩阵怎么表达一个绝对向量? \\
+              引入 C 语言中的概念 $->$ 内存地址与变量名的概念 \\
+              内存地址就是绝对向量 它不改变(除非此内存地址的数据被回收) 它是找到这块地址的唯一方法, 但它几乎是不可读
+              和难以操作的 \\
+              变量名使用一种完全自主的方式描述这个地址(映射), 映射这个内存地址的变量名几乎没有任何要求(非重复) \\
+              但本质上可以存在无数的描述(路径)找到这个绝对向量.\\
+              矩阵也一样, 对一个绝对向量来说, 多个矩阵只是多种不同的描述(路径)而言\\
+              最标准的形式是 $\begin{bmatrix}
+                      \vert    & \vert    \\
+                      \vec{e1} & \vec{e2} \\
+                      \vert    & \vert
+                  \end{bmatrix}$ \\
+        \item 2: 矩阵到底是什么"形状"? \\
+              以 $2 x 2$ 矩阵为例子(2D) \\
+              它是由两个列向量组成, 以标准基为例: \\
+              $\begin{bmatrix}
+                      1 & 0 \\
+                      0 & 1
+                  \end{bmatrix}$ -> $\vec{e1} = \begin{bmatrix}
+                      1 \\
+                      0
+                  \end{bmatrix}$ 和 $\vec{e2} = \begin{bmatrix}
+                      0 \\
+                      1
+                  \end{bmatrix}$ \\
+              观察这两个列向量，它们代表了从原点出发的两条基础路径（两条相邻的边）。为什么一定要画平行四边形去表达? \\
+              因为路线! \\
+              标准基下的$\vec{v}$ \\
+              $\vec{v}$ = $x \cdot \vec{b_{i}} + y \cdot \vec{b_{j}}$ \\
+              它是加法运算所以它是有先后的 你可以先沿着 x 轴先走 x 步 然后沿着 y 轴走y 步 \\
+              这也是为什么向量可以长度是直角三角形的斜边长 因为这样的路径和原点一定会构建成一个直角三角形(在标准基环境中)\\
+              已知代数变化 $x \cdot \vec{b_{i}} + y \cdot \vec{b_{j}}$  =  $y \cdot \vec{b_{j} + x \cdot \vec{b_{i}}}$ \\
+              所以你也可以先沿走 y 轴 也就是对称路线  \\
+              所以这个平行四边形是到达向量的路径(存在对称性)\\
+              所以我们很明显的就能知道 对于标准基矩阵 它是形状是非常标准的平行四边形(正方形)网格
+              那么其余的基底矩阵呢?
+              那么按照“加法交换律形成的对称路线”，它们画出来的就不再是正方形，而是被拉长、压缩或倾斜的“斜平行四边形”。
+        \item 3: 什么是 P ? \\
+              对于一个在标准基下的$\vec{v}$ \\
+              $\vec{v}$ = $x \cdot \vec{e1} + y \cdot \vec{e2}$ \\
+              那么在新的z1,z2基下的$\vec{v}$ \\
+              $\vec{v}$ = $c1 \cdot \vec{z1}  + c2 \cdot \vec{z2}$ \\
+              在 概念1 中我们已讨论绝对向量的概念, 所以我们知道: \\
+              $x \cdot \vec{e1} + y \cdot \vec{e2}$ = $c1 \cdot \vec{z1}  + c2 \cdot \vec{z2}$
+              那么我们变形:\\
+              $\begin{bmatrix}
+                      \vert    & \vert    \\
+                      \vec{e1} & \vec{e2} \\
+                      \vert    & \vert
+                  \end{bmatrix} \cdot \begin{bmatrix}
+                      x \\
+                      y
+                  \end{bmatrix}$  =   $\begin{bmatrix}
+                      \vert    & \vert    \\
+                      \vec{z1} & \vec{z2} \\
+                      \vert    & \vert
+                  \end{bmatrix} \cdot \begin{bmatrix}
+                      c1 \\
+                      c2
+                  \end{bmatrix}$ \\
+              那么 P 就是 $\begin{bmatrix}
+                      \vert    & \vert    \\
+                      \vec{z1} & \vec{z2} \\
+                      \vert    & \vert
+                  \end{bmatrix} $ 它是找到绝对向量的另一组基底 \\
+        \item 4: P 的身份是什么? \\
+              我们已经逻辑证明了 P 是什么"形状", 那么 P 的身份是什么? \\
+              我们已知道 $P = \begin{bmatrix}
+                      \vert & \vert \\
+                      z1    & z2    \\
+                      \vert & \vert \\
+                  \end{bmatrix}$ ?
+              那么 z1, z2 的来源是什么 ?  它不是凭空变出来的! \\
+              而是诞生于标准基底环境(因为z1, z2 是 矩阵 A 基于标准基底变化之的特征向量)\\
+              if: $z1 = \begin{bmatrix}
+                      a \\
+                      b
+                  \end{bmatrix}$,$z2 = \begin{bmatrix}
+                      c \\
+                      d
+                  \end{bmatrix}$ \\
+              so: $z1 =  a \cdot e1 + b \cdot e2$, $z2 =  c \cdot e1 + d \cdot e2$ \\
+              那么 $\vec{v_{p}} = \begin{bmatrix}
+                      x1 \\
+                      x2
+                  \end{bmatrix}$ \\
+              $P \cdot \vec{v_{p}} = x1(a \cdot e1 + b \cdot e2) + x2( c \cdot e1 + d \cdot e2)$ \\
+              = $a\cdot e1 \cdot x1  +  b \cdot e2 \cdot x1  + c \cdot e1 \cdot x2  + d \cdot e2 \cdot x2$ \\
+              = $(a\cdot e1 \cdot x1 +  c \cdot e1 \cdot x2 ) + (b \cdot e2 \cdot x1  + d \cdot e2 \cdot x2) $ \\
+              = $e1(ax1 + cx2) + e2(bx1 + dx2)$ \\
+              我们回到了非常经典的标准基代数表达式 \\
+              所以我们就可以得到 P 是 从特征基坐标 → 标准基坐标的翻译器 \\
+        \item 5: D 是什么(D 的诞生)? \\
+              两个环境: P, I 为基底的平行四边形网格 \\
+              $\vec{v}$(I 基底), $\vec{v_{p}}$(P 基底) \\
+              由概念4 我们可以得到等式:  $P\vec{v_p} = I\vec{v}$ \\
+              一个矩阵变化在 I 基底下为 A, 在 P 基底下为 M  \\
+              $M(\vec{v_p})$ 和 $A(\vec{v})$ 是什么关系 ? \\
+              在绝对向量的概念下(路线不同, 目的地相等): \\
+              $P(M(\vec{v_p})) =  I(A(\vec{v}))$ \\
+              $P(M(\vec{v_p}))$ 中 $M(\vec{v_p})$ 是基于 P 基底运算后的向量 然后再由 P "翻译"回 标准坐标系:\\
+              现在我们来确定 P 的身份 它和 A 的关系, 也就是说 -> 这里 P 和 A 在这里必须存在一种关系?  不然代数变化无法继续 ? \\
+              我们继续变化等式:\\
+              $P(M(\vec{v_p})) =  A (P\vec{v_p})$ \\
+              在几何变化行为中左边是"先在特征基下变换，再翻译回标准基"，右边是"先翻译回标准基，再在标准基下变换"。
+              $P \cdot M  = A \cdot P$ (我们两边约掉$\vec{v_{p}}$) \\
+              到这里代数式已经无法再推理和简化 \\
+              我们已经知道 M 和 A 都是矩阵运算变化, 他们是同一种变化 这个点是非常重要的(只不过是处于的基环境不一样)? \\
+              那么 M 可以等于 A 吗 可以 但矩阵乘法是天然不满足交换律的 ? \\
+              我们进一步代数推导\\
+              $P^{-1}(P \cdot M)   = P^{-1}(A \cdot P)$ \\
+              $IM = P^{-1}(A \cdot P)$ \\
+              $M = P^{-1}(A \cdot P)$ \\
+              那么回到我们之前的问题 A 和 P 可能是什么关系 ? \\
+              $M =  P^{-1}(A \cdot \begin{bmatrix}
+                      \vert    & \vert    \\
+                      \vec{z1} & \vec{z2} \\
+                      \vert    & \vert
+                  \end{bmatrix})$ \\
+              $M =  P^{-1}(\begin{bmatrix}
+                      \vert     & \vert     \\
+                      A\vec{z1} & A\vec{z2} \\
+                      \vert     & \vert
+                  \end{bmatrix})$ \\
+              如果我们想进一步推理代数式:  \\
+              只能设: P 是 A 的特征向量矩阵 \\
+              $M =  P^{-1}(\begin{bmatrix}
+                      \vert             & \vert             \\
+                      \lambda1 \vec{z1} & \lambda2 \vec{z2} \\
+                      \vert             & \vert
+                  \end{bmatrix})$ \\
+              我们把右乘系数的动作，转换为右乘一个对角矩阵 D \\
+              $M =  P^{-1}(
+                  \begin{bmatrix}
+                      \vert    & \vert    \\
+                      \vec{z1} & \vec{z2} \\
+                      \vert    & \vert
+                  \end{bmatrix} \begin{bmatrix}
+                      \lambda1 & 0        \\
+                      0        & \lambda2
+                  \end{bmatrix})$ \\
+              那么在 P 是 A 的特征向量矩阵 成立的下 :
+              我们可以得到 M 代数式 最简形式 : \\
+              $M = P^{-1} P D$  \\
+              $M = D$
+        \item 6: $P\cdot D \cdot P^{-1}$ 的诞生 \\
+              我们基于概念5 可以得到等式 -> $P \cdot D = A \cdot P$  \\
+              进一步化简: \\
+              $(P \cdot D) P^{-1} = A \cdot P \cdot P^{-1}$ \\
+              = $P\cdot D \cdot P^{-1}$ = A
+    \end{itemize}
+\end{flushleft}
+
+\paragraph{Training}
+\begin{flushleft}
+    \begin{itemize}
+        \item  正向走通全链 \\
+              $A = \begin{bmatrix}
+                      4 & 1 \\
+                      2 & 3
+                  \end{bmatrix}$
+              1.求特征值与特征向量: \\
+              = $det (\begin{bmatrix}
+                      4 - \lambda & 1           \\
+                      2           & 3 - \lambda
+                  \end{bmatrix} )  = 0 $\\
+              = $(4 - \lambda)(3-\lambda) - 2 = 0$ \\
+              = $12 - 3\lambda - 4\lambda + \lambda^{2} - 2 = 0 $ \\
+              = $10 - 7\lambda  + \lambda^{2} = 0 $ \\
+              = $\lambda^{2} - 7\lambda + 10 = 0$ \\
+              = $(\lambda - 2)(\lambda - 5) = 0$ \\
+              so: $\lambda = 2 | \lambda = 5$ \\
+              if: $\lambda = 2$ :
+              =   \begin{align}
+                  2x  + y  = 0 \\
+                  2x  + y  = 0 \\
+              \end{align} \\
+              $x = -\frac{1}{2}y $ \\
+              $\vec{v_{1}} = \begin{bmatrix}
+                      1 \\
+                      -2
+                  \end{bmatrix}$
+              if: $\lambda  = 5$ \\
+              =  \begin{align}
+                  x   - y  = 0 \\
+                  2x  -2y  = 0 \\
+              \end{align}
+              $x = y $ \\
+              $\vec{v_{2}} = \begin{bmatrix}
+                      1 \\
+                      1
+                  \end{bmatrix}$
+        \item 构建 P, D 和 PD$P^{-1} = A$ \\
+              $P = \begin{bmatrix}
+                      1  & 1 \\
+                      -2 & 1 \\
+                  \end{bmatrix}$ \\
+              $D = \begin{bmatrix}
+                      2 & 0 \\
+                      0 & 5
+                  \end{bmatrix}$ \\
+              $P^{-1} = \begin{bmatrix}
+                      \frac{1}{3} & -\frac{1}{3} \\
+                      \frac{2}{3} & \frac{1}{3}
+                  \end{bmatrix}$ \\
+              $PDP^{-1}$ = $A = \begin{bmatrix}
+                      4 & 1 \\
+                      2 & 3
+                  \end{bmatrix}$
+    \end{itemize}
+\end{flushleft}
+
+
+\begin{flushleft}
+    \begin{itemize}
+        \item $A^{n}$的力量 \\
+              $A = \begin{bmatrix}
+                      4 & 1 \\
+                      2 & 3
+                  \end{bmatrix}$,计算 $A^{5}$ 先直接算（感受痛苦），然后用 $P\cdot D^{5} \cdot P^{-1}$\\
+              思考: 为什么 $D^{n}$ 容易计算?
+        \item 1.计算 $A^{5}$ \\
+              $\vec{v} = \begin{bmatrix}
+                      1 \\
+                      2
+                  \end{bmatrix}$\\
+              $A^{5}\vec{v}$ =  $
+                  \begin{bmatrix}
+                      4 & 1 \\
+                      2 & 3
+                  \end{bmatrix}\begin{bmatrix}
+                      4 & 1 \\
+                      2 & 3
+                  \end{bmatrix}\begin{bmatrix}
+                      4 & 1 \\
+                      2 & 3
+                  \end{bmatrix}\begin{bmatrix}
+                      4 & 1 \\
+                      2 & 3
+                  \end{bmatrix}\begin{bmatrix}
+                      4 & 1 \\
+                      2 & 3
+                  \end{bmatrix}\begin{bmatrix}
+                      1 \\
+                      2
+                  \end{bmatrix}$ \\
+              矩阵的运算是严格有序的,从右至左 \\
+              = $A^{4}(A\vec{v})$ \\
+              = $A^{4} \begin{bmatrix}
+                      4 \cdot 1 + 1 \cdot 2 \\
+                      2 \cdot 1 + 3 \cdot 2
+                  \end{bmatrix}$ \\
+              =  $A^{4} \begin{bmatrix}
+                      6 \\
+                      8
+                  \end{bmatrix}$ \\
+              = $A^{3} \begin{bmatrix}
+                      32  (4 \cdot 6 + 1 \cdot 8) \\
+                      36  (2 \cdot 6 + 3 \cdot 8)
+                  \end{bmatrix} $ \\
+              = ... \\
+              =  $\begin{bmatrix}
+                      4156 \\
+                      4188
+                  \end{bmatrix}$ \\
+
+
+        \item 2.计算 $P\cdot D^{5} \cdot P^{-1}$ \\
+              已知 : $P = \begin{bmatrix}
+                      1  & 1 \\
+                      -2 & 1 \\
+                  \end{bmatrix}$ \\
+              $D = \begin{bmatrix}
+                      2 & 0 \\
+                      0 & 5
+                  \end{bmatrix}$ \\
+              $P^{-1} = \begin{bmatrix}
+                      \frac{1}{3} & -\frac{1}{3} \\
+                      \frac{2}{3} & \frac{1}{3}
+                  \end{bmatrix}$ \\
+              $D^{5}  = \begin{bmatrix}
+                      32 & 0    \\
+                      0  & 3125
+                  \end{bmatrix}$ \\
+              $P\cdot D^{5} \cdot P^{-1} \vec{v}$ = $
+                  \begin{bmatrix}
+                      1  & 1 \\
+                      -2 & 1 \\
+                  \end{bmatrix}\begin{bmatrix}
+                      32 & 0    \\
+                      0  & 3125
+                  \end{bmatrix}\begin{bmatrix}
+                      \frac{1}{3} & -\frac{1}{3} \\
+                      \frac{2}{3} & \frac{1}{3}
+                  \end{bmatrix}\begin{bmatrix}
+                      1 \\
+                      2
+                  \end{bmatrix}$
+              =  $\begin{bmatrix}
+                      4156 \\
+                      4188
+                  \end{bmatrix}$ \\
+
+        \item \textbf{3. 思考: 为什么 $D^{n}$ 容易计算？反复施加变换的几何意义是什么？} \\
+              这里我们要重申下“基底”这个基础概念：基底是到达一个绝对地址的路径步骤的组成。标准基和特征基都可以走到这个目的地，只是路径的组成方式不同。\\
+              那么在特征基网格下，反复施加变换的几何意义是什么?\\
+              \textbf{是解耦！}\\
+              在标准基下， x 的变化会牵扯 y, y 也会牵扯 x, 反复运算时像扭麻花。\\
+              很明显，在特征基表达的矩阵中，路径是由 $n$ 个完全独立的“横平竖直”的纯伸缩组成的，\textbf{不存在互相混合的“曲线”}。走 $z_1$ 就纯粹被 $\lambda_1$ 放大，走 $z_2$ 就纯粹被 $\lambda_2$ 放大，它们互不干涉。
+              这就是 $D^n$ 能瞬间计算出结果原因
+
+    \end{itemize}
+\end{flushleft}
+
+
+\begin{flushleft}
+    \begin{itemize}
+        \item 对称矩阵的特殊性 \\
+              $A = \begin{bmatrix}
+                      5 & 2 \\
+                      2 & 2
+                  \end{bmatrix}$ \\
+        \item 多角化 A  \\
+              Step1 : 求特征值/向量\\
+              = $\begin{bmatrix}
+                      5 - \lambda & 2           \\
+                      2           & 2 - \lambda
+                  \end{bmatrix}$ \\
+              = $(5 - \lambda)(2 - \lambda) -  4  = 0 $ \\
+              = $ 10 - 2\lambda - 5\lambda  + \lambda^{2} - 4 = 0$ \\
+              = $ 6 - 7\lambda  +  \lambda^{2} = 0$ \\
+              = $ \lambda^{2} - 7\lambda  + 6  = 0$ \\
+              = $(\lambda - 1) (\lambda - 6) = 0 $ \\
+              so: $\lambda = 1  Or \lambda = 6$ \\
+              if: $\lambda = 1$: \\
+              = \begin{align}
+                  4x  +  2y  = 0 \\
+                  2x  +  y   = 0
+              \end{align} \\
+              = $x = -(1/2y)$ \\
+              = $\vec{v_1} = \begin{bmatrix}
+                      1 \\
+                      -2
+                  \end{bmatrix}$ \\
+              if: $\lambda = 6$: \\
+              = \begin{align}
+                  x  -  2y  = 0 \\
+                  2x  - 4y   = 0
+              \end{align} \\
+              = $x = -(1/2y)$ \\
+              = $\vec{v_2} = \begin{bmatrix}
+                      1 \\
+                      -2
+                  \end{bmatrix}$ \\
+              = $1/2x = y$ \\
+              = $\vec{v_2} = \begin{bmatrix}
+                      2 \\
+                      1
+                  \end{bmatrix}$ \\
+              so: \\
+              $P = \begin{bmatrix}
+                      1  & 2 \\
+                      -2 & 1
+                  \end{bmatrix}$ \\
+              $D = \begin{bmatrix}
+                      1 & 0 \\
+                      0 & 6
+                  \end{bmatrix}$ \\
+              % A1 = np.array(([1, 2],[-2, 1])) ; A1IV = np.linalg.inv(A1); print(A1IV)%   
+              $P^{-1} = \begin{bmatrix}
+                      0.2 & -0.4 \\
+                      0.4 & 0.2
+                  \end{bmatrix}$
+        \item 几何关系 \\
+              已知 P  = $\begin{bmatrix}
+                      1  & 2 \\
+                      -2 & 1
+                  \end{bmatrix}$ \\
+              $\vec{e_{1}} = \begin{bmatrix}
+                      1 \\
+                      -2
+                  \end{bmatrix}$ \\
+              $\vec{e_{2}} = \begin{bmatrix}
+                      2 \\
+                      1
+                  \end{bmatrix}$ \\
+              $\vec{e_{1}}^{T} \cdot \vec{e_{2}}$ = $ (1 \cdot 2)  +  (-2 \colon 1)  = 0$ \\
+              点积为0 互相垂直 \\
+              我们观察 A 矩阵 会发现 $ A = A^{T} $ 是一个 实对称矩阵 \\
+        \item 为什么一个矩阵的 特征向量基底矩阵(由标准坐标系换个视角为特征向量基底矩阵), 这个矩阵如果是实对称矩阵  那么它的两个特征向量会垂直?\\
+              我们已掌握的基础定理: \\
+              设 : \\
+              A(2 x 2) 下面定理(存在特征向量和是实对称矩阵)成立 \\
+              \begin{align}
+                  A\vec{v_1} = \lambda_{1} \vec{v_1}
+                  A\vec{v_2} = \lambda_{2} \vec{v_2}
+                  A^{T} =  A
+              \end{align} \\
+              证明 $\vec{v_1}^{T} \cdot \vec{v_2} = 0$ \\
+              已知 $\vec{v_1}^{T} \cdot \vec{v_2} = \vec{v_2}^{T} \cdot \vec{v_1} $ (乘法的交换率)\\
+              引入 A: \\
+              = $\vec{v_1}^{T} \cdot A\vec{v_2}  = \vec{v_2}^{T} \cdot A\vec{v_1}$ \\
+              = $\vec{v_1}^{T} \cdot A^{T}\vec{v_2}  = \vec{v_2}^{T} \cdot A^{T}\vec{v_1}  $ \\
+              = $(A\vec{v_1})^{T} \cdot \vec{v_2} = (A\vec{v_2})^{T} \cdot \vec{v_1}$ \\
+              = $(\lambda_{1}\vec{v_1})^{T} \cdot \vec{v_2} = (\lambda_{2}\vec{v_2})^{T} \cdot \vec{v_1}$ \\
+              我们已知道对 $\vec{v_1}$ 先进行倍数的缩放再倒置 和先倒置再缩放是相同的 -> $(\vec{v_1}\lambda_{1})^{T} =  \lambda_{1} \vec{v_{1}}^{T}$ \\
+              = $\lambda_{1}\vec{v_1}^{T} \cdot \vec{v_2} = \lambda_{2}\vec{v_2}^{T} \cdot \vec{v_1}$ \\
+              = $\lambda_{1}\vec{v_1}^{T}\vec{v_2} - \lambda_{2}\vec{v_2}^{T}\vec{v_1} =  0$
+              = $(\lambda_{1} - \lambda_{2}) (\vec{v_1}^{T}\vec{v_2}) =  0$
+              已知 $\lambda_{1} - \lambda_{2}$ != 0 \\
+              那么 $(\vec{v_1}^{T}\vec{v_2})  = 0$
+              如果 $A^{T} =  A$ 必须要得到满足 也就是 不是所有矩阵的特征向量会垂直
+
+    \end{itemize}
+\end{flushleft}
+
+
+\paragraph{Rank And Outer product}
+\begin{flushleft}
+    \begin{itemize}
+        \item 1: 什么是方向 什么是矩阵的方向?
+              方向是向量的天然属性之一(因为有了方向 才有向量这个概念) \\
+              矩阵是由两个基向量(列)组成的变化规则, 它作用于环境(这个环境下的所有向量) \\
+              那么矩阵是否也存在方向 ? \\
+              $Mx  =  \begin{bmatrix}
+                      \vert    & \vert    \\
+                      \vec{e1} & \vec{e2} \\
+                      \vert    & \vert
+                  \end{bmatrix}\begin{bmatrix}
+                      x \\
+                      y
+                  \end{bmatrix}$ \\
+              = $\vec{e1}x  + \vec{e2}y$ \\
+              $\vec{e1}x  + \vec{e2}y$ 这个代数式子非常经典 它描述了新向量$\vec{x_{ne}}$ 的"路径"组成, 沿着e1走多少 沿着e2走多少 ? \\
+              那么在逻辑上 e1 和 e2 是存在方向的 那么 e1 + e2 是不是只是一个方向 ?  \\
+              从向量加法的定义来说 e1 + e2 = e3 e3就是一个向量 它的确是一个存在方向 \\
+              但 $\vec{e1}x  + \vec{e2}y != e1 + e2$(除非 x = y = 1) \\
+              而 $x,y ∈ \mathbb{R}$ 和 向量加法的物理逻辑是路径拼接 \\
+              所以 $\vec{e1}x  + \vec{e2}y$ 可以是环境中的任何一个向量地址 \\
+              那么从这个角度来说: 矩阵是不存在方向的? \\
+        \item 2: 矩阵没有方向, 或者说矩阵包含所有方向 就像 $N ∈ \mathbb{R}$ 存不存在 N = 1(only)? \\
+              $\vec{e1}x  + \vec{e2}y$ 我们来分析下 e1 和 e2 \\
+              我们知道向量是存在方向的 那么 $k \cdot e$(k 是常量, 就是表示只在 e 这一个方向做拉伸)\\
+              设$ e2 = k \cdot e1 $ \\
+              $\vec{e1}x  + \vec{e2}y$  =  $\vec{e1}x + \vec{e1}ny$  \\
+              = $e1(x + ny)$ \\
+              这个代数形式就 表达 N = 1 (only) 的存在情况 \\
+        \item 3: Rank 到底是什么 ?
+              我们以 $M(n \times m ...)$ 矩阵来说 \\
+              $\vec{x_{new}} = Mx$ 能到任何一个位置 那么我们称为它为全集(也称为全空间和全维度) \\
+              如果 $\vec{x_{new}}$ 只能存在于固定空间(k 维度) 我们称为这个维度为 Rank \\
+              这个 $ K <= min(n,m)$ 这个 K 就是 Rank \\
+        \item 4: Outer product 和 Rank \\
+              三个向量 v, u, x \\
+              M(Outer product) =  $vu^{T}$ \\
+              M 是矩阵 \\
+              $Mx$ = \\
+              $(vu^{T})x$  = $v(u^{T}x)$($(u^{T}x$ 是点积) ) = $vC$ \\
+              $vC$ 只有一个方向 所以 Rank = 1 \\
+              Outer product 的 Rank 只能是 1
+    \end{itemize}
+
+    $\vec{v}^{T}\vec{x} == \vec{v} \cdot \vec{x}$
+\end{flushleft}
+
+\paragraph{$.T$ 和点积的代数几何关系}
+\begin{flushleft}
+    \begin{itemize}
+        \item 1 点积, $.T$, $\in \mathbb{R}^{1 \times 1}$ \\
+              存在向量 $\vec{v} \in \mathbb{R}^{n \times 1}, \vec{x}  \in \mathbb{R}^{n \times 1}$ \\
+              向量空间:
+              点积: $\vec{v} \cdot \vec{x}$ = $\sum_{i = 1}^{n} v_{i}x_{i} = y$ \\
+              这里的 y 是一个标量 \\
+              矩阵空间(必须要倒置$\vec{v}$,不然无法满足矩阵乘法基本定理):
+              矩阵乘法 $\vec{v}^{T} @ \vec{x}$ = $\begin{bmatrix}
+                      v_{1} & v_{2} & v_{3} & \dots & v_{m}
+                  \end{bmatrix}@ \begin{bmatrix}
+                      x_{1} \\
+                      x_{2} \\
+                      x_{3} \\
+                      \dots \\
+                      x_{n}
+                  \end{bmatrix} = \sum_{i = 1}^{n}v_{i}x_{i} = y1 $\\
+              那么从代数形式: $y = y1 -> \vec{v} \cdot \vec{x} = \vec{v}^{T} @ \vec{x} $
+        \item 2  $\vec{v}.T @ \vec{x}$ 的几何意义是什么? \\
+              我们已知道 $\vec{v}.T @ \vec{x}$ 在代数形式上是等价于  $\vec{v} \cdot \vec{x}$ \\
+              所以这个问题就可以翻译成为什么点积表达的是个什么几何意义? 也就是 $y = \sum_{i = 1}^{n}v_{i}x_{i}$ \\
+              现在 y 是一个代数式结果 我们并不知道它的几何意义 我们需要找到它的几何意义(所有数学是发现的 而非定义的?) \\
+              我们回到 $\vec{v}, \vec{x}$ \\
+              从几何视觉上 $\vec{v}, \vec{x}$ 是三角形的两条边 它可以和另一条线段构成三角形(C):\\
+              $\vec{c} = \vec{v} - \vec{x}$ \\
+              那么我们需要求出 $|c|$ 也就是向量 c 的长度, 使用余弦定理定于: \\
+              $|c|^{2} = |v|^{2} + |x|^{2} - 2|v||x| \cdot \cos({θ}) = p1$  \\
+              我们已知道向量定义 任意向量的坐标 = 它的终点坐标 - 起点坐标 (设在2维) \\
+              $\vec{c} = \begin{bmatrix}
+                      (v_{1} - x_{1}),(v_{2} - x_{2})
+                  \end{bmatrix}$ \\
+              $|c|= \sqrt{(v_{1} - x_{1})^{2} + (v_{2} - x_{2})^{2}}$ \\
+              $=|c|^{2} = (v_{1} - x_{1})^{2} + (v_{2} - x_{2})^{2} $  \\
+              $= v_{1}^{2} - 2v_{1}x_{1} + x_{1}^{2} + v_{2}^{2} - 2v_{2}x_{2} + x_{2}^{2} $
+              $= (x_{1}^{2} + x_{2}^{2}) + (v_{1}^{2} + v_{2}^{2}) - 2 \cdot (x_{1}v_{1} + x_{2}v_{2})$
+              $= |\vec{x}|^{2}  + |\vec{v}|^{2} -  2 \cdot (x_{1}v_{1} + x_{2}v_{2}) = p2$  \\
+              $ p1 = p2  ->  x_{1}v_{1} + x_{2}v_{2} =  |v||x| \cdot \cos({θ}) $ \\
+              p1是几何的基于三角形余弦定理 p2是代数的基于向量代数运算 它们在这里是属于同一事物的两种描述 \\
+              $|x| \cdot \cos({θ})$ 是 $\vec{x}$ 在 $\vec{v}$ 的投影长度 $\cos({θ})$ 是 $\vec{x}$ 和 $\vec{v}$
+              的夹角 \\
+
+        \item 3 $\vec{v}.T @ \vec{x}$ 的几何意义到底解决了什么具体问题 ?? \\
+              由 item 2 我们已得出  $\vec{v}.T @ \vec{x}$ = $ |v||x| \cdot \cos({θ}) $ \\
+              $|x| \cdot \cos({θ})$ 也只是一个代数上普通的标量 -> k \\
+              也就是说  $\vec{v}.T @ \vec{x}$ 是一个 k 倍的 $|v|$ 常量 那么 $vec{v}.T$ 到底是什么呢 ?
+              是一个测量工具 是一个函数 ? 先把 $\vec{x}$ 算出在 $\vec{v}$的投影标量出来 再乘 $|v|$ ?
+
+        \item 4  点积到底为了解决什么问题 ?
+              这点它和余弦定理有点像 为了代数式求解 -> 存在3个已知量(两个向量 + 点积标量) 求一个未知量??
+              这个未知量 可以是高维度两个向量的夹角 也可以是两个向量的几何位置性质 (点积为0 则相互垂直) ????
+              $\mathbb{R}{n}$
+
+    \end{itemize}
+
+\end{flushleft}
+
+
+
+
+\paragraph{复数特征值}
+
+\begin{flushleft}
+
+    $A  = \begin{bmatrix}
+            0 & -1 \\
+            1 & 0
+        \end{bmatrix}$
+    \begin{itemize}
+        \item 求特征值（快解） \\
+              由迹与行列式：
+              \[
+                  \lambda_1 + \lambda_2 = 0,\qquad \lambda_1\lambda_2 = \det A = 1.
+              \]
+              令 $\lambda_1 = \lambda$，则 $\lambda_2 = -\lambda$，代入乘积：
+              \[
+                  \lambda(-\lambda) = 1 \;\Longrightarrow\; -\lambda^2 = 1 \;\Longrightarrow\; \lambda^2 = -1,
+              \]
+              所以 $\lambda_1 = i,\;\lambda_2 = -i$.
+
+        \item 1: 问题: 虚数和实数的区别 ?
+              虚数和实数的最大的区别是维度不同 一个是2维 一个是1维线性 \\
+              也就是说一个虚数参与了 常数式代数式子中 那么这个代数式和被迫升维(过程式的), 但结果可以是常数式的, 过程与结果的不在一个维度\\
+              虚数的定义: $i^{2} = -1$  \\
+              -1是一个非常标准的常数 它的几何意义是翻转 \\
+              代数表达: $5 \cdot -1 = -5$ -1这个算子会把 5 转换成-5 在线轴(常数一维)的视角中 是非常典型的翻转(以0为数轴中心点) $5 -> -5$ (注意这里是一维)\\
+              那么我们怎么使用高维的角度是描述旋转呢 ? \\
+              $x = \begin{bmatrix}
+                      1 \\
+                      0
+                  \end{bmatrix}$
+              我们继续回到 A 矩阵的视角中(2D) 已知定理 $Ax = \lambda_{1}x$  \\
+              $Ax = \begin{bmatrix}
+                      0 \\
+                      1
+                  \end{bmatrix}$  \\
+              那么 $AAx = \lambda_{1}\lambda_{1}x$ \\
+              $AAx = \begin{bmatrix}
+                      -1 \\
+                      0
+                  \end{bmatrix}$ = -1x  \\
+              so :  $i$ = 逆时针旋转90度 \\
+              所以 i 是一个2维动作 但最终结果依然是一维
+              所以复数到底是什么呢?
+              由上所知 我们知道 i 是一个逆时针旋转90度的动作, 例如 $2 \cdot i$ 把长度为 2 轴 以正方向的向量，绕原点逆时针旋转 90°
+              是给一维数轴补上了旋转这个操作
+        \item 2: 为什么"纯旋转"在实数范围内找不到特征向量?
+
+
+
+    \end{itemize}
+
+    所以我们来重新理解下i  到底是什么
+
+    i 是一个动作 是逆时针旋转90度的动作
+
+    对于一个绝对的点 x = 3 ,y = 4
+
+    在 标准坐标世界系中它表达为 (3, 4)
+    在 虚数世界中它表达为 3 + 4i
+    那么 3 + 4i 中这个 + 号是非常有意思的
+    我们已知道 i 是一个逆时针旋转的动作 所以这个整个代数式维度不再是 a + b 这种一维 而是 旋转这种二维
+    那么这个的加法不再是 标量(Scalar)的思维
+    + 就是东西变多（融合）
+    × 就是东西变大（放大）
+    而且路径的拼接
+    3 + 4i 就像一个人从原点出发 向右走 3 步 而这个 i 是 逆时针旋转90度的动作,注意这个是动作的过程 而非结果 结果是正北方 是方向
+    那么4i 就是向正北方走 4步?
+
+    那么我们继续 如果 (3 + 4i)i 是什么呢 用上面的思路我们就很清晰了
+    (3 + 4i) 在几何上就是一个已经到达的目的点 这个点是2维的(或者是高维的X, 是一个向量) 当一个Xi 那么这里的这个i 它就是要做具体动作
+    当一个向量和i做乘法运算 那就是指参与动作 也就是逆时针旋转90度的动作 而非使用结果?
+
+    那么我们回到欧拉公式 $e^{i\theta}$  我们已知 $\theta$ 在这里是一个常数是弧度 例如 180 = $\pi$
+    那么 $i\theta$ 是一个常数乘以 i, 这里的 i 是一个方向属性 朝北方移动制定弧度的距离? $e^{}$ 是指数模式 控制次数?
+
+\end{flushleft}
+
+
+\end{document}

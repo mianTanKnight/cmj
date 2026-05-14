@@ -1,0 +1,144 @@
+\documentclass[12pt]{article}
+\usepackage[a4paper,margin=2.2cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{hyperref}
+\usepackage{cleveref}
+
+% 中文（xelatex）
+\usepackage{fontspec}
+\usepackage{xeCJK}
+\setCJKmainfont{Noto Serif CJK SC}
+
+\title{Math-Note- Calculus}
+\date{}
+\begin{document}
+\maketitle
+
+\subsection*{展开并观察规律}
+\begin{align}
+(x+h)^{2} - x^{2} = ? (a)\\
+(x+h)^{3} - x^{3} = ? (b)\\
+(x+h)^{n} - x^{n} = ? (c)\\
+\end{align}
+我不记得二项式定理
+我们展开 \\
+\begin{align}
+a = x^{2} + 2xh + h^{2} - x^{2} 
+  = 2xh + h^{2} \\
+b = x^{3} + 3x^{2}h + 3xh^{2} + h^{3} - x^{3}
+  = 3x^{2}h + 3xh^{2} + h^{3}
+\end{align}
+那么规律是什么? 会存在一个$h^{n}$ xh的前系数是这个指数 例如2xh,$3x^{2}h$ ?
+
+\subsection*{处理分式的“裂项”}
+简化$\frac{1}{x+h} - \frac{1}{x}$ 目标是将其写成一个分子包含 h的分式。
+\begin{align}
+    step 1: 通分
+    = \frac{x}{(x+h)x} - \frac{x+h}{(x+h)x} \\
+    = \frac{x-x-h}{(x+h)x} \\
+    = \frac{-h}{(x+h)x}
+\end{align}
+
+\subsection*{根号的“脱壳”}
+将$\sqrt{x+h} - \sqrt{x}$ 的分子有理化
+\begin{align}
+    step 1: 分式化
+    = \frac{\sqrt{x+h} - \sqrt{x}}{1}\\
+    step 2: 共轭
+    =  \frac{\sqrt{x+h} - \sqrt{x}}{1}  \cdot \frac{\sqrt{x+h} + \sqrt{x}}{\sqrt{x+h} + \sqrt{x}}\\ 
+    =  \frac{x+h-x}{ \sqrt{x+h} + \sqrt{x}}\\
+    =  \frac{h}{ \sqrt{x+h} + \sqrt{x}}\\    
+\end{align}
+
+\subsection*{斜率的演变}
+给定函数$f(x) = x^{2}$ 在曲线上取两点 A(1,1), B(1.1, 1.21) 计算直线AB的斜率
+从A走到B 本质上是一个向量 先向x走 B.x- A.x 再向y 走 B.y - A.y\\
+那么问题就是这个向量的斜率是多少？\\
+\begin{align}
+    \vec{v} = \begin{bmatrix}
+        1.1 - 1 \\
+        1.21 - 1 \\
+    \end{bmatrix} \\  
+        \vec{v} = \begin{bmatrix}
+        0.1 \\
+        0.21 \\
+    \end{bmatrix} \\  
+\end{align}    
+$向量的斜率是 y/x$
+斜率就是：$\frac{0.21}{0.1}$ = 2.1
+
+如果B点无限向A点接近 "瞄准" 的是1这个整数 ?
+如果A是(1.09,1.209)
+= $\begin{bmatrix}
+    0.01,
+    0.01
+\end{bmatrix}$
+斜率就是：$\frac{0.01}{0.01}$ = 1 ?
+
+\subsection*{割线与切线}
+首先我们要先弄明白切线和割线是什么意思
+两点确定是割线
+单点确定是切线
+
+切线是无法确定长度的 但割线存在 
+对于一个波动的曲线 割线可以计算出这个曲线一个局部的长度(近似)
+
+\subsection*{穷竭法的思考（积分的萌芽）}
+一句话: 曲线变成直线了 曲线消失了直接代替
+
+
+切线由2点构成
+\[
+p1 = (x, f(x))
+p2 = (x+h, f(x+h))
+\]
+
+\subsection*{幂函数}
+\begin{align}
+f(x) = x^{4}
+= \frac{(x+h)^{4} - x^{4}}{ x + h - x}\\
+= \frac{x^{4}+ 4x^{3}h  + 6x^{2}h^{2}  + 4xh^{3} + h^{4} - x^{4}}{h} \\
+= \frac{4x^{3}h  + 6x^{2}h^{2}  + 4xh^{3} + h^{4}}{h} \\
+= \frac{h(4x^{3} + 6x^{2}h  + 4xh^{2} + h^{3})}{h}\\
+= \frac{1}{4x^{3} + 6x^{2}h  + 4xh^{2} + h^{3}}
+\end{align}
+
+
+\subsection*{倒数函数}
+\begin{align}
+f(x) = \frac{1}{x} \\
+= \frac{\frac{1}{(x+h)} -\frac{1}{x}}{h} \\
+= \frac{\frac{x}{(x+h)x}-\frac{x+h}{(x+h)x}}{h} \\
+= \frac{\frac{x-x-h}{(x+h)x}}{h} \\
+= \frac{-h}{(x+h)x} \cdot \frac{1}{h} \\
+= -\frac{1}{(x+h)x}
+\end{align}
+
+\subsection*{根号函数}
+\begin{align}
+f(x) = \sqrt{x} \\
+= \frac{\sqrt{x+h}-\sqrt{x}}{h}\\
+= \frac{\sqrt{x+h}-\sqrt{x}}{h} \cdot  \frac{\sqrt{x+h}+\sqrt{x}}{\sqrt{x+h}+\sqrt{x}} \\ 
+= \frac{h}{h(\sqrt{x+h}+\sqrt{x})} \\
+= \sqrt{x+h}+\sqrt{x} 
+\end{align}
+
+
+\subsection*{常数函数}
+\begin{align}
+f(x) = 5 \\
+= \frac{5-5}{h}
+= 0
+\end{align}
+y是常数,几何上是直线
+
+\subsection*{线性函数}
+\begin{align}
+f(x) = 3x + 2
+= \frac{(3(x+h) + 2) -(3x +2)}{h}
+= \frac{3x + 3h +2 -(3x +2)}{h}
+= 3 
+\end{align}
+
+
+\end{document}

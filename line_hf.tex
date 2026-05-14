@@ -1,0 +1,520 @@
+\documentclass[12pt]{article}
+\usepackage[a4paper,margin=2.2cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{hyperref}
+\usepackage{cleveref}
+
+% 中文（xelatex）
+\usepackage{fontspec}
+\usepackage{xeCJK}
+
+\usepackage{fontspec}
+\usepackage{xeCJK}
+\setCJKmainfont{Noto Serif CJK SC}
+
+\title{Linear Algebra}
+\date{}
+\begin{document}
+\maketitle
+
+
+\begin{flushleft}
+    1. 2x2 矩阵 $\begin{bmatrix}
+            a & b \\
+            c & d
+        \end{bmatrix}$ 把单位正方形变化平行四边形，两条边分别是向量$(a, c)$和$(b, d)$。
+    用叉积公式推导这个平行四边形的有向面积, 证明它等于 ad-bc, 也就是行列式 \\
+    解: \\
+    因为题目需要使用叉积公式推导(建立于三维及以上) \\
+    那么我们需要把 基向量 $\vec{v1} = [a, c]$ 和 $\vec{v2} = [b, d]$ 提维为: \\
+    $\vec{v1} = [a, c, g]$ 和 $\vec{v2} = [b, d, z]$  其中 $g,z$ = 0 \\
+    那么我们会得到如下： \\
+    $\vec{v1} = [a, c, g]$ \\
+    $\vec{v2} = [b, d, z]$ \\
+
+    我们已知叉积会得到一个向量(垂直于v1,v2所构成的平面(也就是那个平行四边形由 0, v1, v2, v1 + v2 构成))\\
+    所以我需要算出这个叉积向量并获取其模长,也就是这个平行四边形的面积 \\
+    已知道叉积公式如下： \\
+    $\vec{v1}  \times \vec{v2}$ =  $(cz - gd , gb - az, ad -cb)$ \\
+    已知 $g,z = 0$
+    所以公式可以简化: \\
+    $\vec{v1}  \times \vec{v2}$ =  $(0 , 0, ad -cb)$ \\
+    = $\vec{v1}  \times \vec{v2}$ =  $(0 , 0, ad- bc)$ \\
+    所以我们的可以基于 $\vec{r} = [0,0,ad -bc]$ 算出模长: \\
+    $\sqrt{(0)^{2} + (0)^{2} + (ad- bc)^{2}}$ \\
+    = $|ad - bc|$ \\
+    这里我们得到了一个绝对值,但我们丢失了方向 \\
+    已知$\vec{r} = [0,0,ad -bc]$ 可以转换成 $\vec{r} = x*0 + y*0 + k(ad-bc)$ \\
+    所以 如果 ad- bc 是否大于0 来确定方向 ad - bc  > 0 是 逆时针 反之是顺时针
+\end{flushleft}
+
+\subsection{特征向量}
+\begin{flushleft}
+    特征向量公式:
+    $A\vec{u} - \lambda\vec{u} = \vec{0}$
+    这个向量0 非常有意思
+    向量0的形态是: $\begin{bmatrix}
+            0 \\
+            0 \\
+            ..
+        \end{bmatrix}$  \\
+    在公式中这个向量0 as $v0_{1}$ 由两个向量减得到 在几何视角中两个向量相减是距离 例如 A-B 就是 B走到A的距离 \\
+    也就是说这个向量0 就表达了 $A\vec{u}$ 和 $\lambda\vec{u}$ 是完全重合的 \\
+
+    那么我们把 $A\vec{u} - \lambda\vec{u} = \vec{0}$ 代数变化下: \\
+    = $(A - \lambda I)\vec{u} = \vec{0}$ 其中 I 是标准矩阵 $\begin{bmatrix}
+            1 & 0 \\
+            0 & 1
+        \end{bmatrix}$ \\
+    那么这个向量0 as $v0_{2}$   是什么意思呢? 我们把 $(A - \lambda I) = K$ 矩阵 也就是说 $ K \cdot \vec{u} = \vec{0}$ \\
+    $\vec{u}$ 被压到了零点？ 这个 $\vec{0}$ 是 0点的意思 \\
+    $v0_{1}$ 和 $v0_{2}$ 的表达性质是不一样的 \\
+    那么我们现在来研究 K 是什么性质 ？ \\
+    K 的表达式是:  \\
+    $A - \lambda I$ 这是一个标准的向量减法, 它的结果是一个矩阵\\
+    这个矩阵表示的是两个矩阵的差异 是一个差异矩阵 \\
+    所以我们知道 K 是一个差异矩阵 \\
+    那么一个 差异矩阵 * $\vec{u}$ = $\vec{0}$
+    是否可以表述 $A\vec{u} - \lambda I\vec{u} = 0$ 是同一件事情呢? \\
+    在代数式上 它很简单也很明显  $K\vec{u}$ =  $A\vec{u} - \lambda I\vec{u}$ \\
+    是描述同一件事? \\
+    答案是: 在这个例子中 代数和几何是描述同一个事。\\
+    它们更像描述文件地址 一个是绝对坐标($v0_{1}$), 一个是相对坐标($v0_{2}$)\\
+
+    我有一个关键的点 虽然能明白一些 但我感觉到很模糊 \\
+    $A\vec{u} - \lambda I\vec{u} = \vec{0} $ -> 式子a \\
+    问题1: 等于向量0代表是完全重叠 而非在一个方向上(它比在同一个方向要严苛的多)
+    我们来看 矩阵$A$ 和 矩阵 $\lambda I$ \\
+    如果让式子a成立 那么有下面明显的下面几种明显的情况 \\
+    1: $A$ = $\lambda I$ = 0  \\
+    2: $A$ = $\lambda I$ 或 $A$ - $\lambda I$  = 0  \\
+    但从代数视角来说 det($A$ - $\lambda I$) = 0 并不满足呀 \\
+    当然我们从几何性质来说 det($A$ - $\lambda I$) = 0 是降维性质 可能会把 $\vec{u}$ 压到0点但不一定会压到0点 只有 式子a成立才会被压到0点 \\
+
+    我大概明白了一些 其实关键在一个很基础点上 我忽视了 我们要找的是两个未知两 一个是 $\lambda$ 一个  $\vec{u}$ \\
+    同方向是$\vec{u}$和 $A\vec{u}$ \\
+    但 $\lambda$ 是一个可拉伸收缩的控制值 当两个向量在同一个方向 那么其中一个向量 *$\lambda$ 就一定可以和另一个向量重叠 \\
+\end{flushleft}
+
+\paragraph{Task 1.1 投影矩阵:}
+\begin{flushleft}
+    $A = \begin{bmatrix}
+            1 & 0 \\
+            0 & 0 \\
+        \end{bmatrix}$ \\
+    1: 纯靠你在脑海中想象这个矩阵对二维空间的变换动作 \\
+    一眼看去 我就会把 A 拆称两个基向量 $\vec{i} = \begin{bmatrix}
+            1 \\
+            0
+        \end{bmatrix}$ 和 $\vec{j} = \begin{bmatrix}
+            0 \\
+            0
+        \end{bmatrix}$ \\
+    我们发现 $\vec{j}(y)$ 是 0向量 所以 我们很明白这是一个只会沿着x轴运动的\\
+    它把所有点都拍到x轴上了 \\
+    2: 代数式解: \\
+    $(A - \lambda I) =  \begin{bmatrix}
+            1 - \lambda & 0           \\
+            0           & 0 - \lambda
+        \end{bmatrix}$   \\
+    = $det((A - \lambda I)) = 0$ \\
+    = $(1 - \lambda)(-\lambda) - 0  = 0$ \\
+    = $-\lambda + \lambda^{2} - 0 = 0$ \\
+    = $\lambda^{2} - \lambda - 0 = 0 $
+    = $\lambda^{2} = \lambda$ \\
+    so: $\lambda = 1  \| \lambda = 0$ \\
+    if: $\lambda = 1$: \\
+    = $\begin{bmatrix}
+            0 & 0  \\
+            0 & -1 \\
+        \end{bmatrix} @ \begin{bmatrix}
+            x \\
+            y
+        \end{bmatrix}$ \\
+    = \begin{align}
+        0x + 0y = 0  \\
+        0x + -1y = 0 \\
+    \end{align}
+    so: y = 0 ,x 可以是任意数 \\
+    $\vec{v} = \begin{bmatrix}
+            1 \\
+            0
+        \end{bmatrix}$
+    if: $\lambda = 0$: \\
+    = $\begin{bmatrix}
+            1 & 0 \\
+            0 & 0 \\
+        \end{bmatrix} @ \begin{bmatrix}
+            x \\
+            y
+        \end{bmatrix}$ \\
+    = \begin{align}
+        1x + 0y = 0 \\
+        0x + 0y = 0 \\
+    \end{align}
+    so: x = 0, y 可以是任意数 \\
+    $\vec{v} = \begin{bmatrix}
+            0 \\
+            1
+        \end{bmatrix}$ \\
+    我们找到了两个组
+    \begin{align}
+        \vec{u} = \begin{bmatrix}
+                      1 \\
+                      0
+                  \end{bmatrix} \& \lambda = 1 \\
+        \vec{u} = \begin{bmatrix}
+                      0 \\
+                      1
+                  \end{bmatrix} \& \lambda = 0
+    \end{align}
+    运算后发现 全在x轴(原点也是x轴上的一点) 没有推翻我们的几何推断
+\end{flushleft}
+
+\paragraph{任务 1.2 镜像矩阵:}
+\begin{flushleft}
+    $B =  \begin{bmatrix}
+            0 & 1 \\
+            1 & 0 \\
+        \end{bmatrix}$
+    1: 纯靠你在脑海中想象这个矩阵对二维空间的变换动作 \\
+    新的基i向量是0,1  新的基j向量是1,0 与原基向量相反(也就是对称关系)
+    经典的沿着x = y 这条直线对称
+    2: 代数式解: \\
+    = $det(\begin{bmatrix}
+            -\lambda & 1
+            1        & -\lambda
+        \end{bmatrix}) = 0$ \\
+    = $(-\lambda)(-\lambda) - 1 = 0$ \\
+    = $\lambda^{2} - 1 = 0$ \\
+    = $\lambda^{2} = 1$  \\
+    = $\sqrt{\lambda} = 1 $ \\
+    so : $\lambda = 1 \| \lambda = -1$ \\
+    if : $\lambda = 1 $:
+    = $\begin{bmatrix}
+            -1 , 1
+            1  , -1
+        \end{bmatrix}\begin{bmatrix}
+            x \\
+            y
+        \end{bmatrix} = 0$ \\
+    \begin{align}
+        -x + y = 0 \\
+        x + -y = 0
+    \end{align} \\
+    x,y相等 \\
+    if : $\lambda = -1 $:
+    = $\begin{bmatrix}
+            1 , 1
+            1  , 1
+        \end{bmatrix}\begin{bmatrix}
+            x \\
+            y
+        \end{bmatrix} = 0$ \\
+    \begin{align}
+        x + y = 0 \\
+        x + y = 0
+    \end{align} \\
+    x,y为相反数 \\
+    so: \\
+    \begin{align}
+        \vec{u} =  \begin{bmatrix}
+                       1 \\
+                       1
+                   \end{bmatrix} \& \lambda = 1 \\
+        \vec{u} =  \begin{bmatrix}
+                       1 \\
+                       -1
+                   \end{bmatrix} \& \lambda = -1
+    \end{align}
+\end{flushleft}
+
+\paragraph{Task 2.1}
+\begin{flushleft}
+    C = $\begin{bmatrix}
+            3 & 0 \\
+            0 & 3
+        \end{bmatrix}$ \\
+    1: 纯靠你在脑海中想象这个矩阵对二维空间的变换动作 \\
+    部数增大(3)
+
+    2: 算 $\lambda $ 是多少\\
+    = $\begin{bmatrix}
+            3 - \lambda & 0          \\
+            0           & 3- \lambda
+        \end{bmatrix}$ \\
+    = $(3 - \lambda)(3- \lambda) = 0$ \\
+    那么 $\lambda$ 只有一个解 就是3 \\
+
+    3: 当把$\lambda $代入回 $C -\lambda I$,会得到什么矩阵？\\
+    = $\begin{bmatrix}
+            0 & 0 \\
+            0 & 0
+        \end{bmatrix}$ \\
+    会得到0矩阵
+
+    4：这说明在这个空间里，特征向量到底有几根 ？\\
+    我们由2知道 这个矩阵是个0矩阵 \\
+    因为 $\begin{bmatrix}
+            0 & 0 \\
+            0 & 0
+        \end{bmatrix}\begin{bmatrix}
+            x \\
+            y
+        \end{bmatrix} = \vec{0}$ 成立, x,y可以为 $\forall$ (也就是所有向量都是3的特征向量)\\
+    根只有为3的一根
+\end{flushleft}
+
+
+\paragraph{Task 2.2}
+\begin{flushleft}
+    D = $\begin{bmatrix}
+            1 & 1 \\
+            0 & 1
+        \end{bmatrix}$
+    1: 纯靠你在脑海中想象这个矩阵对二维空间的变换动作 \\
+    我们观察到j基量由 0,1 变成 1,1. 我们从几何的习惯理解 当x越大整体的趋势会越向右,所以这很典型是一个往右推的矩阵变化(注意应该没有上提
+    因为y并没有增大)
+
+    2: 解出它的特征值 $\lambda $ \\
+    = $det(\begin{bmatrix}
+            1 -\lambda & 1           \\
+            0          & 1 - \lambda
+        \end{bmatrix}) = 0$ \\
+    \begin{align}
+        (1- \lambda)x + y = 0 \\
+        (1 - \lambda)y  = 0
+    \end{align} \\
+    我们解上面的方程组 $  (1 - \lambda)y  = 0 $  \\
+    = $(y = 0 \& \forall \lambda )  \| (\lambda = 1 \& \forall y )$ \\
+    if $(y = 0 \& \forall \lambda )$: \\
+    那么 x = 0 \\
+    $\vec{v} = \begin{bmatrix}
+            0 \\
+            0
+        \end{bmatrix}$ -> 无意义 \\
+    if $(\lambda = 1 \& \forall y )$: \\
+    带入式子1 $(1- \lambda)x + y = 0$ \\
+    我们可以确定 y = 0 , $\forall x$ \\
+    $\vec{v} = \begin{bmatrix}
+            1 \\
+            0
+        \end{bmatrix}$
+
+    3: 你发现了什么异常？相比于普通的 2×2
+    矩阵，这个矩阵在“寻找方向不变的向量”这件事上，遭遇了什么“先天残疾”？
+    这个先天的残疾 我并不能理解 难道只有一个特征值解(1) ? 或者 特征向量 y 固定为0 ？
+    还有一个问题：
+    还是这个式子:  \\
+    $A\vec{v} =\lambda \vec{v}$
+    对于这个矩阵A 如果这个代数式子成立
+    那么证明我们找到了特征向量和特征值 那么其他向量呢
+    它们没有意义吗？
+    这里我有个点无法理解
+    我们知道 $\vec{v} = \begin{bmatrix}
+            3 \\
+            1
+        \end{bmatrix}$ 是标准坐标系的表达
+    而 $c1v1 + c2v2 = \vec{v} = \begin{bmatrix}
+            3 \\
+            1
+        \end{bmatrix}$
+    从这个代数式来看 它说在找也给在新的基底 存在[c1,c2] 等于 [3,1]
+    这点我无法理解
+    那么正确的式子应该是这样呀
+    c1v1 + c2v2 = 3ei + 1ej 呀 同一个位置
+\end{flushleft}
+
+\begin{flushleft}
+    我追求干净和简洁和逻辑顺畅的理解 我先说下我的理解 :
+    我们先向量:
+    $\vec{v} = \begin{bmatrix}
+            3 \\
+            1
+        \end{bmatrix}$ \\
+    这向量基于标准基的向量 它是简化的 完整代数表达形式是: \\
+    $\vec{v} = 3 \cdot \begin{bmatrix}
+            1 \\
+            0
+        \end{bmatrix} + 1 \cdot \begin{bmatrix}
+            0 \\
+            1
+        \end{bmatrix}$ \\
+    由上面的代数式我们很清楚的明白这里有一个累加的逻辑 先走3个 $\vec{b_i}$ + 1 $\vec{b_j}$ \\
+    到达了一个目的 这个目的是 $\vec{v}$ 这个向量v 首先它是个地点 它在标准基下环境名称是 [3, 1] \\
+    就像变量名和指针地址的关系 在另一个基环境下 这个变量名是可以变化的 但指针地址并不会改变/ \\
+
+    那么变基操作呢? \\
+    我们把 3, 1换成 c1,c2, 两个基向量换成v1, v2呢 \\
+    那么代数式(表达同一个地方): \\
+    c1v1 + c2v2  =  $ 3 \cdot \begin{bmatrix}
+            1 \\
+            0
+        \end{bmatrix} + 1 \cdot \begin{bmatrix}
+            0 \\
+            1
+        \end{bmatrix}$ \\
+    我们现在遇到一个矩阵 A  它会改变基向量 这里有个很重要的逻辑细节: \\
+    先换基底而非先矩阵运算 \\
+    那么式子就会变成这样: \\
+    $A(c1v1+ c2v2) = A(\begin{bmatrix}
+            3 \\
+            1
+        \end{bmatrix}) $ \\
+    那么现在我们已知道有两组未知变化c,v 正常情况下是无解的\\
+    如果 A存在特征向量/值 \\
+    那么式子可以变化 : \\
+    $c1(Av1) + c2(Av2) = A(\begin{bmatrix}
+            3 \\
+            1
+        \end{bmatrix}) $ \\
+    = $c1(\lambda v1) + c2(\lambda_{2} v2) = A(\begin{bmatrix}
+            3 \\
+            1
+        \end{bmatrix})$ \\
+    那么这个代数式子表达什么？ \\
+    如果一个矩阵存在特征向量/值 那么通过换基(基换成特征向量)操作 走[c1,c2]
+    是可以到达同一个地方($A(\begin{bmatrix}
+            3 \\
+            1
+        \end{bmatrix})$)的？
+    但有个问题 这是一个代数式 也就是 c1 c2 必须存在解才能证明这个可能？
+
+    这是我的一点 如果有任何不正确和模糊的地方 你需要指出来
+
+    你刚才说到了一个非常有数学美感的一句话:
+    一个n维矩阵 如果它不是残缺矩阵(存在n个特征向量 但它们同一个方向)
+    那么它就一定能证明 $c1(\lambda v1) + c2(\lambda_{2} v2) = A(\begin{bmatrix}
+            3 \\
+            1
+        \end{bmatrix})$ 是有解的 例如: 2维 就会撑起一个平面 只要你能撑起这个平面 那么你就一定可以走到指定的目的地(条条大路通罗马？)
+\end{flushleft}
+
+\paragraph{Task 3}
+\begin{flushleft}
+    一个$2 x 2$的矩阵M $\begin{bmatrix}
+            a & b \\
+            c & d \\
+        \end{bmatrix}$: \\
+    1: 当它作用在向量 $\vec{v1} = \begin{bmatrix}
+            1 \\
+            1
+        \end{bmatrix}$时, 拉长2倍,方向不变.\\
+    2: 当它作用到向量 $\vec{v2}  = \begin{bmatrix}
+            -1 \\
+            1
+        \end{bmatrix}$时 压成零向量. \\
+
+    构建一个方程组: \\
+    \begin{align}
+        M @ v1 = 2(v1)           \\
+        M @ v2 = 0               \\
+        a + b = 2 (x)            \\
+        c + d = 2 (y)            \\
+        -a + b  = 0              \\
+        -c + d  = 0              \\
+        a + b - 0 =  2 - (a - b) \\
+        c + d - 0 = 2 - (c - d)  \\
+        a + b  = 2 - a + b       \\
+        c + d  = 2 - c + d       \\
+        a + b + a - b = 2        \\
+        c + d + c - d  = 2       \\
+        2a = 2                   \\
+        2c = 2                   \\
+        a, c = 1                 \\
+        b, d = 1                 \\
+    \end{align}
+    so :  M = $\begin{bmatrix}
+            1 & 1 \\
+            1 & 1 \\
+        \end{bmatrix}$\\
+    思考：如果M运算连续作用100次($M^{100}$) 空间会变成什么样？ 如果以v1,v2作为新坐标系
+    事情会变的简单？ \\
+    连续作用100次 空间会变成什么样? \\
+    空间会以指数级拉大 因为 a, b, c, d 大于等于1
+    如果以v1,v2作为新坐标系
+    事情会变的简单? \\
+    对于v1来说 这个扩大的系数稳定为2\\
+    那么就可以简化为 $v1 * 2^{100}$ \\
+    v2就更简单 直接是0 ？
+
+\end{flushleft}
+
+\paragraph{Task 4}
+\begin{flushleft}
+    R = $\begin{bmatrix}
+            0 & -1 \\
+            1 & 0
+        \end{bmatrix}$ \\
+    1: 解 $det(R- \Lambda I) = 0$. \\
+    = $\begin{bmatrix}
+            -\lambda & -1       \\
+            1        & -\lambda
+        \end{bmatrix}$  \\
+    = $(-\lambda)^{2} + 1 = 0$ \\
+    = $ \lambda ^{2} + 1 = 0 $ ? 实数无解 ？ \\
+\end{flushleft}
+
+回到了最基础的式子也是最重要的式子
+$A\vec{v1} = \lambda \vec{v1}$
+
+$A\vec{v1}$ 这个就是在原坐标系中的部分组成的概念！\\
+$A\vec{v1} = \lambda \vec{v1}$ 而这个代数式就直接说明了
+特征向量和其他向量的关系
+是我笨了嘛 我虽然好像懂了 但依然感觉很模糊
+
+
+\paragraph{Power-iteration}
+\begin{flushleft}
+    A = $\begin{bmatrix}
+            a & b \\
+            c & d
+        \end{bmatrix}$ \\
+    普通向量: $\vec{v} =\begin{bmatrix}
+            x \\
+            y
+        \end{bmatrix}$ \\
+    特征向量: $\vec{ev} = \begin{bmatrix}
+            e \\
+            k
+        \end{bmatrix}$
+
+    1: 我们需要证明出为什么在连续同样矩阵运算之后 其他向量会趋同于主特征向量? \\
+
+
+\end{flushleft}
+
+一个目的地 你可以 以多个规则到达 例如: 曲线, 翻转或 直线 .... \\
+对于一个矩阵 它在标准xy坐标系中的变化规则 可能是曲线 \\
+但如果我们把基底一换(非xy坐标) 那么它的变化规则 可能是直线 (如果是 这组基底就是 特征向量 $\lambda$ 只是幅度) \\
+向量 $v = \begin{bmatrix}
+        x \\
+        y
+    \end{bmatrix}$ \\
+在标准系中: \\
+A @ $\vec{v}$ \\
+= $x\begin{bmatrix}
+        1 \\
+        0
+    \end{bmatrix} + y\begin{bmatrix}
+        0 \\
+        1
+    \end{bmatrix}$ \\
+= $\vec{v_n}$ \\
+这个 $\vec{v_n}$ 是个绝对坐标 不存在它在什么基底 \\
+
+A 存在一组特征向量 e1, e2 我们对A执行换底: \\
+$\vec{v}$  = \\
+A@$\begin{bmatrix}
+        \lambda 1 \\
+        \lambda 2
+    \end{bmatrix}$ \\
+= $\lambda1 \cdot e1  + \lambda2 \cdot e2$  (如果一个平面存在两个向量 那么这个两个向量足以撑去这个平面)\\
+那么上面这个表达式就可以表达一个非常重要的思想:
+一个向量在变基的情况下是由两个基向量组织而成 ->分量被不均匀拉伸(分量是特征向量)
+
+其实在标准环境下的$\vec{v}$ 和特征向量组环境下的 $\vec{v}$ 是同一个绝对地址？
+
+
+
+\end{document}

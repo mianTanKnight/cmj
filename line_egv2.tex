@@ -1,0 +1,605 @@
+ \documentclass[12pt]{article}
+\usepackage[a4paper,margin=2.2cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{hyperref}
+\usepackage{cleveref}
+
+% 中文（xelatex）
+\usepackage{fontspec}
+\usepackage{xeCJK}
+
+\usepackage{fontspec}
+\usepackage{xeCJK}
+\setCJKmainfont{Noto Serif CJK SC}
+
+\title{Linear Algebra-Ega2}
+\date{}
+\begin{document}
+\maketitle
+
+
+\section{破裂日 (Defective Matrix)}
+\begin{flushleft}
+    \[ A = \begin{bmatrix}
+            2 & 1 \\
+            0 & 2
+        \end{bmatrix} \]
+    尝试对其进行对角化：
+
+    \vspace{0.5em}
+    \noindent\textbf{Step 1: Solve $\lambda$ (求特征值与代数重数)} \\
+    \[
+        \det(A - \lambda I) = 0
+    \]
+    \[
+        (2-\lambda)^{2}  = 0
+    \]
+    解得特征值为重根 $\lambda = 2$。\\
+    因为因子的指数为 2，所以：\textbf{代数重数 = 2}。
+
+    \vspace{0.5em}
+    \noindent\textbf{Step 2: Solve egv (求特征向量与几何重数)} \\
+    将 $\lambda = 2$ 代入 $A - \lambda I$：
+    \[
+        \begin{bmatrix}
+            0 & 1 \\
+            0 & 0
+        \end{bmatrix}
+    \]
+    显然，该矩阵的 Rank (秩) = 1。\\
+    根据定理：\textbf{几何重数} = 维度 $n$ - Rank = $2 - 1 = \textbf{1}$。
+
+    求解齐次方程组 $(A - 2I)x = 0$：
+    \[ \begin{cases}
+            0x  +  y = 0 \\
+            0x  +  0y = 0
+        \end{cases} \]
+    解得：$y = 0$，$x$ 可以为任何非零数。\\
+    得到\textbf{唯一}的基础解系（特征向量）：
+    $\vec{e}_1 =  \begin{bmatrix} 1 \\ 0 \end{bmatrix}$
+
+    \vspace{0.5em}
+    \noindent\textbf{Step 3: 为什么 $g_{i} < a_{i}$ 不能对角化？} \\
+    对角化的核心公式是：$A = P \cdot D \cdot P^{-1}$。\\
+    其中矩阵 $P$ 必须是由 $n$ 个特征向量拼成的可逆矩阵：$P = \begin{bmatrix} \vec{e}_1 & \cdots & \vec{e}_n \end{bmatrix}$。
+
+    要让 $P$ 可逆（即能算出 $P^{-1}$），$P$ 必须满足：
+    \begin{enumerate}
+        \item 内部的列向量必须\textbf{线性无关}（例如不能存在 $\vec{e}_i = k \cdot \vec{e}_j$ 的共线情况）。
+        \item 矩阵必须满秩，即 \textbf{$\det(P) \neq 0$}（不能出现降维塌陷）。
+    \end{enumerate}
+
+
+    \vspace{0.5em}
+    \noindent\textbf{Step 4: 到底什么是对角化？它和 $P$ 以及 $P^{-1}$ 的几何关系} \\
+    对角化就是找到矩阵 $A$ 的“极简形态” $D$（由特征值组成的对角矩阵）。
+
+    \textbf{代数推导：} \\
+    如果 $P$ 可逆，对角化公式为：$A = P \cdot D \cdot P^{-1}$。\\
+    左右同乘 $P$：$AP = P \cdot D \cdot P^{-1} P \implies AP = PD$ \\
+    左乘 $P^{-1}$：$P^{-1}AP =  P^{-1}PD \implies D = P^{-1}AP$
+
+    \textbf{几何直觉（翻译器理论）：} \\
+    我们把一个普通向量 $\vec{x}$ 放到公式最右边来观察变换过程：$\textbf{A}\vec{x} = \textbf{P} \cdot \textbf{D} \cdot \textbf{P}^{-1} \vec{x}$。\\
+    矩阵乘法是\textbf{从右向左}执行的，这完美对应了三个步骤：
+    \begin{enumerate}
+        \item \textbf{$P^{-1}$ (入境翻译器)：} 把向量 $\vec{x}$ 从“标准基环境”翻译并拉拽到“$P$ 特征向量基环境”中。
+        \item \textbf{$D$ (极简处理核心)：} 在特征向量的专属世界里，变换变得极其简单！不需要复杂的旋转扭曲，只需要沿着各个轴做简单的缩放（乘以特征值）。这就是到达目的地的捷径。
+        \item \textbf{$P$ (出境翻译器)：} 处理完毕后，用 $P$ 把结果从“特征环境”重新翻译回我们熟悉的“标准基环境”。
+    \end{enumerate}
+
+    从几何视角分析，\textbf{$A$ 是基于标准基坐标系的、极其混乱复杂的转换；而 $D$ 是基于特征向量基坐标系的、最为简单的转换（只有单纯的拉伸/压缩）。} \\
+    但无论走哪条路（直接用 $A$，或者走 $P \rightarrow D \rightarrow P^{-1}$ 的捷径），它们最终都会到达\textbf{同一个绝对的向量地址}。对角化，就是为了寻找这条“降维打击”般的捷径！
+
+    % \noindent\textbf{Step 4: 到底什么称为对角化 ? 它和 P和 $P^{-1}$ 的关系}: \\
+    % 对角化 = D, D 是对角矩阵由特征值组成 \\
+    % 如果 P 可逆:
+    % $A = P \cdot D \cdot P^{-1}$。\\
+    % $AP = P \cdot D \cdot P^{-1} P $ \\
+    % $AP = PD$ \\
+    % $P^{-1}AP =  P^{-1}PD$ \\
+    % $P^{-1}AP = D$ \\
+    % $D = P^{-1}AP$
+    % 我们思考这个公式 $D = P^{-1}AP$ : \\
+    % P 为 A 矩阵的翻译器(把向量翻译回 A 标准基环境) \\
+    % $P^{-1}$ 是 P 矩阵的翻译器 (把向量翻译回 P 特征向量基环境) \\
+    % D 就是 在 P 特征向量基环境 达到目的地的路径  因为 D 是 对角矩阵 所以它足够简单 \\
+    % 所以我们从几何视角分析来说 A 是基于标准基坐标系的混乱的转换  而D 是基于特征向量基坐标系最为简单的转换 \\
+    % 它们都可以到达同一个绝对向量地址
+
+    \noindent\textbf{Step 5: 这个矩阵的几何行为是什么}: \\
+    从A矩阵两个列向量初看 :
+    应该是先拉伸之后向右上提 ?
+    因为 $\vec{e1} = \begin{bmatrix}
+            2 \\
+            0
+        \end{bmatrix} = 2 \begin{bmatrix}
+            1 \\
+            0
+        \end{bmatrix}$ 是非常标准的拉伸动作
+    但  $\vec{e2}.x = 1$ 而非0 则证明路径整体上移?
+
+\end{flushleft}
+
+
+
+\section{代数重数 与 几何重数}
+\begin{flushleft}
+    已知矩阵 $A = \begin{bmatrix} 2 & 0 \\ 0 & 2 \end{bmatrix}$，判断其是否可对角化。
+
+    \vspace{0.5em}
+    \noindent\textbf{第一步：求特征值与代数重数} \\
+    构建特征方程：$\det(A - \lambda I) = 0$
+    \[
+        \begin{vmatrix}
+            2 - \lambda & 0           \\
+            0           & 2 - \lambda
+        \end{vmatrix} = 0
+    \]
+    化简得多项式：$(2 - \lambda)^2 = 0$ \\
+    解得特征值为 $\lambda = 2$。
+    \begin{itemize}
+        \item \textbf{代数重数：} 看特征多项式中 $(\lambda - 2)$ 这个因子的\textbf{最高次幂}。因为这里是平方（2次方），所以 $\lambda = 2$ 的\textbf{代数重数 = 2}。
+    \end{itemize}
+
+    \vspace{0.5em}
+    \noindent\textbf{第二步：求特征向量与几何重数} \\
+    将 $\lambda = 2$ 代入，构建齐次线性方程组 $(A - \lambda I)x = 0$：
+    \[
+        \begin{bmatrix} 0 & 0 \\ 0 & 0 \end{bmatrix}
+        \begin{bmatrix} x_1 \\ x_2 \end{bmatrix} =
+        \begin{bmatrix} 0 \\ 0 \end{bmatrix}
+    \]
+    展开即为：
+    \[
+        \begin{cases}
+            0x_1 + 0x_2 = 0 \\
+            0x_1 + 0x_2 = 0
+        \end{cases}
+    \]
+
+    \begin{itemize}
+        \item \textbf{计算几何重数（重点）：} \\
+              此时系数矩阵 $(A - 2I)$ 是一个全零矩阵，其\textbf{秩 $r = 0$}。\\
+              矩阵的阶数 $n = 2$（未知数个数）。\\
+              根据定理：特征空间的维数（几何重数） $= n - r$ \\
+              所以，\textbf{几何重数 = $2 - 0 = 2$}。
+    \end{itemize}
+
+    \vspace{0.5em}
+    \noindent\textbf{第三步：求基础解系} \\
+    因为方程组的秩为 0，说明 $x_1$ 和 $x_2$ 都是自由变量（可以取任意不全为 0 的数）。\\
+    我们可以取两组线性无关的向量作为基础解系：
+    \[
+        p_1 = \begin{bmatrix} 1 \\ 0 \end{bmatrix}, \quad p_2 = \begin{bmatrix} 0 \\ 1 \end{bmatrix}
+    \]
+    这说明特征空间是二维的。
+
+    \vspace{0.5em}
+    \noindent\textbf{结论：} \\
+    对于特征值 $\lambda=2$，其 \textbf{几何重数(2) = 代数重数(2)}。\\
+    因此，矩阵 $A$ 可以找到 2 个线性无关的特征向量，\textbf{该矩阵可对角化}（实际上它本身就是对角阵）。
+
+
+
+    问一个一直困扰我很久的模糊问题 为什么矩阵乘法的运算规则是行*列
+    $A = \begin{bmatrix}
+            a & b \\
+            c & d
+        \end{bmatrix}$ \\
+    我在理解矩阵时 会以列向量的模式理解 也就是矩阵 A 是有 $e1 = \begin{bmatrix}
+            a \\
+            c
+        \end{bmatrix},e2 = \begin{bmatrix}
+            b \\
+            d
+        \end{bmatrix}$ 组成 是基底向量 我们知道 标准矩阵 $I = \begin{bmatrix}
+            1 & 0 \\
+            0 & 1 \\
+        \end{bmatrix}$ A 和 I 的变化关系是 $ I.e1 -> A.e1  I.e2 -> A.e2$ 对于一个向量 $\vec{v}$ \\
+    经过 A 矩阵变化之后 -> $\vec{v_{n}} = v.x \cdot A.e1  + v.y \cdot A.e2 $ 一种向量加法的形态
+    但这个代数形态并不是行*列呀 ?
+
+
+    % 你的意思是我的思路和理解是正确的 只是少了一次代数推理 ?
+    % 你的回复有个点很有意思 你说矩阵诞生的目的是为了解决 解线性方程组
+    % 问题 1: 为什么线性方程组能使用矩阵这形态表达? 逻辑是什么? 
+    % 问题 2: 并不是为了做空间几何变换，而是为了解线性方程组 ? 为什么后来矩阵可以做空间几何变换呢 ? 是什么特性或发现 让矩阵成为现在的矩阵 而非只是解线性方程组的另一种形态呢 ?
+\end{flushleft}
+
+\section{矩阵}
+\begin{flushleft}
+
+    \vspace{0.5em}
+    \noindent\textbf{1: 矩阵的诞生与矩阵的代数意义?} \\
+    为什么课题是矩阵与向量 矩阵在前向量在后? 因为矩阵的诞生是为了解决代数问题: \\
+    存在方程组 a :\\
+    \[
+        \begin{cases}
+            4x + 3y = 8 \\
+            4x - y  = 5
+        \end{cases}
+    \]
+    a 存在一个重要的代数性质 "线性" 也就是满足可加性、齐次性 \\
+    假如我们把方程组 a 的 左边 抽象成函数 f(x, y) : \\
+    可加性满足: \\
+    $f(u+v) = f(u) + f(v)$ \\
+    齐次性满足:
+    $f(k \cdot u) = k \cdot f(u)$ \\
+
+    a 方程可以变化成一个矩阵模式(这里只有代数意义) \\
+    $ A =  \begin{bmatrix}
+            4 & 3  \\
+            4 & -1 \\
+        \end{bmatrix} \begin{bmatrix}
+            x \\
+            y
+        \end{bmatrix} = \begin{bmatrix}
+            8 \\
+            5
+        \end{bmatrix}$ \\
+    A 可以通过矩阵乘法规则还原成 a
+
+    \vspace{0.5em}
+    \noindent\textbf{2: 矩阵模式对于方程组的优势(数学家为什么要发明矩阵这个概念去表达代数方程组) ? } \\
+
+    A 是可以还原为 a 的 利用矩阵乘法规则 \\
+    那么我们仔细分析 A 的形态:
+    $ A\cdot x  = y$ \\
+    X 完全为代数未知数, x 和 y 是完全的已知数 \\
+    1: 把未知和已知解耦 这里是利用了齐次性 $f(k \cdot x) = k \cdot f(x)$ \\ k 是已知数 f(x) 是未知数 ? \\
+    2: 如果 Y 的系数项 非常大 那么整个代数运算也会是 $X \cdot Y  = Z$  这种形态 X 依然简单 Y 包含了全部的线性运算规则 隔离成了两个整体 \\
+
+    \vspace{0.5em}
+    \noindent\textbf{3: 矩阵和线性的关系(可加性、齐次性)} \\
+    A 是可以还原为 a 所以 矩阵形态 是天然满足线性的(或者说 A 是容器, 矩阵乘法规则才是线性的表达)\\
+    $A(u+v)  = Au + Av$ 和 $A(ku)  = k \cdot Au$
+
+
+    \vspace{0.5em}
+    \noindent\textbf{4: 矩阵和几何空间的关系,为什么矩阵变成了可以表达空间几何变换？是什么特性造成的？} \\
+    我们由上已知道 矩阵形态是天然满足线性的 \\
+    所以我们关键的要分析 可加性 和 齐次性 在几何上是什么形态表达 ? \\
+    齐次性的几何表现:  \\
+    $f(k \cdot v) = k \cdot f(v)$ \\
+    齐次性是使用代数乘法的运算 如果 v 是一个有方向的数学对象 那么 $k \cdot v$ = $v + v + \cdots$ \\
+    我们会发现 它会沿这个方向 (如果 k 是负数 就是反方向) 做以 v 为单位的伸缩动作 这个动作就是直线伸缩动作 \\
+    v 有起点吗 ? \\
+    我们把 k 设置为 0 ,这就是代数上的起点  \\
+    $f(0 \cdot v) = 0 \cdot f(v) = 0$ \\
+    在几何上这个起点就是零空间 也就是原点 \\
+    我们需要理解上面这个代数式 f 是线性变化  $0 \cdot v$ 是处于原点的 v \\
+    $= 0 \cdot f(v)$ 如果满足齐次性 这个等号满足 那么结果必然等于 0 \\
+    所以我们能得到 齐次性的几何表现是 过原点的 直线伸缩动作 ?
+    只要一个变换满足齐次性，它就绝对不能移动原点，原点必须是变换的不动点。反过来，所有会移动原点的变换（比如平移），必然不满足齐次性，也就不是线性变换
+    可加性的几何表现:  \\
+    $f(u+v) = f(u) + f(v)$ \\
+    可加性是使用代数加法而运算 加法有一个非常意思的特性 -> 支持对同一个结构的不同数据的多个数学对象进行组合平移(例如 自然数相加 3 + 4 = 7 他们是同一个结构但值不一样 \\
+    例如 $\vec{v} + \vec{x} = \vec{vx} $) \\
+    而乘法是复制平移是单方向的 但组合平移是多方向的(或者说是不限制方向的) \\
+    $f(u+v) = f(u) + f(v) = f(v) + f(u)$ \\
+    这里我们拿路线为例子 f(u) 和 f(v) 都是一个拥有路线(有方向)的目的地 先走 f(u) 之后再走 f(v) 到达的最终目的地  = 先走 f(v) 再 走 f(u) \\
+    是天然存在对称性的(加法也存在对称性) 那么什么几何形状存在两步结构天然对称性的? 平行四边形 \\
+    所以 可加性是 任意方向组合平行四边形? \\
+
+    所以当矩阵形态(重点是矩阵运算规则)是满足线性的 那么矩阵天然适配为线性几何变化, 它只是被发现 \\
+
+\end{flushleft}
+
+
+\section{逆向问题}
+\begin{flushleft}
+    已知 $D = \begin{bmatrix}
+            3 & 0  \\
+            0 & -1
+        \end{bmatrix}, P = \begin{bmatrix}
+            1 & 1  \\
+            1 & -1
+        \end{bmatrix}$
+
+    \vspace{0.5em}
+    \noindent\textbf{1: 求 A} \\
+    $A  = P\cdot D \cdot P^{-1}$ \\
+    $det(P) = -1 - 1 = -2$ \\
+    $P^{-1} = \frac{1}{ad-bc}\begin{bmatrix}
+            d  & -b \\
+            -c & a
+        \end{bmatrix}  = \begin{bmatrix}
+            \frac{1}{2} & \frac{1}{2}  \\
+            \frac{1}{2} & -\frac{1}{2}
+        \end{bmatrix}$ \\
+    $A = \begin{bmatrix}
+            1 & 1  \\
+            1 & -1
+        \end{bmatrix}  \begin{bmatrix}
+            3 & 0  \\
+            0 & -1
+        \end{bmatrix} \begin{bmatrix}
+            \frac{1}{2} & \frac{1}{2}  \\
+            \frac{1}{2} & -\frac{1}{2}
+        \end{bmatrix} =  \begin{bmatrix}
+            1 & 2 \\
+            2 & 1
+        \end{bmatrix}$
+
+    \vspace{0.5em}
+    \noindent\textbf{2: A 的特征值是否真的是 3 和 -1} \\
+    迹 + 特征多项式 / 韦达定理
+    \begin{align}
+        \lambda_{1} + \lambda_{2} = 2 \;(1 + 1) \\
+        \lambda_{1} \cdot \lambda_{2} = -3 \; (1 \cdot  1  - 2 \cdot 2 )
+    \end{align}
+    带入 3, -1 成立
+
+    \vspace{0.5em}
+    \noindent\textbf{3: 思考题：你是从"特征基世界"出发，构造出标准基下的矩阵。用你的翻译器类比说清楚这个反向过程} \\
+    $A\vec{v}  = P\cdot D \cdot P^{-1} \vec{v}$ \\
+    我们已知 P 和 D 是矩阵 特征向量矩阵 和特征值对角矩阵 \\
+    所以我们依然重点要关注 P 到底是什么: \\
+    P 最重要的一个特点是 它使用基于基础基底(e1,e2)的两个特征向量 同样撑起了整个以基础基底(e1,e2)的平面 \\
+    $P = \begin{bmatrix}
+            \vec{g1} | \; \vec{g2}
+        \end{bmatrix}$
+
+    我们以一个最终向量$\vec{X} = \begin{bmatrix}
+            p1 \\
+            p2
+        \end{bmatrix}$
+
+    那么存在下面的代数关系(也是几何关系) : \\
+    $\vec{v} = \begin{bmatrix}
+            a1 \\
+            a2
+        \end{bmatrix},\vec{v1} = \begin{bmatrix}
+            c1 \\
+            c2
+        \end{bmatrix} $ \\
+    $= a1 \cdot e1 + a2  \cdot e2  = c1 \cdot g1  + c2 \cdot g2  = \vec{X}$ \\
+    a1,a2,c1,c2 为常量 代表步伐 \\
+
+    g1, g2 可以进一步展开为  \\
+    $g1 = g1_{x}e1 + g1_{y}e2$ \\
+    $g2 = g2_{x}e1 + g2_{y}e2$ \\
+    代数转换一下 :\\
+    $= c1 \cdot (g1_{x}e1 + g1_{y}e2)  + c2 \cdot (g2_{x}e1 + g2_{y}e2)$ \\
+
+    $= \begin{bmatrix}
+            \vec{e1} | \; \vec{e2}
+        \end{bmatrix} c1 \cdot \begin{bmatrix}
+            g1_{x} \\
+            g1_{y}
+        \end{bmatrix}  + \begin{bmatrix}
+            \vec{e1} | \; \vec{e2}
+        \end{bmatrix}  c2 \cdot \begin{bmatrix}
+            g2_{x} \\
+            g2_{y}
+        \end{bmatrix} $ \\
+
+    $ = \begin{bmatrix}
+            \vec{e1} | \; \vec{e2}
+        \end{bmatrix}(c1 \cdot \begin{bmatrix}
+            g1_{x} \\
+            g1_{y}
+        \end{bmatrix} + c2 \cdot \begin{bmatrix}
+            g2_{x} \\
+            g2_{y}
+        \end{bmatrix}) $ \\
+
+
+    $\begin{bmatrix}
+            \vec{e1} | \; \vec{e2}
+        \end{bmatrix}\begin{bmatrix}
+            a1 \\
+            a2
+        \end{bmatrix} = \begin{bmatrix}
+            \vec{e1} | \; \vec{e2}
+        \end{bmatrix} (c1 \cdot \begin{bmatrix}
+            g1_{x} \\
+            g1_{y}
+        \end{bmatrix} + c2 \cdot \begin{bmatrix}
+            g2_{x} \\
+            g2_{y}
+        \end{bmatrix})$ \\
+
+
+    $\begin{bmatrix}
+            a1 \\
+            a2
+        \end{bmatrix} = c1 \cdot \begin{bmatrix}
+            g1_{x} \\
+            g1_{y}
+        \end{bmatrix} + c2 \cdot \begin{bmatrix}
+            g2_{x} \\
+            g2_{y}
+        \end{bmatrix} $ \\
+    $\begin{bmatrix}
+            a1 \\
+            a2
+        \end{bmatrix} = P \begin{bmatrix}
+            c1 \\
+            c2
+        \end{bmatrix}$
+
+    P 的列向量（特征向量）和标准基张成的是同一个$R^{2}$空间, 把一个向量翻译回这个空间 \\
+
+
+    $P^{-1}$ 到底是什么 ? \\
+    我们已知 P 是一个翻译器  那么 $P^{-1}$ 依然是一个翻译器 但我们要使用代数证明 $P^{-1}$ 翻译到什么环境?? \\
+    同时乘法 $P^{-1}$
+
+    $P^{-1}\begin{bmatrix}
+            a1 \\
+            a2
+        \end{bmatrix} =P^{-1} P \begin{bmatrix}
+            c1 \\
+            c2
+        \end{bmatrix}$ \\
+    $= P^{-1}\begin{bmatrix}
+            a1 \\
+            a2
+        \end{bmatrix} =  \begin{bmatrix}
+            c1 \\
+            c2
+        \end{bmatrix} $ \\
+    $ P^{-1}\begin{bmatrix}
+            a1 \\
+            a2
+        \end{bmatrix} -> \begin{bmatrix}
+            c1 \\
+            c2
+        \end{bmatrix}$  这个代数式非常清楚的表达了 $P^{-1}$ 的身份 把一个向量翻译到特征向量基底空间  \\
+
+
+    那么这个逆向工程就非常清晰了 : 我们拥有 P 和 D 我们可以找到 $P^{-1}$
+
+    $DP^{-1}$ 是把向量翻译到特征向量基底空间并到达目的地,   P 把这个目的地翻译回 A(P 和 A 在一个张成空间)
+
+\end{flushleft}
+
+\section{矩阵的迹}
+\begin{flushleft}
+    定义 : 矩阵$A \in \mathbb{R}^{n \times n}$ \\
+    $tr(A) = \sum_{i = 1}^{n} A_{ii}$
+    \begin{itemize}
+        \item 1: 到底什么是迹, 它是为了解决什么问题 ? \\
+              在标准基下(e1, e2): \\
+              $A = \begin{bmatrix}
+                      a & b \\
+                      c & d
+                  \end{bmatrix}$\\
+              我们要分析一个问题: a, b, c, d 这些常数项的变化会给整个矩阵带来什么变化 ?  \\
+              $A\vec{v}  = \begin{bmatrix}
+                      a & b \\
+                      c & d
+                  \end{bmatrix}\begin{bmatrix}
+                      x \\
+                      y
+                  \end{bmatrix} = \begin{bmatrix}
+                      ax + by \\
+                      cx + dy
+                  \end{bmatrix}$ \\
+              我们设 A = $\begin{bmatrix}
+                      1 & 0 \\
+                      0 & 1
+                  \end{bmatrix}$ \\
+              $ \begin{bmatrix}
+                      ax + by \\
+                      cx + dy
+                  \end{bmatrix} = \begin{bmatrix}
+                      x \\
+                      y
+                  \end{bmatrix}$ \\
+              我们改变 a.b != 0 \\
+              $ = \begin{bmatrix}
+                      x + by \\
+                      y
+                  \end{bmatrix}$
+              所以我们发现 新的 y 依然是 y  新的 x 是 = x+by :
+              例子: $\begin{bmatrix}
+                      1 \\
+                      1
+                  \end{bmatrix}(v_{1}) ->  \begin{bmatrix}
+                      b \cdot (1) \\
+                      1
+                  \end{bmatrix}(v_{2})$  $v_{2}$ 对比 $\vec{1}$ 发生了水平滑移 所以 b 控制了 水平剪切 程度 \\
+              c:  \\
+              $ = \begin{bmatrix}
+                      x \\
+                      cx + y
+                  \end{bmatrix}$  发生了垂直剪切  \\
+              a:
+              $ = \begin{bmatrix}
+                      ax \\
+                      y
+                  \end{bmatrix}$ 拉伸了 x 轴长 是水平拉伸 \\
+              d:
+              $ = \begin{bmatrix}
+                      x \\
+                      by
+                  \end{bmatrix}$ 拉伸了 y 轴长 是垂直拉伸 \\
+              我们现在知道 a, b 是倍数关系 : \\
+              $tr(A) = a + d $ \\
+              我们就能清晰的明白:  a + d  或 $\sum_{i = 1}^{n} A_{ii}$ 是剔除 剪切变化之后的 总伸缩率(这就是一种解耦的表现 -> 改变面积变化和改变形状变化)
+              迹到底解决了什么问题: 对矩阵变化之后的伸缩率的一种直观表现?
+        \item 2 迹与基的关系 : \\
+              2.1 在回答迹与基的关系之前, 我们来弄明白什么叫换基和换基的目的 ? \\
+              存在一个绝对的地址 可以使用绝对向量 X 表达 \\
+              A 矩阵是基于标准基到达 X 的线性变换 \\
+              B 矩阵是基于 P(基底)到达 X 的 线性变换 \\
+              这是同一种抽象的线性变化, 在不同基下的矩阵表示 \\
+              子问题2.1: B 的代数表达是什么(基于 A 和 P), 为什么这么表达 ? \\
+              2.1.1 : $P$ 是什么, $Pv$ 是什么  ? \\
+              A 是基于标准基底 E 的线性变换 $\begin{bmatrix}
+                      \vec{e1} | \; \vec{e2}
+                  \end{bmatrix}$ \\
+              向量 $\vec{m} = \begin{bmatrix}
+                      x \\
+                      y
+                  \end{bmatrix}$ 存在于标准基环境  \\
+              向量 $\vec{v} = \begin{bmatrix}
+                      c1 \\
+                      c2
+                  \end{bmatrix}$ \\
+              因为 P 的身份是基底  $\begin{bmatrix}
+                      \vec{p1} | \; \vec{p2}
+                  \end{bmatrix}$\\
+              但 P 还有另一种非常重要的特性: 它本身是基于 E 的一个抽象线性变换
+              也就是说 如果 P 是存在的 那么它也能张成整个空间 \\
+              那么对 X(绝对向量来说) \\
+              $X = xe1 + ye2 =  c1p1 + c2p2$ \\
+              $m = Pv $ \\
+              那么 Pv 就是 m 是同一个对象, 不同的视角, P 是翻译回 E 环境的翻译器 \\
+              2.1.2: B 的代数表达 ;
+              $Am = APv$ 是成立的(基于 2.1.1) \\
+              它们是 E 环境下完全相同的变换 \\
+              已知 B 是 P 基底的线性变换  \\
+              我们需要把 \\
+              $P^{-1}Am = P^{-1}APv$ \\
+              $ m = Pv$ \\
+              上面的代数证明来 $P^{-1}$ 就是翻译回 P 环境的 翻译器！
+              那么 $B = P^{-1}AP $
+
+              有 2.1.1和 2.1.2 我们得知 B 和 A 是同一种线性变换 T 的 两种表达
+              对 $tr(T) = tr(A) = tr(B)$ 迹在不同基底的不变性
+        \item 3 迹与连续变化 XY : \\
+              矩阵乘法并不支持交换率 $XYv != YXv$  \\
+              我们也知道迹是线性的总伸缩率(伸缩率会改变面积, 但剪切变化不会改变面积, 只会改变形状(item1)) \\
+              那么 $tr(XY)$ 的一种重要的代数性质是 先伸缩一个系数然后再伸缩一个系数 是一个连续动作 \\
+              类似代数式 $s \cdot x \cdot y = s \cdot y  \cdot x$ (s 是面积), 这是一种逻辑推导 \\
+              代数推导： \\
+              $X,Y \in \mathbb{R}^{n \times n}$ \\
+              X 的 i 行, j 列的数 记 $X_{ij}$ \\
+              Y 的 j 行, k 列的数 记 $Y_{jk}$ \\
+              step1: $tr(XY):$
+              \begin{align}
+                  (XY)ik = \sum_{j = 1}^{n} X_{ij}Y_{jk} \\
+                  (XY)ii = \sum_{j = 1}^{n} X_{ij}Y_{ji} \\
+                  tr(XY) = \sum_{i = 1}^{n}(\sum_{j = 1}^{n} X_{ij}Y_{ji})
+              \end{align}
+              Y 的 j 行, k 列的数 记 $Y_{jk}$ \\
+              X 的 i 行, j 列的数 记 $X_{ij}$ \\
+              step2: $tr(YX):$
+              \begin{align}
+                  (YX)ik = \sum_{i = 1}^{n} Y_{ij}X_{jk} \\
+                  (YX)jj = \sum_{i = 1}^{n} Y_{ji}X_{ij} \\
+                  tr(YX) = \sum_{j = 1}^{n}(\sum_{i = 1}^{n} Y_{ji}X_{ij})
+              \end{align}
+              $\sum_{j = 1}^{n}(\sum_{i = 1}^{n} Y_{ji}X_{ij})$ 是基于常数的加法与乘法的混合运算 是支持交换率和结合律的 \\
+              $ = \sum_{j = 1}^{n}(\sum_{i = 1}^{n} X_{ij} Y_{ji})$ \\
+              $ = \sum_{i = 1}^{n}(\sum_{j = 1}^{n} X_{ij} Y_{ji}) = tr(XY)$ \\
+        \item 4 为什么 $tr(A) = \lambda_{1} + \lambda_{2}$ ? \\
+              A 可以对角化
+              $tr(A) = tr(PDP^{-1})$ \\
+              $tr(A) = tr(XY) = tr(YX) = tr(P^{-1}PD) = tr(D) = \lambda_{1} + \lambda_{2}+ ...$ \\
+              但我们也可以使用另一种视角 也就是 迹在不同基底的不变性 \\
+              $tr(A) = tr(B) = tr(P^{-1}AP) =  tr(P^{-1}PDP^{-1}P) = tr(D) $
+        \item 5 思考 为什么 $det(A) =  \lambda_{1} \cdot \lambda_{2}$ ? \\
+              $det(A) = det(PDP^{-1})$\\
+              $ = det(XY) = det(X)det(Y)\;\; (item3 \; 同样的代数证明逻辑)$ \\
+              $ = det(P)det(DP^{-1}) = det(P)det(D)det(P^{-1}) = (使用交换律) det(P)det(P^{-1})det(D) = det(D)$
+
+    \end{itemize}
+
+\end{flushleft}
+
+\end{document}

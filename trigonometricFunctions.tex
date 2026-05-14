@@ -1,0 +1,124 @@
+\documentclass[tikz,border=6pt]{standalone}
+\usepackage{ctex} 
+\usepackage{amsmath}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,angles,quotes}
+
+\begin{document}
+
+
+
+
+\begin{tikzpicture}[>=Latex, scale=3]
+    % 1. 坐标轴与单位圆
+    \draw[->, color=gray!50] (-1.2,0) -- (1.2,0) node[right, color=black] {$x$};
+    \draw[->, color=gray!50] (0,-0.2) -- (0,1.2) node[above, color=black] {$y$};
+    \draw[color=gray!30, dashed] (0,0) circle (1);
+
+    % 定义角度 alpha
+    \def\alpha{30}
+
+    % 2. 原始基向量 i 和 j
+    \draw[->, thick, gray] (0,0) -- (1,0) node[below] {$\vec{i}(1,0)$};
+    \draw[->, thick, gray] (0,0) -- (0,1) node[left] {$\vec{j}(0,1)$};
+
+    % 3. 旋转后的 i' 向量
+    \coordinate (O) at (0,0);
+    \coordinate (Ip) at (\alpha:1);
+    \draw[->, blue, thick] (O) -- (Ip) node[right] {$\vec{i}'(\cos\alpha, \sin\alpha)$};
+    
+    % i' 的辅助线 (直角三角形)
+    \draw[blue, dashed] (Ip) -- ({cos(\alpha)}, 0) node[below, font=\small] {$\cos\alpha$};
+    \draw[blue, dashed] (Ip) -- (0, {sin(\alpha)}) node[left, font=\small] {$\sin\alpha$};
+
+    % 4. 旋转后的 j' 向量
+    \coordinate (Jp) at ({90+\alpha}:1);
+    \draw[->, red, thick] (O) -- (Jp) node[above left] {$\vec{j}'(-\sin\alpha, \cos\alpha)$};
+    
+    % j' 的辅助线 (关键证明部分)
+    % 投影到 y 轴
+    \draw[red, dashed] (Jp) -- (0, {cos(\alpha)}) node[right, font=\small] {$\cos\alpha$};
+    % 投影到 x 轴
+    \draw[red, dashed] (Jp) -- ({-sin(\alpha)}, 0) node[below, font=\small] {$-\sin\alpha$};
+
+    % 5. 标注角度 alpha
+    \coordinate (X) at (1,0);
+    \coordinate (Y) at (0,1);
+    
+    % i' 与 x 轴的夹角
+    \pic [draw, "$\alpha$", angle eccentricity=1.5, angle radius=0.3cm] {angle = X--O--Ip};
+    
+    % j' 与 y 轴的夹角 (证明它们是全等旋转)
+    \pic [draw, "$\alpha$", angle eccentricity=1.5, angle radius=0.3cm] {angle = Y--O--Jp};
+
+    % 6. 核心证明文字说明
+    \node[anchor=west, text width=5cm, font=\small, draw, fill=yellow!5] at (2.0, 0.5) {
+        \textbf{证明逻辑：}\\
+        1. $\vec{i}'$ 是由 $\vec{i}$ 旋转 $\alpha$ 得到，其坐标定义为 $(\cos\alpha, \sin\alpha)$。\\
+        2. $\vec{j}'$ 是由 $\vec{j}$ 旋转 $\alpha$ 得到。因为 $\vec{j} \perp \vec{i}$，所以 $\vec{j}'$ 与 $y$ 轴的夹角也是 $\alpha$。\\
+        3. 观察红色的直角三角形：\\
+        \quad $\bullet$ 它的对边在 $x$ 轴上，长度为 $\sin\alpha$，方向向左，故 $x = -\sin\alpha$。\\
+        \quad $\bullet$ 它的邻边在 $y$ 轴上，长度为 $\cos\alpha$，方向向上，故 $y = \cos\alpha$。\\
+        4. 因此：$\vec{j}' = (-\sin\alpha, \cos\alpha)$。
+    };
+
+\end{tikzpicture}
+
+\begin{tikzpicture}[>=Latex, scale=4]
+    \def\alpha_{25} \def\bate{35}
+    \coordinate (O) at (0, 0) node[left] {$O$};
+    \coordinate (C) at ({\alpha_ + \bate}:1);
+    \coordinate (D) at ({\alpha_}:{cos(\bate)});
+
+    \draw[->, gray!30] (0,0) -- (1.1,0) node[right]{$x$};
+    \draw[->, gray!30] (0,0) -- (0,1.1) node[above]{$y$};
+
+    \draw[thick] (O) -- (C) node[midway, above left]{$1$} node[left] {$C$};
+    \draw[blue, thick] (O) -- (D) node[midway, below]{$\cos\beta$}  node[below] {$D$};
+    \draw[red, thick] (C) -- (D) node[midway, right]{$\sin\beta$};
+    \pic [draw, "$\bate$", angle eccentricity=1.2, angle radius=0.5cm] {angle = D--O--C}; % 修正角度标注位置
+
+    % 我们先找到 D点对 X轴做的投影点 F 点
+    % 已知道 F = cos alpha  * OD
+    % 在标准半径的为1的圆  OD = cos bate * 1 = cos bate
+    % F = cos bate * cos alpha  
+    % 使用(x, y)格式
+    \coordinate (F) at ({cos(\bate)*cos(\alpha_)}, 0);
+    \fill[gray] (F) circle (0.5pt) node[below] {$F$};
+    % 做D-F 垂直线
+    \draw[dashed] (D) -- (F) node[above right]{$\cos\beta \cdot \sin a (D-F)$};
+    % 做O-F 直线
+    \draw[dashed]  (O) -- (F) node[below right]{$\cos\beta \cdot \cos a (O-F)$};
+    \pic [draw, "$\alpha_$", angle eccentricity=1.2, angle radius=0.5cm] {angle = F--O--D};
+
+    处理E点 E点是 cos alpha+bate 
+    \coordinate (E) at ({cos(\bate + \alpha_)}, 0);
+    \fill[gray] (E) circle (0.5pt) node[below] {$E$};
+    % 做C - E点的垂线
+    \draw[dashed] (C) -- (E) node[below left]{$\cos{(\alpha_+ \bate)}$};
+
+    % 确定 G 点 
+    % 思考 角 GDC 的度数是多少 = 90 - 35 = 55
+    % G(x,y) -> G.x = OE, G.y =  DF
+    \coordinate (G) at ({cos(\bate + \alpha_)}, {cos(\bate) * sin(\alpha_)});
+    \fill[gray] (G) circle (0.5pt) node[below] {$G$};
+
+    % GD的长度 我们需要推算出来
+    % step 1: ∠OCD  = 90 - 35 = 55
+    % step 2: ∠OCE  = 90 - 60 = 30
+    % step 3: ∠GCD  = 55 - 30 = 25
+    % step 4: GD  = sin \bate * sin 25  = sin \bate * sin alpha_
+    \draw[dashed] (G) -- (D) node[above right]{$\sin{\beta} \cdot \sin a (G-D)$};
+
+    % 确定CG的长度 
+    \draw[dashed] (C) -- (G) node[above left]{$sin{\beta} \cdot cos a (C-G)$};
+
+    % 那么 C.x =  \cos\beta \cdot \cos a - sin{\beta} \cdot sin a  (OF- GD)
+    % 那么 C.y =  \cos\beta \cdot \sin a + sin{\beta} \cdot cos a  (CG + DF)
+
+\end{tikzpicture}
+
+
+
+
+\end{document}
