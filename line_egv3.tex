@@ -1,0 +1,54 @@
+\documentclass[12pt]{article}
+\usepackage[a4paper,margin=2.2cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{hyperref}
+\usepackage{cleveref}
+
+% 中文（xelatex）
+\usepackage{fontspec}
+\usepackage{xeCJK}
+
+\usepackage{fontspec}
+\usepackage{xeCJK}
+\setCJKmainfont{Noto Serif CJK SC}
+
+\title{Linear Algebra-Ega2}
+\date{}
+\begin{document}
+\maketitle
+
+\section{内积与空间}
+\begin{flushleft}
+    \begin{itemize}
+        \item 1 什么是向量空间? \\
+              向量空间并不是一个空间, 更像一个集, 拥有一组规则, 如果符合这组规则的数学对象都是这个空间的元素:  \\
+              设 $u, v, w$ 为空间内的向量，$k, m$ 为外部的实数（标量），规则如下: \\
+              如下: \\
+              \begin{align}
+                  u + v          & = v + u \quad \text{加法交换律}       \\
+                  (u + v) + w    & = u + (v + w) \quad \text{加法结合律} \\
+                  u + \mathbf{0} & = u \quad \text{零元素存在性}          \\
+                  u + (-u)       & = \mathbf{0} \quad \text{负元素存在性} \\
+                  k(mu)          & = (km)u \quad \text{标量乘法结合律}     \\
+                  k(u + v)       & = ku + kv \quad \text{标量乘法分配律 1} \\
+                  (k + m)u       & = ku + mu \quad \text{标量乘法分配律 2} \\
+                  1 \cdot u      & = u \quad \text{标量单位元存在性}
+              \end{align}
+              我们很清楚的发现 这个几个定理规则 是非常标准的线性动作 :  \\
+              “平移”和“合成” (加法律)  \\
+              拉伸/压缩（乘法律） \\
+
+              那么这两个几何动作和维度的关系？维度并不是由动作决定的 你可以在 n 维 做拉伸/压缩, 也可以在 1维,
+              维度是由向量表达的 \\
+              所以向量空间 最大的特点是 动作 而非维度 高维度的也存在向量空间元素？ \\
+
+              那么向量元素就是满足上述规则的一个集, 这个集是跨维度, 它是由几何动作(线性)定义的
+        \item 2 什么是欧式空间? \\
+
+
+
+    \end{itemize}
+\end{flushleft}
+
+
+\end{document}
