@@ -12,7 +12,7 @@
 \usepackage{xeCJK}
 \setCJKmainfont{Noto Serif CJK SC}
 
-\title{Linear Algebra-Ega2}
+\title{Linear Algebra}
 \date{}
 \begin{document}
 \maketitle
@@ -111,6 +111,58 @@
               距离: d = $\sqrt{(x_{1} - x_{2})^{2} + (y_{1}- y_{2})^{2} }$ \\
 
               当向量空间拥有内积提供的代数模型的几何空间 就是欧几里得空间
+        \item 3 关于双线性的思考 \\
+              先解释什么叫线性动作 关键有两个重要特性: 齐次性和可加性 \\
+              我们会立足于欧式空间描述这两特性, 也就是说 "空间移动动作"的齐次性和可加性的表达 \\
+              当涉及到空间概念(维度), 我们会使用向量(向量可以使用一组数字 表达维度(方向, 大小...), 它本质是在指定空间环境的移动指令, \\
+              例如： 在标准笛卡尔坐标系中(标准基) 下 它就是2d空间的移动指令  移动指令 $\vec{v}$ 在标准移动指令 e1 方向上的分量大小(或者是步伐)) \\
+
+              \textbf{3.1 齐次性} \\
+              t(时间), $\vec{v}$(有方向的速度), $\vec{X}$(目的地) \\
+              存在函数:\\
+              \begin{align}
+                  f(\vec{v}) = \vec{v} \cdot t = \vec{X} \\
+                  f(k \cdot \vec{v}) = (k \cdot \vec{v}) \cdot t = k \cdot (\vec{v} \cdot t) = k \cdot \vec{X}
+              \end{align}
+              基础代数形式: $f(k \cdot u) = k \cdot f(u)$ \\
+              当你提升速度为 k 倍时间 目的地（位移向量）也会变为原来的 k 倍
+              (这里我们发现 乘法天然是满足齐次性的物理表达, 到底是齐次性选择了乘法还是乘法选择了齐次性？
+              是几何上的齐次性映射到代数上的 乘法)
+
+              \textbf{3.2 可加性} \\
+              想象一艘船在大海航线 \\
+              存在两种移动指令: $\vec{v}$(引擎), $\vec{u}$(洋流的推动力) 和 t(时间) \\
+              存在函数:
+              \begin{align}
+                  f(\vec{v} + \vec{u}) = (\vec{v} + \vec{u}) \cdot t = \vec{X} \\
+                  =\vec{v}t + \vec{u}t  = f(\vec{v}) + f(\vec{u}) =  f(\vec{u}) + f(\vec{v}) = \vec{X}
+              \end{align}
+              基础代数形式: $f(v + u) = f(v) + f(u)$ \\
+              这是可加性的一种表现, 而 $f(\vec{v}) + f(\vec{u}) =  f(\vec{u}) + f(\vec{v})$ 是一种平行四边形几何性质的表现 \\
+              本质是向量加法(交换律)保证的(路径的拼接会带来的平行四边形特性)
+
+              \textbf{3.3 双线性} \\
+              内积公式: $\vec{v} \cdot \vec{u} = x_{1}x_{2} + y_{1}y_{2}$ \\
+              我们使用函数表达:
+              $f(\vec{v}, \vec{u}) = v.x_{1} \cdot u.x_{2} + v.y_{1} \cdot u.y_{2}$
+              双线性有一个非常的特性: 公平性 任何向量发生了线性变化 对于其结果也会发生线性变化 \\
+              双线性的齐次性: \\
+              \begin{align}
+                  f(k\vec{v}, \vec{u}) = k \cdot v.x_{1} \cdot u.x_{2} + k \cdot v.y_{1} \cdot u.y_{2} \\
+                  = k(v.x_{1} \cdot u.x_{2} + v.y_{1} \cdot u.y_{2})                                   \\
+                  = k \cdot f(\vec{v}, \vec{u})
+              \end{align}
+              双线性的可加性: \\
+              \begin{align}
+                  f((\vec{z} + \vec{v}),\vec{u}) = (z.x_{3} + v.x_{1})u.x_{2} + (z.y_{3} + v.y_{1})u.y_{2}               \\
+                  = z.x_{3} \cdot u.x_{2}  +  v.x_{1} \cdot u.x_{2}  +  z.y_{3} \cdot u.y_{2} +  v.y_{1}  \cdot  u.y_{2} \\
+                  =  z.x_{3} \cdot u.x_{2} +  z.y_{3} \cdot u.y_{2}  +  f(\vec{v}, \vec{u})                              \\
+                  = f(\vec{z}, \vec{u}) + f(\vec{v}, \vec{u})                                                            \\
+              \end{align}
+              上面我们使用代数证明了 任何向量发生了线性变化 对于其结果也会发生线性变化这句话(公平性), 但这是不够的 \\
+
+
+
 
 
     \end{itemize}
