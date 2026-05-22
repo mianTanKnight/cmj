@@ -16,7 +16,7 @@ me_pos = np.array([2.0, 2.0])
 enemy_pos = np.array([5.0, 3.0])
  
 # 算出 me -> ememy 的向量, 使用的 向量减法
-v  = me_pos - enemy_pos
+v  =  enemy_pos - me_pos
 
 # me 现在是坐标系中的一个点, 但它也会有一个面向方向(也是的一个向量), 它就是子弹的射击方向
 shoot_direction =  np.array([1.0, 1.0])
