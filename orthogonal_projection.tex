@@ -1,0 +1,85 @@
+\documentclass[12pt]{article}
+\usepackage[a4paper,margin=2.2cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{hyperref}
+\usepackage{cleveref}
+
+% 中文（xelatex）
+\usepackage{fontspec}
+\usepackage{xeCJK}
+
+\usepackage{fontspec}
+\usepackage{xeCJK}
+\setCJKmainfont{Noto Serif CJK SC}
+
+\title{Orthogonal Projection}
+\date{}
+\begin{document}
+\maketitle
+
+
+\subsection{向量的正交分解与投影}
+\begin{flushleft}
+    \begin{itemize}
+        向量 $\vec{u} = \begin{bmatrix}
+                x \\
+                y
+            \end{bmatrix}, \vec{v} = \begin{bmatrix}
+                x_{1} \\
+                y_{1}
+            \end{bmatrix}$
+
+        向量本质是一个空间的移动指令(复合的), 这个空间是一个网格 由基底决定, 对于 u, v 而言是标准基(e1,e2)
+
+        $\vec{u} = xe1 + ye2, \; \vec{v} = x_{1}e1 + y_{1}e2$
+
+        也就是说 $x, y, x_{1}, y_{1} $ 都是基于e1, e2 的移动分量。\\
+        现在我们设 $\vec{u} = X$, 这 X 是 无关基底的绝对地址。 \\
+
+        在标准基网格环境, 通过  $xe1 + ye2 \to X $ 表达  \\
+        那么我们设 在一组新的基底 $e1^{'}, e2^{'}$ 和新分量 $x_{new}, y_{new}$  表达\\
+        存在下列代数组关系：
+        \begin{align}
+            xe1 + ye2 \to X \\
+            x_{new}e1^{'} + y_{new}e2^{'} \to X
+        \end{align}
+
+        step1: $e1^{'}, e2^{'}$ 由 $\vec{v}$ 派生(方向归一化的正交分解), 基于 v 诞生的新基底。\\
+        step2: $x_{new}e1^{'}, y_{new}e2^{'}$ 与 $xe1,ye2$ 的代数逻辑与几何投影关系。\\
+
+
+        \vspace{0.5em}
+        \item 1: $\vec{v}$ 方向归一化的正交分解($e1^{'},e2^{'}$) \\
+
+              \vspace{0.3em}
+              \textbf{1.1 $e1^{'}$} \\
+              $e1^{'}$ 非常清楚和简洁 $\to$  $\vec{v}$ 的方向并且长度为1的单位 \\
+              \begin{align}
+                  e1^{'} = \frac{\vec{v}}{|v|} \\
+              \end{align}
+              (3): 保留方向并归一化
+
+
+              \vspace{0.3em}
+              \textbf{1.2 $e2^{'}$} \\
+              $e2^{'}$ 是 $e1^{'}$ 逆时针旋转 $90^{\circ}$  \\
+              \begin{align}
+                  e2^{'} = R_{90^{\circ}}\frac{\vec{v}}{|v|}
+              \end{align}
+              (5): $R_{90^{\circ}} = \begin{bmatrix}
+                      0 & -1 \\
+                      1 & 0
+                  \end{bmatrix} \to $逆时针旋转90
+
+              \vspace{0.3em}
+
+              逆时针旋转$90^{\circ}$ = $(e1^{'} \cdot e2^{'} = 0)$ = 正交性(这是代数和几何的统一, 不需要证明) \\
+              到这里我们完成了 对$\vec{v}$ 基于归一化的正交分解, 获得的基于 v 的新世界的基底 \\
+
+
+    \end{itemize}
+
+\end{flushleft}
+
+
+\end{document}
