@@ -27,7 +27,7 @@
             \end{bmatrix}, \vec{v} = \begin{bmatrix}
                 x_{1} \\
                 y_{1}
-            \end{bmatrix}$
+            \end{bmatrix}, \vec{u},\vec{v} \neq \vec{0}$
 
         向量本质是一个空间的移动指令(复合的), 这个空间是一个网格 由基底决定, 对于 u, v 而言是标准基(e1,e2)
 
@@ -64,7 +64,7 @@
               \textbf{1.2 $e2^{'}$} \\
               $e2^{'}$ 是 $e1^{'}$ 逆时针旋转 $90^{\circ}$  \\
               \begin{align}
-                  e2^{'} = R_{90^{\circ}}\frac{\vec{v}}{|v|}
+                  e2^{'} = R_{90^{\circ}}\frac{\vec{v}}{||\vec{v}||}
               \end{align}
               (5): $R_{90^{\circ}} = \begin{bmatrix}
                       0 & -1 \\
@@ -74,11 +74,94 @@
               \vspace{0.3em}
 
               逆时针旋转$90^{\circ}$ = $(e1^{'} \cdot e2^{'} = 0)$ = 正交性(这是代数和几何的统一, 不需要证明) \\
-              到这里我们完成了 对$\vec{v}$ 基于归一化的正交分解, 获得的基于 v 的新世界的基底 \\
+              到这里我们完成了 对$\vec{v}$ 基于归一化的正交分解, 获得的基于 v 的新世界的基底
 
+              \vspace{0.5em}
+        \item 2: $\vec{u} \;\text{与}\; \vec{v} $ 的代数逻辑与几何投影关系  \\
+              1: 怎么基于 $e1^{'},e2^{'}$ 走到 X ? \\
+              \begin{align}
+                  \vec{u} = X = x_{new}e1^{'} + y_{new}e2^{'} \\
+                  \vec{u} =  x_{new}e1^{'} + y_{new}e2^{'}
+              \end{align}
+              这里我们需要解决的问题是 算出$x_{new}, y_{new}$ 两个分量 \\
+              已知正交性: \\
+              \begin{align}
+                  e1^{'} \cdot e2^{'} = 0 \\
+                  e1^{'} \cdot e1^{'} = 1 \\
+                  e2^{'} \cdot e2^{'} = 1 \\
+              \end{align}
+              $e1^{'}, e2^{'}$ 长度为1 \\
+              存在代数转换: \\
+              \begin{align}
+                  \vec{u} =  x_{new}e1^{'} + y_{new}e2^{'}                             \\
+                  \vec{u} \cdot e1^{'} =  (x_{new}e1^{'} + y_{new}e2^{'}) \cdot e1^{'} \\
+                  \vec{u} \cdot e1^{'} =  x_{new}1 + y_{new}0                          \\
+                  x_{new} = \vec{u} \cdot e1^{'}
+              \end{align}
 
+              \begin{align}
+                  \vec{u} =  x_{new}e1^{'} + y_{new}e2^{'}                             \\
+                  \vec{u} \cdot e2^{'} =  (x_{new}e1^{'} + y_{new}e2^{'}) \cdot e2^{'} \\
+                  \vec{u} \cdot e2^{'} =  x_{new}0 + y_{new}1                          \\
+                  y_{new} = \vec{u} \cdot e2^{'}
+              \end{align}
+              代入: \\
+              \begin{align}
+                  x_{new} = \vec{u} \cdot \frac{\vec{v}}{||\vec{v}||} \\
+                  x_{new} = \frac{\vec{u} \cdot  \vec{v}}{||\vec{v}||}
+              \end{align}
+              到这里我们自然发现了 $x_{new} $ 它是 u 在  v 的标量投影 (这是完全基于换基视角"发现"的) \\
+              向量投影(标量投影 * 单位向量): \\
+              \begin{align}
+                  x_{new}e1^{'} = (\frac{\vec{u} \cdot  \vec{v}}{||\vec{v}||})\frac{\vec{v}}{||\vec{v}||} \\
+                  x_{new}e1^{'} = \frac{\vec{u} \cdot  \vec{v}}{(||\vec{v}||)^{2}}\vec{v}
+              \end{align}
+              也就是$x_{new}e1^{'}$ 就是 u 在 v 上的向量投影 = $proj_{\vec{v}^{\vec{u}}}$ \\
+
+              \vspace{0.5em}
+        \item 3 从内积公式代数出发
+              内积可以整理称投影形式： \\
+              $\vec{u} \cdot \vec{v} = |\vec{u}||\vec{v}| \cos\theta$ \\
+              给定向量 u 与方向 v, 把 u 沿着 v 方向分解为两部分 $\to$  一部分 平行于 v, 一部分垂直于 v \\
+              \begin{align}
+                  \vec{u} = \vec{u}_{\parallel} + \vec{u}_{\perp}  \\
+                  \vec{u}_{\parallel} = c\vec{v}                   \\
+                  \vec{u}_{\perp} =  \vec{u} - \vec{u}_{\parallel} \\
+                  <\vec{u}_{\perp}, \vec{v}> = 0                   \\
+              \end{align}
+              存在上述代数式关系 \\
+              这里我们要弄清楚 $cv$ 是什么, 表示什么东西 \\
+              c 是一个标量系数, 已知 v 是方向向量 那么 $cv$ 是对这个 v 做系数拉伸 \\
+              我们知道在一组基底环境下(无关维度) 两个向量是满足平行四边形法则(构成一个平面) \\
+              例如 u, v  会存在有关 v 系数的向量 $cv$ 会与 u 做垂线 构成直角三角形(平行四边形的一半) \\
+              这个 $cv$ 也称为 $\vec{u}$ 在 $\vec{v}$ 方向上的正交投影向量 \\
+              $proj_{v}(u) = cv = \vec{u}_{\parallel}$ \\
+              那么算出 c 我们就可以得到 $proj_{v}(u)$ \\
+              \begin{align}
+                  <\vec{u}_{\perp}, \vec{v}> = 0                   \\
+                  <\vec{u} - \vec{u}_{\parallel}, \vec{v}> = 0     \\
+                  <\vec{u} - cv, \vec{v}> = 0                      \\
+                  <\vec{u},\vec{v}> - c<\vec{v}, \vec{v}> = 0      \\
+                  c = \frac{<\vec{u},\vec{v}>}{<\vec{v}, \vec{v}>} \\
+              \end{align}
+              $proj_{v}(u) = cv = \frac{<\vec{u},\vec{v}>}{<\vec{v}, \vec{v}>}\vec{v}$
+              当 v 向量已经归一化($|v| = 1$) \\
+              $proj_{v}(u) = <\vec{u},\vec{v}>\vec{v}$ \\
+
+              这里有几个很有意思的点  \\
+              1:  当 $|v| = 1$ 时  \\
+              $proj_{v}(u) = <\vec{u},\vec{v}>\vec{v}$  \\
+              也就是说 $ c = <\vec{u},\vec{v}>$, 那么点积到底是什么呢? 它把 u 常量化 和 v 是一种纯粹的倍数关系 \\
+              2: $\vec{u}_{\parallel}, \vec{u}_{\perp}$ 和 $\vec{v}$ 的关系 \\
+              它们使 $\vec{v}$ 的方向构造一个新网格(正交垂直), 这个网格和标准基的正交网格有区别吗?
+              没有! 它只是看到这个世界的另一个视角 \\
+              那么 $\vec{u} = c1\vec{u}_{\parallel} + c2\vec{u}_{\perp}$ 是完全成立的 \\
+              $\vec{v}$ 被拆解成 一组分量 + 一组基 \\
+              但$\vec{v}$ 在开始时 我们已经确了它只是一个方向, 也就是, 我们可以把一个环境转换成 $\to$ 任意视角"方向"的一个环境, 而且它们存在代数映射关系 ??
+
+              因为我们是从内积公式出发的(双线性), 那么函数 f(x) 也是满足的: \\
+              $proj_{g(x)}(f(x)) = \frac{\int f(x)g(x)}{(g(x))^{2}}g(x)$
     \end{itemize}
-
 \end{flushleft}
 
 \end{document}
