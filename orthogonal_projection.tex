@@ -167,8 +167,44 @@
 \subsection{投影最小化距离}
 \begin{flushleft}
     \begin{itemize}
+        \item[] \textbf{定理}：在所有形如 $cv$ 的向量中，$proj_{v}(u)$ 是离 $u$ 最近的那个。即：
+              $$ \min_{c \in \mathbb{R}} \|u - cv\| \text{ 在 } c = \frac{\langle u, v \rangle}{\langle v, v \rangle} \text{ 处取得} $$
+              其中 $\frac{\langle u, v \rangle}{\langle v, v \rangle}$ 为投影系数。
+
+              \vspace{0.5em}
+        \item[] \textbf{证明}：
+              对于任意实数 $c$，我们将向量 $u - cv$ 拆分为相互垂直的两部分：
+              \begin{align*}
+                  u - cv        & = (u - \text{proj}_{v}(u)) + (\text{proj}_{v}(u) - cv) \\
+                  u_{\perp}     & = u - \text{proj}_{v}(u) \quad (\text{垂直于 } v)         \\
+                  u_{\parallel} & = \text{proj}_{v}(u) - cv \quad (\text{平行于 } v)
+              \end{align*}
+
+              因为 $u_{\perp}$ 与 $u_{\parallel}$ 相互垂直，我们可以构建一个直角三角形。
+              由勾股定理可知：
+              $ \|u - cv\|^2 = \|u_{\perp}\|^2 + \|\text{proj}_{v}(u) - cv\|^2 $
+
+              分析上式以求 $\|u - cv\|^2$ 的最小值：
+              \begin{itemize}
+                  \item 第一项 $\|u_{\perp}\|^2$ 为常数（不依赖于 $c$）；
+                  \item 第二项 $\|\text{proj}_{v}(u) - cv\|^2 \ge 0$。
+              \end{itemize}
+              因此，当且仅当第二项为 $0$ 时，$\|u - cv\|^2$ 取得最小值。即：
+              \begin{align*}
+                  \text{proj}_{v}(u) - cv                                                & = 0 \\
+                  \frac{\langle u, v \rangle}{\langle v, v \rangle} v - cv               & = 0 \\
+                  \left( \frac{\langle u, v \rangle}{\langle v, v \rangle} - c \right) v & = 0
+              \end{align*}
+              设 $v \neq 0$，则有：
+              $$ c = \frac{\langle u, v \rangle}{\langle v, v \rangle} $$
+              此时，最小距离的平方为 $\|u - cv\|^2 = \|u_{\perp}\|^2$, $u - cv = u_{\perp} $。证毕。
+    \end{itemize}
+\end{flushleft}
 
 
+\subsection{子空间投影}
+\begin{flushleft}
+    \begin{itemize}
     \end{itemize}
 \end{flushleft}
 

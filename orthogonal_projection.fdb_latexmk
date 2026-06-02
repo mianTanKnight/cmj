@@ -1,7 +1,7 @@
 # Fdb version 4
-["pdflatex"] 1779959976.492 "/home/wenshen/math_/orthogonal_projection.tex" "orthogonal_projection.pdf" "orthogonal_projection" 1779959977.22901 0
+["pdflatex"] 1780398383.85606 "/home/wenshen/math_/orthogonal_projection.tex" "orthogonal_projection.pdf" "orthogonal_projection" 1780398384.58861 0
   "/etc/texmf/web2c/texmf.cnf" 1767840140.29732 475 c0e671620eb5563b2130f56340a5fde8 ""
-  "/home/wenshen/math_/orthogonal_projection.tex" 1779959976.6734 8349 73c6a7f9ab34f7e8289a7f431c62e41c ""
+  "/home/wenshen/math_/orthogonal_projection.tex" 1780398383.29578 10495 d8cee2d03297cc9967c8836b92cd2d74 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/adobe/zapfding/pzdr.tfm" 1136768653 1528 f853c4d1b4e0550255e02831fdc8496f ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
@@ -91,9 +91,9 @@
   "/usr/share/texmf/tex/latex/CJK/CJKfntef.sty" 1634405102 12851 25a9b5cc006609feb5c9a20ce24a5392 ""
   "/usr/share/texmf/web2c/texmf.cnf" 1707919699 40399 f2c302f7d2af602abb742093540a5834 ""
   "/var/lib/texmf/web2c/xetex/xelatex.fmt" 1773453549 9159849 4f654266db2832deea0e9941ea8199c8 ""
-  "orthogonal_projection.aux" 1779959977.13464 393 e3b4a562e0b30a891d0be9df35c8c5a1 "pdflatex"
-  "orthogonal_projection.out" 1779959977.13564 232 e662e8594b208dd61ac9c2402d13b439 "pdflatex"
-  "orthogonal_projection.tex" 1779959976.6734 8349 73c6a7f9ab34f7e8289a7f431c62e41c ""
+  "orthogonal_projection.aux" 1780398384.49971 515 8be19f8f4af13251522d5da0eb8ffb6b "pdflatex"
+  "orthogonal_projection.out" 1780398384.49971 320 718a0f228d55f73be93c2436942e3281 "pdflatex"
+  "orthogonal_projection.tex" 1780398383.29578 10495 d8cee2d03297cc9967c8836b92cd2d74 ""
   (generated)
   "orthogonal_projection.aux"
   "orthogonal_projection.log"
