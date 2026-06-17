@@ -18,7 +18,7 @@
 \maketitle
 
 
-\subsection{向量的正交分解与投影}
+\section{向量的正交分解与投影}
 \begin{flushleft}
     \begin{itemize}
         向量 $\vec{u} = \begin{bmatrix}
@@ -164,7 +164,7 @@
     \end{itemize}
 \end{flushleft}
 
-\subsection{投影最小化距离}
+\section{投影最小化距离}
 \begin{flushleft}
     \begin{itemize}
         \item[] \textbf{定理}：在所有形如 $cv$ 的向量中，$proj_{v}(u)$ 是离 $u$ 最近的那个。即：
@@ -202,9 +202,137 @@
 \end{flushleft}
 
 
-\subsection{子空间投影}
+\section{子空间投影}
 \begin{flushleft}
     \begin{itemize}
+        给定一个 k 维子空间 $W \subseteq V$, 把 $u$ 投影到 W 上. \\
+        \textbf{问题}: 找到 $w \subseteq W$ 使得 $u- w \perp W$ (即 $u - w$ 与 $W$ 中所有向量正交).
+        如果 $W$ 有一组正交基 ${w_{1}, w_{2}, ... ,w_{k}}$ (即 $w_{i} \perp w_{j}$ 当 $i \neq j$), 那么解非常干净:
+        \begin{align}
+            proj_w(u) = \sum_{i=1}^{k}\frac{<u, w_{i}>}{<w_{i},w_{i}>}w_{i}
+        \end{align}
+
+        为什么这是对的? 证明:
+
+        设 $w$ 是存在的 \\
+        那么它存在下列性质: \\
+        $w \subseteq W \subseteq V$ w 是 V 里的向量，并且它落在子空间 W 中 \\
+        w 是向量 那么我们可以代数式表达: \\
+        \begin{align}
+            w = c{1}w_{1} + c{2}w_{2} + ... c_{k}w_{k} \\
+            w = \sum_{i=1}^{k}c_{i}w_{i}
+        \end{align}
+
+        投影要求: \\
+        $u - w \perp W$ \\
+        那么 $w_{j}$ 是 W 里任意一个基方向, 使用下列成立: \\
+        \begin{align}
+            <u - w, w_{j}> = 0                                \\
+            <u - \sum_{i=1}^{k}c_{i}w_{i}, w_{j}> = 0         \\
+            <u, w_{j}> - \sum_{i=1}^{k}c_{i}<w_{i},w_{j}> = 0 \\
+        \end{align}
+        因为 W 这些基都是正交的($i \ne j $)
+        那么:
+        \begin{align}
+            <u, w_{j}> - \sum_{i=1}^{k}c_{i}<w_{i},w_{j}> = 0 \\
+            <u, w_{j}> - c_{j}<w_{j},w_{j}> = 0               \\
+            <u, w_{j}>  =   c_{j}<w_{j},w_{j}>                \\
+            \frac{<u, w_{j}>}{<w_{j},w_{j}>}  = c_{j}
+        \end{align}
+        把 $c_{j}$ 换成标准下标 $c_{i}$  \\
+        $ c_{i} = \frac{<u, w_{i}>}{<w_{i},w_{i}>}$ \\
+        那么 w: \\
+        $w = proje_{w}(u) = \sum_{i=1}^{k}\frac{<u, w_{i}>}{<w_{i},w_{i}>}w_{i}$ \\
+
+        这里我们能明白一个很有意思的点 ${w_{j}}$ 因为是存在投影点 w  和 u 有正交性
+        另一方面，由于基向量之间两两正交，\(\langle w_i,w_j\rangle\) 在 \(i\neq j\) 时为 0。
+        因此当我们用 \(w_j\) 这个方向去检测投影点 \(p\) 时，只有 \(w_j\) 方向自己的分量会留下，
+        其他方向的分量全部被正交性消掉。
+        所以在正交基下，每个系数 \(c_j\) 可以被单独计算，不同方向之间没有耦合。
+
+        如果 W 中的基不正交 那么 $<u,w_{j}> - \sum_{i=1}^{k}c_{i}<w_{i},w_{j}> = 0$ 就无法化简 需要确定计算出解
+        那么最终的 关于 w 的 投影点公式是不成立的
+
+    \end{itemize}
+\end{flushleft}
+
+
+\section{Gram-Schmidt: 正交化算法}
+\begin{flushleft}
+    \begin{itemize}
+        输入一组线性无关的向量 ${v_{1}, v_{2}, ..., v_{k}}$ \\
+        输出一组互相正交的向量 ${w_{1}, w_{2}, ..., w_{k}}$, 张成同一个子空间 \\
+        重点: 输入组中的向量必须要互相线性无关 $v_{i} != cv_{j}$ 也就是每一个向量都有独立的方向 \\
+
+        这里我们研究下 $v_{1},v_{2}$ \\
+        我们已知 $v_{1}$ 和 $v_{2}$ 是线性无关 \\
+        那么我们 可以对 $v_{1}, v_{2}$ 做正交分解和投影 \\
+        \begin{align}
+            w_{1} = v_{1}                                                                            \\
+            v_{2} = \vec{w_{1}}_{\parallel} + \vec{w_{1}}_{\perp}                                    \\
+            \vec{w_{1}}_{\parallel} = proj_{w_{1}}(v_{2}) = \frac{<v_{2},w_{1}>}{<w_{1},w_{1}>}w_{1} \\
+            \vec{w_{1}}_{\perp} =  v_{2} -  \frac{<v_{2},w_{1}>}{<w_{1},w_{1}>}w_{1}                 \\
+            w_{2} = \vec{w_{1}}_{\perp}                                                              \\
+            <w_{1}, w_{2} > = 0                                                                      \\
+        \end{align}
+
+        那么这里我们得到了 $w_{1},w_{2}$ 它们是正交 \\
+        那么我们思考下 $w_{3}$ 如果它和 $w_{2}$ 正交 那么它和 $w_{1}$ 的几何性质呢 ?  不能确定 \\
+        但是我们需要保证 $w_{3} \perp w_{1}$  \\
+        那么我可以得到一个概念 $w_{3} \perp w_{1} \&\& \; w_{3} \perp w_{2}$, $w_{3} \perp span(w_{1}, w_{2})$ \\
+        从维度的角度来看 新延伸出来的的维度 新延伸出来的维度不一定天然正交旧维度 : Gram-Schmidt 是主动把它改造成正交旧子空间的新方向.
+
+        这里我们要解决一个关键的点: 延续出来的方向是耦合的还解耦的  例如 : $w_{3}$ 是个方向是直角三角形的边 那么它拆解出来的两个向量(平行和垂直) 是否和 w1,w2耦合
+
+        \textbf{1: 什么叫耦合什么叫解耦 ?}: \\
+        我们设在3维空间中的子平面空间:
+        \begin{align}
+            W_{2} = span(w1,w2)       \\
+            \vec{w1} = \begin{bmatrix}
+                           1 \\
+                           0 \\
+                           0
+                       \end{bmatrix} \\
+            \vec{w2} = \begin{bmatrix}
+                           0 \\
+                           1 \\
+                           0
+                       \end{bmatrix} \\
+        \end{align}
+        $\vec{v3} = \begin{bmatrix}
+                c1 \\
+                c2 \\
+                c3
+            \end{bmatrix}$
+        $ = \begin{bmatrix}
+                c1 \\
+                c2 \\
+                0
+            \end{bmatrix} (\text{as A}) + \begin{bmatrix}
+                0 \\
+                0 \\
+                c3
+            \end{bmatrix} (\text{as B})$ \\
+        $A \in span(w1,w2)$, B 是延展方向 \\
+        这里会发现一个有意思的点 $<A,B> = 0$ 也就是说 A, B 是正交的  \\
+        我们把 B 转换成代数模式: $B = 0w1 + 0w2 + c3w3$ 代数式非常的干净的表现 B 的分量构成 w1,w2 占比为0 这是代数视角的解耦\\
+        这里有一个非常重要的点 B 这个向量与 A 向量(或者更准确的说是 span(w1,w2)) 的几何形态 是完全垂直的 而非是斜的 \\
+        B 无法分解出 $A \parallel + A\perp$ 或者说 $A \parallel = 0 $ 这是几何视角的解耦
+        对 A, B (向量) 来说, A 是耦合的, B 是解耦的(影响方向的分量只有一个)
+
+        什么是耦合?
+        $\vec{v3}$ 是一个耦合向量,
+        起始点 $\vec{P}$, t 是常量 \\
+        \begin{align}
+            A \neq 0, B \neq 0      \\
+            A \subseteq span(w1,w2) \\
+            P_{new} = P + tv3       \\
+            P_{new} = P + tA + tB
+        \end{align}
+        那么 我们很明显的就可以发现移动 "路径" 它必须在 $span(w1,w2)$ 先移动一段距离
+        这也就是 v3 耦合了$span(w1,w2)$
+
+
 
 
 
