@@ -1,6 +1,5 @@
 {
   "latex-workshop.latex.autoBuild.run": "onSave",
-  "latex-workshop.latex.outDir": "/out",
   "latex-workshop.formatting.latex": "latexindent",
   "latex-workshop.latex.build.forceRecipeUsage": true,
   "latex-workshop.latex.recipe.default": "latexmk (xelatex)",
