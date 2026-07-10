@@ -17,8 +17,358 @@
 \begin{document}
 \maketitle
 
+\begin{flushleft}
+    \subsubsection{题 1: 对象与集合:}
 
-$x = 1 w $
+    设 $W \subseteq \mathbb{R^{3}}$ 是子空间, $p$ 是 u 在 $W$ 上的投影.
+    判断:
+    \begin{align}
+        p \subseteq W
+    \end{align}
 
+    说明这个表达式在"类型"上出现了什么问题: \\
+
+    1: 什么问题 ? \\
+    $p$ 是 投影向量 $\subseteq$ 是集合与集合的从属关系关系表述
+    $\in$ 是元素与集合的从属关系的正确表述
+
+    2: 修正版 \\
+    \begin{align}
+        p \in W
+    \end{align}
+
+\end{flushleft}
+
+
+\begin{flushleft}
+    \subsubsection{题 2: 线性无关:}
+    设 $v1,v2,v3 \in \mathbb{R^{3}}$ \\
+    若任意两个向量都不是彼此的标量倍数，那么 \\
+    \begin{align}
+        {v1,v2, v3}
+    \end{align}
+    一定线性无关
+
+    1: 判断并构造证明或反例:\\
+    一个关键的问题: 什么叫'线性相关' (反证线性无关): \\
+
+    我们知道向量一个包含方向的移动指令 \\
+    如果两个向量彼此是标量倍数 也就是: $v2 = c1v1 \; ({c1 \in \mathbb{R} \mid c1 \neq 0 })$ \\
+    $v2 = c1v1$ 代数式表现出一个几何特性 $\rightarrow v1 \parallel v2 $ \\
+
+    平行有一个代数性质: $c1v1 + c2v2 = \vec{0} \; ({c1,c2 \in \mathbb{R}  \mid  (c1,c2)\neq (0, 0) })$, 会存在常量$c1,c2$(步伐) 会使用回归到出发点 \\
+    那么我们现在带入 $v3$ 因为 题目$v3$ 和 $v1,v2$ 确定了不是标量倍数(不平行) \\
+    但有一种情况是无法保证的 $v3$ 和 $v1 + v2$ 是否平行, 如果 v3 和 $v1 + v2$ 存在线性相关: \\
+    代数式: $(c1v1 +  c2v2) + c3v3 = \vec{0} \; ({c1,c2,c3 \in \mathbb{R}  \mid (c1, c2, c3)\neq (0, 0, 0)})$ \\
+
+    设: $\vec{v1} =  \begin{bmatrix}
+            1 \\
+            0 \\
+            0
+        \end{bmatrix}, \vec{v2} = \begin{bmatrix}
+            0 \\
+            1 \\
+            0
+        \end{bmatrix}, \vec{v3}= \begin{bmatrix}
+            1 \\
+            1 \\
+            0
+        \end{bmatrix}$ \\
+
+    上面例子满足: 任意两个向量都不是彼此的标量倍数 \\
+    但存在关键关系: $v3 \parallel (v1 + v2)$ \\
+    那么我们会得到一个代数式:
+    \begin{align}
+        (c1\begin{bmatrix}
+               1 \\
+               0 \\
+               0
+           \end{bmatrix} + c2\begin{bmatrix}
+                                 0 \\
+                                 1 \\
+                                 0
+                             \end{bmatrix}) + c3\begin{bmatrix}
+                                                    1 \\
+                                                    1 \\
+                                                    0
+                                                \end{bmatrix} = \vec{0} \; ({c1,c2,c3 \in \mathbb{R}  \mid (c1,c2,c3) \neq (0, 0, 0)})
+    \end{align}
+    我们很容易可以得出一组解: $c1 = -1 , c2 = -1 , c3 = 1$ \\
+    结论: 若任意两个向量都不是彼此的标量倍数，那么一定线性无关 是错误的 \\
+    证毕 \\
+\end{flushleft}
+
+
+
+\begin{flushleft}
+    \subsubsection{题 3: 正交于整个子空间:}
+    设: \\
+    \begin{align}
+        W = span(w1,w2,w3)
+    \end{align}
+    并且$w1,w2,w3$是 W 的一组基. \\
+    已知: \\
+    \begin{align}
+        r \cdot w1 = r \cdot w2 = r \cdot w3 = 0 \; (<r,w1> = <r,w2> = <r,w3> = 0 )
+    \end{align}
+    能否推出: \\
+    \begin{align}
+        r \perp W  ?
+    \end{align}
+    不能只用几何图像，要从 W 中任意向量的表达式证明。
+
+    证: \\
+    $\vec{v} = \begin{bmatrix}
+            a \\
+            b \\
+            c
+        \end{bmatrix} \; ({a, b, c \in \mathbb{R}})$ 且 $\vec{v} \in W$ \\
+    那么我们代数化: $\vec{v}$
+    \begin{align}
+        \vec{v} = aw1 + bw2 + cw3
+    \end{align}
+    那么我们会得到下面代数式(基于内积的线性性质):  \\
+    \begin{align}
+        <v, r> = <aw1 + bw2 + cw3 , r> \\
+        = <aw1, r> + <bw2,r> + <cw3,r> \\
+        = a<w1,r> + b<w2,r> + c<w3,r>  \\
+        = a(0) + b(0) + c(0)
+        = 0
+    \end{align}
+    由上诉我们可以得到一个定理: r 和 W 中任意一个向量都是垂直的, 所以 r 垂直 整个 W \\
+    证毕
+
+\end{flushleft}
+
+
+\begin{flushleft}
+    \subsubsection{题 4: 非正交基:}
+    判断并修正: 若 W 的一组基不正交, 则 u 在 W 上的正交投影不存在.
+
+    证: \\
+    1: 投影是否存在? \\
+    对于 W 空间 这组基是否能张成整个空间 只和 Rank(秩) 和 基之间是否存在线性相关 成必要关系 \\
+    简单来说 如果是满秩 $\land$ 基之间不存在线性相关 那么这组基就能张成整个空间 正交性并不是必须的 \\
+    既然 这组基能张成整个空间, 那么 u 就一定存在对 W 的投影:  $\hat{u}$ \\
+
+\end{flushleft}
+
+
+
+\begin{flushleft}
+    \subsubsection{题 5: 内积读取坐标:}
+    设 q 是单位向量. \\
+    判断下面的说法是否完整准确: \\
+    \begin{align}
+        u \cdot q \;(<u,q>)
+    \end{align}
+    就是 u 的一个坐标。
+
+    证: \\
+    q 是单位向量 那么$\rightarrow \| \boldsymbol q \| = 1$ \\
+    $<u,q> = \| \boldsymbol u \| \| \boldsymbol q \| cos\theta = \| \boldsymbol u \| 1 cos\theta = C \; {C \in \mathbb{R}}$ \\
+    这里我们得到了标量投影也就是一个常量, 也就是说这里我们只得到了一个长度和方向 那么它就不是一个坐标的概念
+    $<u,q>q$ 则是投影向量 它的结果是一个向量 是有方向的 是可以转换成: $q_new = c_{1}e_{1}, c_{2}e_{2} ...c_{k}e_{k}$ 表达
+
+\end{flushleft}
+
+
+
+
+\begin{flushleft}
+    \subsubsection{题 6: Gram-Schmidt 与 span:}
+    Gram-Schmidt 中定义 : \\
+    \begin{align}
+        w_{1} = v_{1} \\
+        w_{2} = v_{2} - proj_{w_{1}}(v2)
+    \end{align}
+    证明:
+    \begin{align}
+        span(w_{1}, w_{2}) =  span(v_{1},v_{2})
+    \end{align}
+
+    证: \\
+    1: 张成一个空间的必要因素: \\
+    满秩 $\land$ 基之间不存在线性相关 那么这组基就能张成整个空间
+    由 Gram-Schmidt 中定义: \\
+    \begin{align}
+        <w_{1},w_{2}> = 0
+    \end{align}
+    因为 $w_{1}, w_{2}$ 正交, 那么$w_{1}, w_{2}$ 必然线性无关
+    那么 $span(w_{1}, w_{2})$ 是必然成立的
+
+    2: $span(w_{1}, w_{2}) =  span(v_{1},v_{2})$ 是否是同一个张成空间 ?
+    我们需要证明 $span(w_{1}, w_{2}) \subseteq  span(v_{1},v_{2}) \land  span(v_{1},v_{2}) \subseteq span(w_{1}, w_{2})$ \\
+    也就是证明 : $span(w_{1}, w_{2}) \text{中任意一个向量都可以使用} v_{1},v_{2} \text{这组基代数表达} $ \\
+
+    这里有一个关键的代数关系 : $proj_{w_{1}}(v2)$ 和 $w_{1}$ 的关系 \\
+    可以转化成: $proj_{w_{1}}(v2) = kw_{1}$ (因为投影是确定了以$w_{1}$为方向的) \\
+    那么: \\
+    \begin{align}
+        w_{1} = v_{1}                                 \\
+        w_{2} = v_{2} - proj_{w_{1}}(v2)              \\
+        w_{2} = v_{2} - kw_{1} \;({k \in \mathbb{R}}) \\
+        v_{2} = w_{2} + kw_{1}                        \\
+        v_{1} = w_{1}
+    \end{align}
+
+    则对于任意向量 $p \;(p \in span(v_{1},v_{2}))$ \\
+    \begin{align}
+        p = c1v_{1} + c2v_{2} \;({(c1,c2) \in \mathbb{R}}) \\
+        = c1w_{1} + c2(w_{2} + kw_{1})
+    \end{align}
+
+    对于任意向量 $p2 \; (p2 \in span(w_{1},w_{2}))$ \\
+    \begin{align}
+        p2 = d1w_{1} + d2w_{2} \;({(d1,d2) \in \mathbb{R}}) \\
+        = d1v_{1} + d2(v_{2}- kw_{1})                       \\
+        = d1v_{1} + d2(v_{2} -kv_{1})                       \\
+        = d1v_{1} + d2v_{2} -d2kv_{1}                       \\
+    \end{align}
+
+    证毕: $ span(w_{1}, w_{2}) =  span(v_{1},v_{2})$
+\end{flushleft}
+
+
+\begin{flushleft}
+    \subsubsection{题 7: 零残差的含义}
+    在 Gram-Schmidt 中:
+    \begin{align}
+        w_{3} = v_{3} - proj_{span(w_{1},w_{2})}(v_{3})
+    \end{align}
+    若最终得到：
+    \begin{align}
+        w_{3} = 0
+    \end{align}
+    这说明 $v_{3}$ 与前两个向量有什么关系？\\
+    请从投影的定义推出，而不是只写“线性相关”
+
+    证: \\
+    由 Gram-Schmidt 定义, 我们可得关键代数关系: \\
+    \begin{align}
+        <w_{1},w_{2}> = 0 \\
+        v_{3} = proj_{span(w_{1},w_{2})}(v_{3})
+    \end{align}
+    因为 $<w_{1},w_{2}> = 0$(正交) \\
+    那么 $proj_{span(w_{1},w_{2})}(v_{3})$ 可以转换成: \\
+    \begin{align}
+        proj_{w_{1}}(v_{3}) + proj_{w_{2}}(v_{3})                                             \\
+        = \frac{<v_{3},w_{1}>}{||w_{1}||^{2}}w_{1} + \frac{<v_{3},w_{2}>}{||w_{2}||^{2}}w_{2} \\
+        = k1(w_{1}) + k2(w_{2}) \;({(k1,k2) \in \mathbb{R}})                                  \\
+        v_{3} = k1(w_{1}) + k2(w_{2}) \;({(k1,k2) \in \mathbb{R}})                            \\
+    \end{align}
+    是线性相关关系\\
+    证毕
+
+    扩展证明: \\
+    这里我们再思考一个问题 为什么只有$ <w_{1},w_{2}> = 0$ 的情况下 才能干净的分解成: $proj_{w_{1}}(v_{3}) + proj_{w_{2}}(v_{3})$?
+    这里: $w_{3} =  v_{3} - proj_{span(w_{1},w_{2})}(v_{3}) (w_{3} \neq 0)$ \\
+    那么我们知道关键几何信息:
+    \begin{align}
+        w_{3} \perp span(w_{1}, w_{2})            \\
+        w_{3} \perp w_{1} \land w_{3} \perp w_{2} \\
+    \end{align}
+    已知一定存在一个正交投影向量 p $(p \in span(w_{1},w_{2})) \land p = c1w_{1} + c2w_{2} \;({(c1,c2) \in \mathbb{R}}))$ \\
+    $w_{3} = v_{3} - (c1w_{1} + c2w_{2})$
+    那么我们可以构建下列代数式: \\
+    \begin{align}
+        <v_{3} - (c1w_{1} + c2w_{2}),  w_{1}> = 0                \\
+        <v_{3},w_{1}> - <(c1w_{1} + c2w_{2}),w_{1}> = 0          \\
+        <v_{3},w_{1}>  - (c1<w_{1},w_{1}> + c2<w_{2},w_{1}>) = 0 \\
+        <v_{3},w_{1}>  - c1<w_{1},w_{1}> - c2<w_{2},w_{1}> = 0   \\
+        if: <w_{2},w_{1}> = 0                                    \\
+        <v_{3},w_{1}>  =  c1<w_{1},w_{1}>                        \\
+        <v_{3} - (c1w_{1} + c2w_{2}),  w_{2}> = 0 \text{(同上)}
+    \end{align}
+    $ if: <w_{2},w_{1}> = 0 $ 如果不成立 $<v_{3},w_{1}>$ 投影会混合成 $c1<w_{1},w_{1}> + c2<w_{2},w_{1}>$ 而非单一的 $c1<w_{1},w_{1}>$ \\
+    证毕
+\end{flushleft}
+
+
+\begin{flushleft}
+    \subsubsection{题 4(修正): 非正交基}
+    \subsubsection{题 4: 非正交基:}
+    判断并修正: 若 W 的一组基不正交, 则 u 在 W 上的正交投影不存在.
+    判断: 说法错误, 即使$W$ 的基不正交, 其 正交投影依然唯一存在
+
+    证: \\
+    在有限维的内积空间 $\mathbb{R}^n$中 和 其子空间 W ($W \subseteq \mathbb{R}^n$)
+    存在一个向量 u ($u \in \mathbb{R}^n$)
+    那么就存在直和分解 $u = u_{\parallel} + u_{\perp}$
+    则证明了正交投影向量 $u_{\parallel}$ 的存在性和唯一性, 并不依赖 W 的基特性, 说到底基影响的是: 怎么到底目的地的路线, 而非这个目的地是否存在
+    证毕
+\end{flushleft}
+
+\begin{flushleft}
+    \subsubsection{题 5(修正): 内积读取坐标:}
+    设 q 是单位向量. \\
+    判断下面的说法是否完整准确: \\
+    \begin{align}
+        u \cdot q \;(<u,q>)
+    \end{align}
+    就是 u 的一个坐标。
+
+    证: q 是单位向量, 那么存在代数表达式
+    \begin{align}
+        u = c1q + c2q2 \; ((c1, c2) \in \mathbb{R})
+    \end{align}
+    也就是说 c1,c2是坐标标量  \\
+    那么存在下列代数转换: \\
+    \begin{align}
+        u \cdot q \;(<u,q>)  \\
+        = <c1q + c2q2, q>    \\
+        = c1<q,q> + c2<q2,q> \\
+        = c1 \cdot 1  + c2<q2,q>
+    \end{align}
+    这里我们要讨论关键的q2, q 的关系 \\
+    if $<q2, q> = 0$ 那么 $<u,q> = c1$ \\
+    也就说我们提取出来 q 在 u 中的占比系数(在坐标系中 类型于 x) \\
+    else \\
+    对于 u 来说 q 和 q2 是完全耦合的 \\
+
+    结论：\\
+    $\langle u, q \rangle$ 永远是 $u$ 投影到一维方向 $\text{span}(q)$ 后、在基 $\{q\}$ 下的**投影坐标**；但它不一定是 $u$ 在某个完整多维非正交基下的**第一个整体坐标*
+    证毕
+
+    示例: \\
+    存在一组基:
+    ${b1,b2} = \begin{bmatrix}
+            1 \\
+            0
+        \end{bmatrix}, \begin{bmatrix}
+            1 \\
+            1
+        \end{bmatrix}$ \\
+    $u = \begin{bmatrix}
+            2 \\
+            1
+        \end{bmatrix}$
+    解c1, c2 : \\
+    \begin{align}
+        c1 \cdot \begin{bmatrix}
+                     1 \\
+                     0
+                 \end{bmatrix} +  c2  \begin{bmatrix}
+                                          1 \\
+                                          1
+                                      \end{bmatrix} = \begin{bmatrix}
+                                                          2 \\
+                                                          1
+                                                      \end{bmatrix} \\
+        x + y  = 2                                                   \\
+        0x + y  =1                                                   \\
+    \end{align}
+    得出: c1, c2 = 1 \\
+    \begin{align}
+        <u> = 1 \cdot b1 + 1 \cdot b2           \\
+        <u, b1> = <1 \cdot b1 + 1 \cdot b2, b1> \\
+        = 1<b1, b1> + 1<b2,b1>                  \\
+        = 1 + 1
+        = 2
+    \end{align}
+    已知 $c1 \neq 2$ \\
+    证毕
+
+\end{flushleft}
 
 \end{document}
