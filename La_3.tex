@@ -1,0 +1,291 @@
+\documentclass[12pt]{article}
+\usepackage[a4paper,margin=2.2cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{hyperref}
+\usepackage{cleveref}
+
+% 中文（xelatex）
+\usepackage{fontspec}
+\usepackage{xeCJK}
+
+\usepackage{fontspec}
+\usepackage{xeCJK}
+\setCJKmainfont{Noto Serif CJK SC}
+
+\title{Least-Squares}
+\date{}
+\begin{document}
+\maketitle
+
+\begin{flushleft}
+    \subsubsection{Least-Squares}
+
+    1: 前置: \\
+    我们已经从 Ac = u 确定无解 \\
+    推出:
+    \begin{align}
+        \hat{c} \in  \arg \min_{c \in \mathbb{R}^{2}} ||u - Ac||^{2}
+    \end{align}
+    并得到了 normal equation: \\
+    $A^{T}A\hat{c} = A^{T}u$
+
+    现在我们必须要证明:
+    $p = A\hat{c}$ 确实是 $Col(A)$ 中距离 u 最近的向量 \\
+
+
+    2: 已知: \\
+    $W  = Col(A),\; p = A\hat{c},\; r = u - p$ \\
+    并且$\hat{c}$ 满足 normal equation: \\
+    \begin{align}
+        A^{T}A\hat{c} = A^{T}u                         \\
+        A^{T}(u - A\hat{c}) = 0                        \\
+        A^{T}r = 0                                     \\
+        r \in NUll(A^{T}) = Col(A)^{\perp} = W^{\perp} \\
+        r \perp W
+    \end{align}
+    所以我们需要证明下面等式: \\
+    对于任意另一个系数向量 c 都有: \\
+    \begin{align}
+        ||u - Ac||^{2} \geq ||u - A\hat{c}||^{2}
+    \end{align}
+    简称 $X_{1}$
+
+
+    3: 证明: \\
+    任取: \\
+    $c \in \mathbb{R}^{2}$ \\
+    令: \\
+    $q = Ac \in W$, $p = A\hat{c} \in W$ \\
+    $p - q \in W$ \\
+    我们已知: \\
+    $r  =  u - p  \in W^{\perp}$ \\
+    因此: \\
+    $r \perp p, r \perp q, r \perp (p - q)$ \\
+
+    3.1: $u -q$ 是什么 ?
+    $u - q$ 是一个向量 也就是从 $q \to u $ 出发点是 q \\
+    那么: \\
+    $u - q = (u - p)  + (p - q) $  \\
+    我们也可以分成两段路走 先到 p 再到 q \\
+    化简下代数式: \\
+    \begin{align}
+        u - q = (u - p)  + (p - q) \\
+        = r + (p - q)              \\
+        = r + (A\hat{c} - Ac)      \\
+        = r + A(\hat{c} - c)
+    \end{align}
+    因为 $r \in W^{\perp} \land A(\hat{c} - c) \in W$ \\
+    所以我们可以构建一个直角三角形 $\triangle UPQ, \angle P=90^\circ $
+    那么存在勾股定理: \\
+    \begin{align}
+        ||u - q||^{2} = ||r||^{2} + ||A(\hat{c} - c)||^{2}             \\
+        ||u - Ac||^{2} = ||u - A\hat{c}||^{2} + ||A(\hat{c} - c)||^{2} \\
+        ||A(\hat{c} - c)||^{2} \geq 0                                  \\
+        ||u - Ac||^{2} \geq ||u - A\hat{c}||^{2}                       \\
+    \end{align}
+    所以 $ \hat{c} = \arg \min_{c \in \mathbb{R}^{2}} ||u - Ac||^{2}$ 成立 \\
+    $A\hat{c} = proj_{w}(u)$ (投影最短)\\
+    证毕:
+
+
+    4: 投影向量唯一， 但系数未必唯一 \\
+    由:
+    \begin{align}
+        ||u - Ac||^{2} = ||r||^{2} + ||A(\hat{c}-c)||^{2}
+    \end{align}
+    我们分析上列等式： 它其实是基于毕达哥拉斯定理 \\
+    斜边: $||u - Ac||^{2}$ \\
+    底边: $||A(\hat{c}-c)||^{2}$ \\
+    对边: $||r||^{2}$ \\
+    直角三角形 $\triangle UPQ, \angle P=90^\circ $ \\
+    问题1: 什么情况下 Q 与 P 最近 ? \\
+    斜边 = 对边, 那么几何上最近, 也就是 $||A(\hat{c}-c)||^{2} = 0$
+
+    现在我们设 Q = P, 那么必然存在  $||A(\hat{c}-c)||^{2} = 0 \to A(\hat{c}-c) = 0$ \\
+    我们现在分析 式子 $A(\hat{c}-c) = 0 $, $\hat{c}, c$ 是系数向量 \\
+    那么 $\hat{c}, c$ 存在哪几种关系呢? \\
+    1: 如果 A 的所有列都线性无关并且 $A \neq 0$ 那么有代数式: \\
+    \begin{align}
+        \sum_{i = 1}^{n} a_{i}(\hat{c} - c) = 0
+    \end{align}
+    那么代数只有一个解 $\hat{c} - c = 0 \to \hat{c} = c$ 系数唯一, A 的零空间只有 0 \\
+    所有的“基准方向”都没有冗余。这意味着没有任意一个方向可以被其他方向替代。
+
+    2: A 存在列线性相关: \\
+    \begin{align}
+        z = \hat{c} - c     \\
+        c = \hat{c} - z     \\
+        Az =  0             \\
+        Ac = A(\hat{c} - z) \\
+        = A\hat{c} - Az     \\
+        = A\hat{c} - 0      \\
+        = p - 0
+    \end{align}
+    也就是说 A 零空间中存在可能的无数个 z 向量, z 向量是系数差向量  \\
+
+    总结: 对于客观存在的 $proj_{w}(u)$ 投影向量它是唯一的, 但从 W 零点出发到到达 $proj_{w}(u)$ 的路径组合不是唯一的
+
+
+    5: 计算 \\
+    已知： \\
+    \begin{align}
+        A = \begin{bmatrix}
+                1 & 1 \\
+                1 & 1 \\
+                0 & 1 \\
+            \end{bmatrix}, u = \begin{bmatrix}
+                                   4 \\
+                                   2 \\
+                                   2
+                               \end{bmatrix}, \hat{c} = \begin{bmatrix}
+                                                            1 \\
+                                                            2
+                                                        \end{bmatrix}
+    \end{align}
+    所以: \\
+    \begin{align}
+        p = A\hat{c} = \begin{bmatrix}
+                           1 * 1 + 1 * 2 \\
+                           1 * 1 + 1 * 2 \\
+                           0 * 1 + 1 * 2 \\
+                       \end{bmatrix} = \begin{bmatrix}
+                                           3 \\
+                                           3 \\
+                                           2
+                                       \end{bmatrix}                \\
+        r = u - p  =  \begin{bmatrix}
+                          4 \\
+                          2 \\
+                          2
+                      \end{bmatrix} - \begin{bmatrix}
+                                          3 \\
+                                          3 \\
+                                          2
+                                      \end{bmatrix} = \begin{bmatrix}
+                                                          1  \\
+                                                          -1 \\
+                                                          0
+                                                      \end{bmatrix} \\
+        ||r||^2  = (\sqrt{1^{2} + (-1)^{2} + 0})^{2}  =  2
+    \end{align}
+
+    候选一: \\
+    \begin{align}
+        c^{(1)} = \begin{bmatrix}
+                      0 \\
+                      2
+                  \end{bmatrix}
+    \end{align}
+    \begin{align}
+        q^{(1)} = Ac^{(1)} = \begin{bmatrix}
+                                 2 \\
+                                 2 \\
+                                 2
+                             \end{bmatrix}                           \\
+        u -q^{(1)} = \begin{bmatrix}
+                         4 \\
+                         2 \\
+                         2
+                     \end{bmatrix} - \begin{bmatrix}
+                                         2 \\
+                                         2 \\
+                                         2
+                                     \end{bmatrix} =  \begin{bmatrix}
+                                                          2 \\
+                                                          0 \\
+                                                          0
+                                                      \end{bmatrix}  \\
+        p - q^{(1)} = \begin{bmatrix}
+                          3 \\
+                          3 \\
+                          2
+                      \end{bmatrix} -  \begin{bmatrix}
+                                           2 \\
+                                           2 \\
+                                           2
+                                       \end{bmatrix} = \begin{bmatrix}
+                                                           1 \\
+                                                           1 \\
+                                                           0
+                                                       \end{bmatrix} \\
+        ||u - q^{(1)}||^{2} = ||r||^{2}  +  ||p - q^{(1)}||^{2}
+        = 4  =  2 + 2
+    \end{align}
+
+    候选二: \\
+    \begin{align}
+        c^{(2)} = \begin{bmatrix}
+                      2 \\
+                      1
+                  \end{bmatrix}
+    \end{align}
+    \begin{align}
+        q^{(2)} = Ac^{(2)} = \begin{bmatrix}
+                                 3 \\
+                                 3 \\
+                                 1
+                             \end{bmatrix}                           \\
+        u -q^{(2)} = \begin{bmatrix}
+                         4 \\
+                         2 \\
+                         2
+                     \end{bmatrix} - \begin{bmatrix}
+                                         3 \\
+                                         3 \\
+                                         1
+                                     \end{bmatrix} =  \begin{bmatrix}
+                                                          1  \\
+                                                          -1 \\
+                                                          1
+                                                      \end{bmatrix}  \\
+        p - q^{(2)} = \begin{bmatrix}
+                          3 \\
+                          3 \\
+                          2
+                      \end{bmatrix} -  \begin{bmatrix}
+                                           3 \\
+                                           3 \\
+                                           1
+                                       \end{bmatrix} = \begin{bmatrix}
+                                                           0 \\
+                                                           0 \\
+                                                           1
+                                                       \end{bmatrix} \\
+        ||u - q^{(2)}||^{2} = ||r||^{2}  +  ||p - q^{(2)}||^{2}
+        = 3  =  2 + 1
+    \end{align}
+
+    $||u - p||^{2} < ||u - q^{(2)}||^{2} <||u - q^{(1)}||^{2} $
+
+
+    6: homework \\
+    一般性证明: \\
+    不使用当前具体数值，严格证明： \\
+    \begin{align}
+        A^{T}(u  - A\hat{c}) = 0
+    \end{align}
+    推导出: \\
+    $\forall c, \; ||u - Ac||^{2} = ||u - A\hat{c}||^{2} + ||A(\hat{c}-c)||^{2} $
+
+    证:  \\
+    已知 $ r = u - A\hat{c} \in Col(A)^{\perp}$ \\
+    设:
+    \begin{align}
+        q = Ac \;(\forall a), \; p = A\hat{c}                           \\
+        p - q  = (A\hat{c} - Ac = A(\hat{c} - c))\in Col(A)^{\parallel} \\
+        u - q  = u - Ac = (u - A\hat{c}) +  (A\hat{c} - Ac )            \\
+    \end{align}
+    已知 $u - A\hat{c} \in  Col(A)^{\perp} \; \land \; A\hat{c} - Ac \in  Col(A)^{\parallel}$ \\
+    我们就可以构建 直角三角形 $\triangle UPQ, \angle P=90^\circ $ \\
+    $u - Ac = $ 斜边, $ A\hat{c} - Ac =$ 底边, $u - A\hat{c} = $ 对边 \\
+    基于毕达哥拉斯定理 当直角三角形成立存在: \\
+    \begin{align}
+        ||u - Ac||^{2} = ||u - A\hat{c}||^{2} + ||A(\hat{c}-c)||^{2}
+    \end{align}
+    证毕：
+
+
+\end{flushleft}
+
+
+\end{document}
