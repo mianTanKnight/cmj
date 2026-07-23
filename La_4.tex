@@ -1,0 +1,232 @@
+\documentclass[12pt]{article}
+\usepackage[a4paper,margin=2.2cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{hyperref}
+\usepackage{cleveref}
+
+% 中文（xelatex）
+\usepackage{fontspec}
+\usepackage{xeCJK}
+
+\usepackage{fontspec}
+\usepackage{xeCJK}
+\setCJKmainfont{Noto Serif CJK SC}
+
+\title{QR}
+\date{}
+\begin{document}
+\maketitle
+\begin{flushleft}
+
+    1: QR 前置知识: \\
+    由 Least-Squares 我们得到关键等式: \\
+    \begin{align}
+        A^{T}A\hat{c} = A^{T}u \\
+        A^{T}p = A^{T}A\hat{c}
+    \end{align}
+
+    在 $\mathbb{R}^{3}$ 空间中 存在 W 子空间 $W = span(a_1,a_2)\; (a_1, a_2) \in \mathbb{R}^{3 \times 1}, Col(A) = W = [a_1, a_2]$ \\
+
+    我们这里回顾下 $A$ 和 $A{T}$: \\
+    1: $A, 和 A^{T}$ 都是矩阵, 是转置关系, $A \in \mathbb{R}^{3 \times 2}, A^{T} \in \mathbb{R}^{2 \times 3}$ \\
+    2: $Col(A) \subseteq \mathbb{R}^{3}, Col(A^{T}) \subseteq \mathbb{R}^{2}$ $(Rank = min(rows_n,cols_n) \land \text{列之间线性无关})$ \\
+    3: $Col(A)$ 的基底组是: $[a_1, a_2]$
+    4: $Col(A^{T})$ 的基底组是什么?  \\
+    已知 $Col(A)$ 的基底组是 $\begin{bmatrix}
+            a_{11} & a_{21} \\
+            a_{12} & a_{22} \\
+            a_{13} & a_{23} \\
+        \end{bmatrix}$ \\
+    $Col(A^{T})$ = $\begin{bmatrix}
+            a_{11} & a_{12} & a_{13} \\
+            a_{21} & a_{22} & a_{23} \\
+        \end{bmatrix}$
+    已知道 $Rank(Col(A^{T})) = 2$ 那么 $Col(A^{T})$ 的列必然存在一组线性相关 我们设$col1$与$col2$线性无关, 那么 $Col(A^{T})$的基底组是: $\begin{bmatrix}
+            a_{11} & a_{12} \\
+            a_{21} & a_{22} \\
+        \end{bmatrix}$
+
+    我们再分析等式: $A^{T}p = A^{T}A\hat{c}$ \\
+    已知 $p = proj_{w}(u) \in W$, $A\hat{c} \in W$ \\
+    $A^{T}A\hat{c}$ 很容易理解: 把 $A\hat{c}$ 点映射到 $Col(A^{T})$ 空间 \\
+    那么映射到  $Col(A^{T})$ 空间之后 我们会得到一个 $Col(A^{T})$的向量 z, 也就是$z = A^{T}A\hat{c} = A^{T}p$ \\
+    我们展开 z 的等式: \\
+    \begin{align}
+        z = A^{T}p = \begin{bmatrix}
+                         a_1^{T} \\
+                         a_2^{T} \\
+                     \end{bmatrix}p \\
+        =\begin{bmatrix}
+             <a_1, p> \\
+             <a_2, p> \\
+         \end{bmatrix}
+    \end{align}
+    这里有一个最重要的点 z 到底是一个分量向量(也就是$Col(A^{T})$的基向量的单位数) 但还是单纯的标量向量? 它是单纯的标量向量(占比比例), 它不是为了确定在$Col(A^{T})$的位置。 \\
+
+    我们这里再次问自己一个问题: 最小二乘(Least-Squares) 到底是要解决什么问题 ? \\
+    它解决的是无解的情况下的近似解(降维近似解)的问题: \\
+    超定线性系统:
+    \begin{align}
+        Ax = b
+    \end{align}
+    A: $m \times n$ (m 个方程, n 个未知量, m > n) \\
+    x: n 维未知数向量 \\
+    b: m 维常数项向量 \\
+    对于超定线性系统 当约束条件(方程) > 自由度（未知数）时  \\
+    对于 $\vec{x}$ 它永远都固定在 $\mathbb{R}^{n}$  \\
+    对于 $\vec{b}$ 和 $Col(A)$ 它属于 $\mathbb{R}^{m}$ \\
+    这里超定线性系统 会出现两种结果情况: \\
+    1: 无解: \\
+    $\vec{b} \notin Col(A)$,不存在一个点 x($x \in \mathbb{R}^{2}$) 使等式成立 \\
+    2: 只有当多出来的方程完全是其他方程的线性组合（即多余的方程是冗余的），且常数项 b 也刚好吻合时，才存在解(这不在本次的讨论范围)
+
+    Least-Squares 就是为了解决这个问题的工具, 它使用了几何的正交投影给出一个最佳近似的低维解(m 映射 n)
+    分析核心公式： \\
+    \begin{align}
+        A^{T}A\hat{c} = A^{T}u
+    \end{align}
+
+    $u$ 是一个高维观测数据 $A$ 是你希望的低维环境 $A{T}$ 是对应的高维解映射到 $A$的矩阵运算(高维向量转化为低维的内积向量), 其实$A\hat{c}= u$是无解的 \\
+    但 基于 $\hat{c}$(Least-Squares) 的 $A^{T}A\hat{c}$ 是有对应的解的($\hat{c}$ 就是低维解 它是存在的, $A^{T}$ 是一个观测空间 证明等式是存在的)
+    它是 $A{T}u$的最佳近似的低维解(在 $Col(A^{T})$ 观察子空间) \\
+
+    这里我们要再次的申明 $A^{T}$ 的声明与作用(这很关键): \\
+    1:$A^{T}$ 与 $u$ \\
+    存在下列代数式子: \\
+    \begin{align}
+        u = p + e                                                       \\
+        e \perp Col(A) \land p \in Col(A)                               \\
+        \sum_{i = 1}^{n} <a_{i},e> = A^{T}e= 0                          \\
+        A^{T}u = A^{T}(p + e) = A^{T}p + A^{T}e  =  A^{T}p + 0 = A^{T}p \\
+    \end{align}
+    我们发现 e 残差向量被去掉了 得到一个 $z  = A^{T}p$  z 是内积标量向量 是一个占比的向量在 等式的一边 检查 $\hat{c}$ 是不是 这个等式的解
+    也就是 $A^{T}$ 是一个测量空间也是一个过滤空间(去噪)
+
+    2: QR- Measurement Cast to Coordinates
+    分析 $z = A^{T}A\hat{c}$ \\
+    已知道 $A = \begin{bmatrix}a_1 & a_2\end{bmatrix} ((a_1,a_2) \in \mathbb{R}^{3 \times 1})$ \\
+    $if: <a_1,a_2> = 0$($a_1, a_2$ 正交) \\
+    \begin{align}
+        A^{T} = \begin{bmatrix}
+                    a_1^{T} \\
+                    a_2^{T}
+                \end{bmatrix}                \\
+        A^{T}A = \begin{bmatrix}
+                     a_1^{T} \\
+                     a_2^{T}
+                 \end{bmatrix} \begin{bmatrix}
+                                   a_1 & a_2
+                               \end{bmatrix} \\
+        = \begin{bmatrix}
+              a_1^{T}a_1 & a_1^{T}a_2 \\
+              a_2^{T}a_1 & a_2^{T}a_2
+          \end{bmatrix}             \\
+        = \begin{bmatrix}
+              ||a_1||^{2} & 0           \\
+              0           & ||a_2||^{2}
+          \end{bmatrix}
+    \end{align}
+    我们对 $a_1, a_2$ 单位化
+    $ \begin{bmatrix}
+            ||a_1||^{2} & 0           \\
+            0           & ||a_2||^{2}
+        \end{bmatrix}  = \begin{bmatrix}
+            1 & 0 \\
+            0 & 1
+        \end{bmatrix} $ \\
+    那么 $z = A^{T}A\hat{c} = I\hat{c} = \hat{c}$ \\
+    else: \\
+    能找到一组与 A 张成相同子空间、但标准正交的基
+    $Q = \begin{bmatrix}q_1 & q_2\end{bmatrix} ((q_1,q_2) \in \mathbb{R}^{3 \times 1})$  \\
+    $Q^{T}Q = I$ \\
+    替换: \\
+    $z = Q^{T}Qy = Iy = y$ \\
+    $Qy = p$ \\
+    我们就可以说 z 就是 p 在正交坐标系 Q 的坐标
+
+    3: 引入 QR \\
+    $A \to QR$ \\
+    $A\hat{c} = QR\hat{c}$ \\
+    $Col(A) = Col(Q) = W$ \\
+    $c \to Rc \to y \to Qy \to p$ \\
+    \begin{align}
+        A^{T}A\hat{c} = A^{T}u                               \\
+        (QR)^{T}(QR)\hat{c} = (QR)^Tu                        \\
+        R^{T}Q^{T}QR\hat{c} = R^{T}Q^{T}u                    \\
+        R^{T}IR\hat{c} = R^{T}Q^{T}u                         \\
+        (R^{T})^{-1}R^{T}IR\hat{c} = (R^{T})^{-1}R^{T}Q^{T}u \\
+        IR\hat{c} = Q^{T}u                                   \\
+        R\hat{c} = Q^{T}u
+    \end{align}
+    代数整理之后我们得到了 $R\hat{c} = z$ 这个 z 是 $Col(Q)$ 的标量向量 \\
+    也就是说 $Q^{T}u$ u 通过 $Q^{T}$ 映射出来 内积标量向量 就是 $Col(Q)$ 中的投影坐标(把复杂的投影运算转化为直接做内积（提取坐标）) \\
+
+    4: 计算 \\
+    $a_{1} = [1,1,0]^{T}, a_{2} = [1,1,1]^{T}, A = \begin{bmatrix}
+            1 & 1 \\
+            1 & 1 \\
+            0 & 1
+        \end{bmatrix}$
+    通过 Gram-Schmidt 构造 Q \\
+    step1: $w1 = a1$ \\
+    归一:  $q1 = \frac{w1}{||w1||}$ \\
+    \begin{align}
+        q1 = \frac{[1,1,0]^{T}}{\sqrt{1^{2} + 1^{2}}}
+        = \frac{[1,1,0]^{T}}{\sqrt{2}}
+        = \frac{1}{\sqrt{2}}[1,1,0]^{T}
+        = [\frac{1}{\sqrt{2}}, \frac{1}{\sqrt{2}}, 0]^{T}
+    \end{align}
+    step2: q2  \\
+    $w2 = a_{2} - proj_{q1}(a_{2})$ \\
+    已知 q1 是单位向量 \\
+    \begin{align}
+        proj_{q1}(a_{2}) = <q1,a_{2}>q1                                                                         \\                                                                         \\
+        = (\frac{1}{\sqrt{2}} * 1 + \frac{1}{\sqrt{2}} * 1 + 0) [\frac{1}{\sqrt{2}}, \frac{1}{\sqrt{2}}, 0]^{T} \\
+        = \sqrt{2} [\frac{1}{\sqrt{2}}, \frac{1}{\sqrt{2}}, 0]^{T}                                              \\
+        = [1, 1, 0]^{T}                                                                                         \\
+    \end{align}
+    $w2 =  [1,1,1]^{T} - [1, 1, 0]^{T} = [0, 0, 1]^{T}$ \\
+    归一: $q2 = \frac{w2}{||w2||}$ \\
+    \begin{align}
+        q2 = \frac{[0, 0, 1]^{T}}{1} \\
+        q2 = [0, 0, 1]^{T}
+    \end{align}
+    step3 : Q \\
+    \begin{align}
+        <q1,q2> = 0                                                                     \\
+        = \frac{1}{\sqrt{2}} * 0  + \frac{1}{\sqrt{2}} * 0 +  0 * 1 = 0                 \\                                                         \\
+        Q = \begin{bmatrix}
+                \frac{1}{\sqrt{2}} & 0 \\
+                \frac{1}{\sqrt{2}} & 0 \\
+                0                  & 1
+            \end{bmatrix}                                        \\
+        Q^{T}Q =\begin{bmatrix}
+                    \frac{1}{\sqrt{2}} & \frac{1}{\sqrt{2}} & 0 \\
+                    0                  & 0                  & 1
+                \end{bmatrix}\begin{bmatrix}
+                                 \frac{1}{\sqrt{2}} & 0 \\
+                                 \frac{1}{\sqrt{2}} & 0 \\
+                                 0                  & 1
+                             \end{bmatrix} \\
+        = \begin{bmatrix}
+              \frac{1}{\sqrt{2}} * \frac{1}{\sqrt{2}} + \frac{1}{\sqrt{2}}* \frac{1}{\sqrt{2}} + 0 & 0 \\
+              0                                                                                    & 1 \\
+          \end{bmatrix}
+        = \begin{bmatrix}
+              1 & 0 \\
+              0 & 1
+          \end{bmatrix}
+    \end{align}
+    延展: 关于$QQ^{T}$ \\
+    已知 $Col(Q) = W$, 我们设代数等式: $ k = QQ^{T}u$ \\
+    $Q^{T}u$ 表示 u 会得到一个内积比例向量, 然后在进行 Q 矩阵运算 \\
+    所以我们能得到 k 就是 u 在 $Col(Q)$ 的投影($k \in \mathbb{R}^{3 \times 1}  \land  k \in Col(Q)$)\\
+
+    step3: 构建 R \\
+
+
+
+\end{flushleft}
+
+
+\end{document}
