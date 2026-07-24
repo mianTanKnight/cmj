@@ -29,7 +29,7 @@
 
     我们这里回顾下 $A$ 和 $A{T}$: \\
     1: $A, 和 A^{T}$ 都是矩阵, 是转置关系, $A \in \mathbb{R}^{3 \times 2}, A^{T} \in \mathbb{R}^{2 \times 3}$ \\
-    2: $Col(A) \subseteq \mathbb{R}^{3}, Col(A^{T}) \subseteq \mathbb{R}^{2}$ $(Rank = min(rows_n,cols_n) \land \text{列之间线性无关})$ \\
+    2: $Col(A) \subseteq \mathbb{R}^{3}, Col(A^{T}) \subseteq \mathbb{R}^{2}$ $(Rank \leq min(rows_n,cols_n) \land \text{列之间线性无关})$ \\
     3: $Col(A)$ 的基底组是: $[a_1, a_2]$
     4: $Col(A^{T})$ 的基底组是什么?  \\
     已知 $Col(A)$ 的基底组是 $\begin{bmatrix}
@@ -41,7 +41,9 @@
             a_{11} & a_{12} & a_{13} \\
             a_{21} & a_{22} & a_{23} \\
         \end{bmatrix}$
-    已知道 $Rank(Col(A^{T})) = 2$ 那么 $Col(A^{T})$ 的列必然存在一组线性相关 我们设$col1$与$col2$线性无关, 那么 $Col(A^{T})$的基底组是: $\begin{bmatrix}
+    已知道 $Rank(Col(A^{T})) = 2$ 那么 $Col(A^{T})$ 的列必然存在一组线性相关
+    我们假设$col1$与$col2$线性无关(因为 rank = 2, 所以能保证能找到两列独立列),
+    那么 $Col(A^{T})$的基底组是: $\begin{bmatrix}
             a_{11} & a_{12} \\
             a_{21} & a_{22} \\
         \end{bmatrix}$
@@ -99,7 +101,7 @@
         \sum_{i = 1}^{n} <a_{i},e> = A^{T}e= 0                          \\
         A^{T}u = A^{T}(p + e) = A^{T}p + A^{T}e  =  A^{T}p + 0 = A^{T}p \\
     \end{align}
-    我们发现 e 残差向量被去掉了 得到一个 $z  = A^{T}p$  z 是内积标量向量 是一个占比的向量在 等式的一边 检查 $\hat{c}$ 是不是 这个等式的解
+    我们发现 e 残差向量被去掉了 得到一个 $z  = A^{T}p$  z 是内积标量向量 是一个内积测量向量 在等式的一边 检查 $\hat{c}$ 是不是 这个等式的解
     也就是 $A^{T}$ 是一个测量空间也是一个过滤空间(去噪)
 
     2: QR- Measurement Cast to Coordinates
@@ -223,10 +225,73 @@
     所以我们能得到 k 就是 u 在 $Col(Q)$ 的投影($k \in \mathbb{R}^{3 \times 1}  \land  k \in Col(Q)$)\\
 
     step3: 构建 R \\
+    \begin{align}
+        A = QR                           \\
+        Q^{T}A  = Q^{T}QR                \\
+        Q^{T}A = R                       \\
+        R  = \begin{bmatrix}
+                 q_1^{T} \\
+                 q_2^{T}
+             \end{bmatrix}\begin{bmatrix}
+                              a_1, a_2
+                          \end{bmatrix} \\
+        = \begin{bmatrix}
+              <q_1^{T},a_1> & <q_1^{T},a_2> \\
+              <q_2^{T},a_1> & <q_2^{T},a_2>
+          \end{bmatrix}  \\
+        q_2 \perp a_1                    \\
+        = \begin{bmatrix}
+              <q_1^{T},a_1> & <q_1^{T},a_2> \\
+              0             & <q_2^{T},a_2>
+          \end{bmatrix}
+        = \begin{bmatrix}
+              (\frac{1}{\sqrt{2}} + \frac{1}{\sqrt{2}}) & (\frac{1}{\sqrt{2}} + \frac{1}{\sqrt{2}}) \\
+              0                                         & 1
+          \end{bmatrix}
+        = \begin{bmatrix}
+              \sqrt{2} & \sqrt{2} \\
+              0        & 1        \\
+          \end{bmatrix}
+    \end{align}
+    验证: $QR = A$ \\
+    \begin{align}
+        \begin{bmatrix}
+            \frac{1}{\sqrt{2}} & 0 \\
+            \frac{1}{\sqrt{2}} & 0 \\
+            0                  & 1
+        \end{bmatrix} \begin{bmatrix}
+                          \sqrt{2} & \sqrt{2} \\
+                          0        & 1        \\
+                      \end{bmatrix}                                                                \\
+        = \begin{bmatrix}
+              \frac{1}{\sqrt{2}} * \sqrt{2} & \frac{1}{\sqrt{2}} * \sqrt{2} + 0 * 1 \\
+              \frac{1}{\sqrt{2}} * \sqrt{2} & \frac{1}{\sqrt{2}} * \sqrt{2} + 0 * 1 \\
+              0                             & 1                                     \\
+          \end{bmatrix} \\
+        = \begin{bmatrix}
+              1 & 1 \\
+              1 & 1 \\
+              0 & 1 \\
+          \end{bmatrix}
+    \end{align}
+
+    5: 我们来思考 QR 到底解决了什么问题(简化了什么问题) \\
+    已证下列关键代数式: \\
+    \begin{align}
+        A^{T}A\hat{c} = A^{T}u                             \\
+        (A^{T}A)^{-1}(A^{T}A)\hat{c} = (A^{T}A)^{-1}A^{T}u \\
+        \hat{c} = (A^{T}A)^{-1}A^{T}u
+    \end{align}
+    也就是说我们要算出 Least-Squares 我们必须要进行复杂的逆矩阵运算 \\
+    引入 QR 之后 \\
+    \begin{align}
+        R\hat{c} = Q^{T}u             \\
+        R^{-1}R\hat{c} = R^{-1}Q^{T}u \\
+        \hat{c} = R^{-1}Q^{T}u
+    \end{align}
 
 
 
 \end{flushleft}
-
 
 \end{document}
