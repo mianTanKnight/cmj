@@ -21,6 +21,50 @@
     \begin{align}
         A = QR, \; R = Q^{T}A
     \end{align}
+    1.1 一般情形  \\
+    设: \\
+    \begin{align}
+        A = [a_{1},a_{2} \cdots ,a_{n}] \in \mathbb{R}^{m \times n}
+    \end{align}
+    并假设这些列暂时线性无关. \\
+    Gram-Schmidt 按顺序构造: \\
+    \begin{align}
+        q_{1}, q_{2}, \cdots , q_{n}
+    \end{align}
+    其中关键性质是: \\
+    \begin{align}
+        span(q_{1},\cdots,q_{j}) = span(a_{1},\cdots, a_{j})
+    \end{align}
+    也就是说, 每处理到 j 列时: \\
+    \begin{align}
+        a_{j} \in span(q_{1},\cdots, q_{j})
+    \end{align}
+    因此 $a_{j}$ 可以写成: \\
+    \begin{align}
+        a_{j} = r_{1j}q_{1} + r_{2j}q_{2} + \cdots  + r_{jj}q_{j}
+    \end{align}
+    注意: 不会出现 $q_{j + 1}, q_{j + 2}, ....$, 因为他们此时还没有参与生产 $a_{j}$
+    所以: \\
+    \begin{align}
+        a_{1} = r_{11}q_{1} + 0 + \cdots                             \\
+        a_{2} = r_{12}q_{1} + r_{22}q_{2} + 0 + \cdots               \\
+        a_{3} = r_{13}q_{1} + r_{23}q_{2} + r_{33}q_{3} + 0 + \cdots \\
+    \end{align}
+    依此类推 :\\
+    把这些列放回矩阵: \\
+    \begin{align}
+        A = \begin{bmatrix} q_1 & q_2 & \cdots & q_n \end{bmatrix}
+        \begin{bmatrix}
+            r_{11} & r_{12} & r_{13} & \cdots \\
+            0      & r_{22} & r_{23} & \cdots \\
+            0      & 0      & r_{33} & \cdots \\
+            \vdots & \vdots & \vdots & \vdots \\
+        \end{bmatrix}
+    \end{align}
+    以此 R 必然是 upper triangular, 它是  Gram-Schmidt 是从左到右按列处理逻辑的必然结构
+
+    2 R 每一列的意义: \\
+
 
 \end{flushleft}
 
