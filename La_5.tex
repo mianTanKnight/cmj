@@ -1,0 +1,352 @@
+\documentclass[12pt]{article}
+\usepackage[a4paper,margin=2.2cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{hyperref}
+\usepackage{cleveref}
+
+% 中文（xelatex）
+\usepackage{fontspec}
+\usepackage{xeCJK}
+
+\usepackage{fontspec}
+\usepackage{xeCJK}
+\setCJKmainfont{Noto Serif CJK SC}
+
+\title{QR-Training-1}
+\date{}
+\begin{document}
+\maketitle
+\begin{flushleft}
+    1: Preposition \\
+    当 $Ac = u$ 无解时, 如何不构造 $A^{T}A$, 直接用 QR 求 $\hat{c}$?
+
+    2: Experimental data \\
+
+    \begin{align}
+        A = \begin{bmatrix}
+                1 & 1 \\
+                1 & 0 \\
+                1 & 1 \\
+                0 & 1
+            \end{bmatrix} = [a_{1}, a_{2}],
+    \end{align}
+    其中: \\
+    \begin{align}
+        a_{1} = [1,1,1,0]^{T}, a_{2} = [1, 0, 1, 1]^{T}
+    \end{align}
+    以及: \\
+    \begin{align}
+        u = [2, 1, 0, 3]^{T}
+    \end{align}
+    矩阵尺寸: \\
+    \begin{align}
+        A \in  \mathbb{R}^{4 \times 2}.
+    \end{align}
+    因此:\\
+    \begin{align}
+        A: \mathbb{R}^{2} \to  \mathbb{R}^{4}.
+    \end{align}
+    但实际 image 是：\\
+    \begin{align}
+        W  = Col(A) \subseteq \mathbb{R}^{4}
+    \end{align}
+
+    3: Thinking and Answering Questions: \\
+    1. $ c \in  \mathbb{R}^{2}$ 是什么对象 ? \\
+    $Ac$ 这个 c 是输入, 是一个2行1列的 向量, 它是一个分量的向量$\in \mathbb{R}^{2}$, Ac 它会落到 Col(A)空间\\
+
+    2. $Ac \in \mathbb{R}^{4}$ 是什么对象 ? \\
+    它是一个四维空间的向量, 但它是落在了 Col(A) 2维平面上 \\
+
+    3. Col(A) 最多几维 ? \\
+    Ax, $x  \in  \mathbb{R}^{2}$, 映射出来的所有点所构成的空间是 Col(A), \\
+    A 只有两个方向(A 列向量线性无关), 所以最多只有2维 \\
+
+    4.若 $a_{1},a_{2}$线性无关, 则: dim Col(A) = ? \\
+    2
+
+    5. $A^{T}u \in \mathbb{R}^{2}$ 是坐标还是测量? \\
+    是测量
+    \begin{align}
+        A^{T} = [a_{1}^{T},a_{2}^{T}]^{T} ( \in \mathbb{R}^{2 \times 4}) \\
+        A^{T}u = [<a_{1},u>, <a_{2},u>]^{T}                              \\
+    \end{align}
+    $<a_{1},u>$ 可以得到 $a_{1}$ 在 u 中的内积/投影测量值, $a_{2}$ 同理 \\
+    所以是测量 \\
+
+    6. 如果得到了 orthonormal matrix Q, 为什么 $Q^{T}u$, 可以解释为 u 在 W 方向的正交坐标 ? \\
+    Step1: \\
+    \begin{align}
+        W = Col(A) = Col(Q) \\
+        Q = [q_{1},q_{2}]   \\
+        q_{1} \perp q_{2}   \\
+        Q^{T}Q = I_{2}      \\
+    \end{align}
+
+    Step2: \\
+    \begin{align}
+        proj_{w}(u) = p                                                          \\
+        p = Qc                                                                   \\
+        Q^{T}(u - Qc) = [<q_{1},(u - Qc)>, <q_{2},(u - Qc)>]^{T} = [0,0]^{T} = 0 \\
+        Q^{T}u = Q^{T}Qc                                                         \\
+        Q^{T}u = Ic                                                              \\
+        Q^{T}u = c
+    \end{align}
+    证毕 \\
+
+    4: 精确方程是否有解
+    尝试解 $Ac = u$ ;
+    建立方程组: \\
+    \begin{align}
+        x_1 \begin{bmatrix}
+                1 \\
+                1 \\
+                1 \\
+                0
+            \end{bmatrix} + x_2 \begin{bmatrix}
+                                    1 \\
+                                    0 \\
+                                    1 \\
+                                    1
+                                \end{bmatrix} = \begin{bmatrix}
+                                                    2 \\
+                                                    1 \\
+                                                    0 \\
+                                                    3
+                                                \end{bmatrix} \\
+        x_{1} + x_2 = 2                                        \\
+        x_{1} = 1                                              \\
+        x_{1} + x_{2} = 0                                      \\
+    \end{align}
+    $x_{1} + x_{2} = 0$ 与 $x_{1} + x_2 = 2$ 冲突, 无解 \\
+    \begin{align}
+        u \notin Col(A).
+    \end{align}
+    问题(Least Squares Solution): \\
+    \begin{align}
+        \hat{c} \in arg min_{c \in R^{2}} ||u - Ac||^{2}
+    \end{align}
+    1: $\hat{c}$是最优系数 也就是 Least Squares 的解 \\
+    2: $A\hat{c}$ 是 u 的最佳近似向量 也就是投影点 \\
+    3: $A\hat{c} \in \mathbb{R}^{4}$ 但位置落点在 $Col(A)$ \\
+
+    5: 计算 Gram-Schmidt 构建 Q \\
+    Step1 : q1  \\
+    令:  w1 = a1. \\
+    \begin{align}
+        q1 = \frac{w1}{||w1||}                                                                                \\
+        q1 = \frac{\begin{bmatrix}
+                       1, 1, 1, 0
+                   \end{bmatrix}^{T}}{\sqrt{3}}                                                               \\
+        = \begin{bmatrix}
+              \frac{1}{\sqrt{3}}, \frac{1}{\sqrt{3}}, \frac{1}{\sqrt{3}}, 0
+          \end{bmatrix}^{T} \\
+        \text{check:}                                                                                         \\
+        \sqrt{(\frac{1}{\sqrt{3}}) ^{2} + \frac{1}{\sqrt{3}}) ^{2}+ \frac{1}{\sqrt{3}}) ^{2}}                 \\
+        \sqrt{1} = 1
+    \end{align}
+
+    Step2: q2 \\
+    $w_{2} = a_{2} - proj_{q_{1}}(a_{2})$ \\
+    \begin{align}
+        proj_{q_{1}}(a_{2}) = <q_{1},a_{2}>q_{1}                        \\
+        <q_{1},a_{2}> = \frac{1}{\sqrt{3}} + 0 + \frac{1}{\sqrt{3}} + 0 \\
+        = \frac{2}{\sqrt{3}}
+        <q_{1},a_{2}>q_{1} = \frac{2}{\sqrt{3}}\begin{bmatrix}
+                                                   \frac{1}{\sqrt{3}}, \frac{1}{\sqrt{3}}, \frac{1}{\sqrt{3}}, 0
+                                               \end{bmatrix}^{T}
+        =  \begin{bmatrix}
+               \frac{2}{3}, \frac{2}{3}, \frac{2}{3}, 0
+           \end{bmatrix}^{T}                      \\
+        a_{2} - proj_{q_{1}}(a_{2})                                     \\
+        =  \begin{bmatrix}
+               1, 0, 1, 1
+           \end{bmatrix}^{T} - \begin{bmatrix}
+                                   \frac{2}{3}, \frac{2}{3}, \frac{2}{3}, 0
+                               \end{bmatrix}^{T}  \\
+        = \begin{bmatrix}
+              \frac{1}{3}, -\frac{2}{3}, \frac{1}{3}, 1
+          \end{bmatrix}^{T}
+    \end{align}
+    $q_{2} = \frac{w_{2}}{||w_{2}||}$ \\
+    \begin{align}
+        q_{2} = \frac{\begin{bmatrix}
+                          \frac{1}{3}, -\frac{2}{3}, \frac{1}{3}, 1
+                      \end{bmatrix}^{T}}{\sqrt{(\frac{1}{3})^{2} + (-\frac{2}{3})^{2} + (\frac{1}{3})^{2} + 1}}                                                                                                      \\
+        = \frac{\begin{bmatrix}
+                    \frac{1}{3}, -\frac{2}{3}, \frac{1}{3}, 1
+                \end{bmatrix}^{T}}{\sqrt{\frac{5}{3}}}
+        = \begin{bmatrix}
+              \frac{1}{3} * \sqrt{\frac{3}{5}}, -\frac{2}{3}* \sqrt{\frac{3}{5}}, \frac{1}{3}* \sqrt{\frac{3}{5}}, 1 * \sqrt{\frac{3}{5}}
+          \end{bmatrix}^{T}                                     \\
+        = \begin{bmatrix}
+              \frac{1}{3} * \frac{\sqrt{3}}{\sqrt{5}}, -\frac{2}{3}*\frac{\sqrt{3}}{\sqrt{5}}, \frac{1}{3}*\frac{\sqrt{3}}{\sqrt{5}},
+              \frac{\sqrt{3}}{\sqrt{5}}
+          \end{bmatrix}^{T} \\
+        =\begin{bmatrix}
+             \frac{\sqrt{3}}{3\sqrt{5}}, - \frac{2\sqrt{3}}{3\sqrt{5}}, \frac{\sqrt{3}}{3\sqrt{5}},
+             \frac{\sqrt{3}}{\sqrt{5}}
+         \end{bmatrix}^{T}                                   \\
+        = \begin{bmatrix}
+              \frac{1}{\sqrt{15}}, - \frac{2}{\sqrt{15}}, \frac{1}{\sqrt{15}}, \frac{3}{\sqrt{15}}
+          \end{bmatrix}^{T}                                                                    \\
+        \text{check:}                                                                                                                                                                                                \\
+        \sqrt{(\frac{1}{\sqrt{15}})^{2} + (- \frac{2}{\sqrt{15}})^{2} + (\frac{1}{\sqrt{15}})^{2} + (\frac{3}{\sqrt{15}})^{2}}                                                                                       \\
+        = 1
+    \end{align}
+
+    Step3: 构建 Q \\
+    \begin{align}
+        Q = [q_{1}, q_{2}] \\
+        Q  = \begin{bmatrix}
+                 \frac{1}{\sqrt{3}} & \frac{1}{\sqrt{15}}  \\
+                 \frac{1}{\sqrt{3}} & -\frac{2}{\sqrt{15}} \\
+                 \frac{1}{\sqrt{3}} & \frac{1}{\sqrt{15}}  \\
+                 0                  & \frac{3}{\sqrt{15}}
+             \end{bmatrix}
+    \end{align}
+    check: \\
+    $Q^{T}Q = I$ \\
+    \begin{align}
+        Q^{T}Q = \begin{bmatrix}
+                     \frac{1}{\sqrt{3}}  & \frac{1}{\sqrt{3}}   & \frac{1}{\sqrt{3}}  & 0                   \\
+                     \frac{1}{\sqrt{15}} & -\frac{2}{\sqrt{15}} & \frac{1}{\sqrt{15}} & \frac{3}{\sqrt{15}} \\
+                 \end{bmatrix}\begin{bmatrix}
+                                  \frac{1}{\sqrt{3}} & \frac{1}{\sqrt{15}}  \\
+                                  \frac{1}{\sqrt{3}} & -\frac{2}{\sqrt{15}} \\
+                                  \frac{1}{\sqrt{3}} & \frac{1}{\sqrt{15}}  \\
+                                  0                  & \frac{3}{\sqrt{15}}
+                              \end{bmatrix}
+        = \begin{bmatrix}
+              1 & 0 \\
+              0 & 1
+          \end{bmatrix}
+    \end{align}
+
+    Step4: 构建 R \\
+    \begin{align}
+        A = QR           \\
+        Q^{T}A = Q^{T}QR \\
+        Q^{T}A = IR      \\
+        R = Q^{T}A
+    \end{align}
+    \begin{align}
+        R = Q^{T}A = \begin{bmatrix}
+                         \frac{1}{\sqrt{3}}  & \frac{1}{\sqrt{3}}   & \frac{1}{\sqrt{3}}  & 0                   \\
+                         \frac{1}{\sqrt{15}} & -\frac{2}{\sqrt{15}} & \frac{1}{\sqrt{15}} & \frac{3}{\sqrt{15}} \\
+                     \end{bmatrix} \begin{bmatrix}
+                                       1 & 1 \\
+                                       1 & 0 \\
+                                       1 & 1 \\
+                                       0 & 1
+                                   \end{bmatrix} \\
+        = \begin{bmatrix}
+              \frac{3}{\sqrt{3}} & \frac{2}{\sqrt{3}}  \\
+              0                  & \frac{5}{\sqrt{15}}
+          \end{bmatrix}
+    \end{align}
+    check : \\
+    QR = a \\
+    \begin{align}
+        QR = \begin{bmatrix}
+                 \frac{1}{\sqrt{3}} & \frac{1}{\sqrt{15}}  \\
+                 \frac{1}{\sqrt{3}} & -\frac{2}{\sqrt{15}} \\
+                 \frac{1}{\sqrt{3}} & \frac{1}{\sqrt{15}}  \\
+                 0                  & \frac{3}{\sqrt{15}}
+             \end{bmatrix}\begin{bmatrix}
+                              \frac{3}{\sqrt{3}} & \frac{2}{\sqrt{3}}  \\
+                              0                  & \frac{5}{\sqrt{15}}
+                          \end{bmatrix}
+        = \begin{bmatrix}
+              1 & 1 \\
+              1 & 0 \\
+              1 & 1 \\
+              0 & 1
+          \end{bmatrix} = A \\
+    \end{align}
+
+    这里我们思考一个问题 R 到底是什么作用? \\
+    我们已知: \\
+    \begin{align}
+        W = Col(A) = Col(Q)
+    \end{align}
+    $QRc: Rc \to y \to Qy \to p$
+    任意2维向量($\in \mathbb{R}^{2}$) c  \\
+    这里有一个非常重要的概念 这个 c 不是 W 或同构子空间的 它就是 $\mathbb{R}^{2}$ 空间的标量向量 \\
+    R 就是把 c 转换成一个适合 Q 的输入向量 y, 这个 y 和 c 在空间性质概念上是一样的, 但它适配 Q 的输入
+
+
+    Step5: 使用 QR 解  Least Squares \\
+    \begin{align}
+        R\hat{c} = Q^{T}u                                                                                                                                \\
+        = \begin{bmatrix}
+              \frac{1}{\sqrt{3}}  & \frac{1}{\sqrt{3}}   & \frac{1}{\sqrt{3}}  & 0                   \\
+              \frac{1}{\sqrt{15}} & -\frac{2}{\sqrt{15}} & \frac{1}{\sqrt{15}} & \frac{3}{\sqrt{15}} \\
+          \end{bmatrix} [2, 1, 0, 3]^{T} \\
+        = [\frac{2}{\sqrt{3}} + \frac{1}{\sqrt{3}}  +  0 + 0, \frac{2}{\sqrt{15}} -\frac{2}{\sqrt{15}} + 0 + \frac{9}{\sqrt{15}}]^{T}                    \\
+        = [\frac{3}{\sqrt{3}}, \frac{9}{\sqrt{15}}]^{T}
+    \end{align}
+    这里我们使用代回: \\
+    \begin{align}
+        \begin{bmatrix}
+            \frac{3}{\sqrt{3}} & \frac{2}{\sqrt{3}}  \\
+            0                  & \frac{5}{\sqrt{15}}
+        \end{bmatrix}[\hat{c}_{1}, \hat{c}_{2}]^{T} =  [\frac{3}{\sqrt{3}}, \frac{9}{\sqrt{15}}]^{T} \\
+        \hat{c}_{2} = \frac{9}{\sqrt{15}} *\frac{\sqrt{15}}{5}                                       \\
+        \hat{c}_{2} = \frac{9}{5}                                                                    \\
+        \hat{c}_{1}\frac{3}{\sqrt{3}} + \frac{2}{\sqrt{3}}\frac{9}{5} =  \frac{3}{\sqrt{3}}          \\
+        \hat{c}_{1}\frac{3}{\sqrt{3}} +  \frac{18}{5\sqrt{3}} = \frac{3}{\sqrt{3}}                   \\
+        \hat{c}_{1}\frac{3}{\sqrt{3}} +  \frac{6}{5} \frac{3}{\sqrt{3}} = \frac{3}{\sqrt{3}}         \\
+        (\hat{c}_{1} + \frac{6}{5} )\frac{3}{\sqrt{3}} = \frac{3}{\sqrt{3}}                          \\
+        \hat{c}_{1} + \frac{6}{5} = 1                                                                \\
+        \hat{c} = -\frac{1}{5}                                                                       \\
+        \hat{c} = [-\frac{1}{5}, \frac{9}{5}]^{T}                                                    \\
+    \end{align}
+
+    走到这里我们能清楚知道 QR 到底是为了解什么问题 它利用 Gram-Schmidt 构建正交基 快速完成 Least Squares 的解 \\
+    但 QR 也是一种构建的思想: 使用正交性 解耦掉基向量的混合 \\
+
+
+    Step6: 验证 \\
+    \begin{align}
+        p = A\hat{c} =  \begin{bmatrix}
+                            1 & 1 \\
+                            1 & 0 \\
+                            1 & 1 \\
+                            0 & 1
+                        \end{bmatrix}[-\frac{1}{5}, \frac{9}{5}]^{T} = [\frac{8}{5}, -\frac{1}{5}, \frac{8}{5}, \frac{9}{5}]^{T}
+    \end{align}
+    r = u - p \\
+    \begin{align}
+        r =  [2, 1, 0, 3]^{T} -[\frac{8}{5}, -\frac{1}{5}, \frac{8}{5}, \frac{9}{5}]^{T} \\
+        = [\frac{2}{5}, \frac{6}{5}, -\frac{8}{5}, \frac{6}{5}]^{T}                      \\
+        <r,a_{1}> = 0                                                                    \\
+        = \frac{2}{5} +  \frac{6}{5} - \frac{8}{5} = 0                                   \\
+        <r,a_{2}> = 0                                                                    \\
+        = \frac{2}{5} -  \frac{8}{5}  +  \frac{6}{5} = 0                                 \\
+    \end{align}
+    $Q^{T}u = Q^{T}p$ \\
+    \begin{align}
+        \begin{bmatrix}
+            \frac{1}{\sqrt{3}}  & \frac{1}{\sqrt{3}}   & \frac{1}{\sqrt{3}}  & 0                   \\
+            \frac{1}{\sqrt{15}} & -\frac{2}{\sqrt{15}} & \frac{1}{\sqrt{15}} & \frac{3}{\sqrt{15}} \\
+        \end{bmatrix} [\frac{8}{5}, -\frac{1}{5}, \frac{8}{5}, \frac{9}{5}]^{T} \\
+        = [\frac{3}{\sqrt{3}}, \frac{9}{\sqrt{15}}]^{T}
+    \end{align}
+    $QQ^{T}u = p$ \\
+    \begin{align}
+        \begin{bmatrix}
+            \frac{1}{\sqrt{3}} & \frac{1}{\sqrt{15}}  \\
+            \frac{1}{\sqrt{3}} & -\frac{2}{\sqrt{15}} \\
+            \frac{1}{\sqrt{3}} & \frac{1}{\sqrt{15}}  \\
+            0                  & \frac{3}{\sqrt{15}}
+        \end{bmatrix}\begin{bmatrix}
+                         \frac{1}{\sqrt{3}}  & \frac{1}{\sqrt{3}}   & \frac{1}{\sqrt{3}}  & 0                   \\
+                         \frac{1}{\sqrt{15}} & -\frac{2}{\sqrt{15}} & \frac{1}{\sqrt{15}} & \frac{3}{\sqrt{15}} \\
+                     \end{bmatrix}[2, 1, 0, 3]^{T} \\
+        = [\frac{8}{5}, -\frac{1}{5}, \frac{8}{5}, \frac{9}{5}]^{T}
+    \end{align}
+
+\end{flushleft}
+
+\end{document}
