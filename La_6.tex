@@ -49,8 +49,8 @@
         a_{1} = r_{11}q_{1} + 0 + \cdots                             \\
         a_{2} = r_{12}q_{1} + r_{22}q_{2} + 0 + \cdots               \\
         a_{3} = r_{13}q_{1} + r_{23}q_{2} + r_{33}q_{3} + 0 + \cdots \\
+        \vdots                                                       \\
     \end{align}
-    依此类推 :\\
     把这些列放回矩阵: \\
     \begin{align}
         A = \begin{bmatrix} q_1 & q_2 & \cdots & q_n \end{bmatrix}
@@ -63,9 +63,262 @@
     \end{align}
     以此 R 必然是 upper triangular, 它是  Gram-Schmidt 是从左到右按列处理逻辑的必然结构
 
-    2 R 每一列的意义: \\
+    2: R 每一列的意义: \\
+    对于第 j 列: \\
+    \begin{align}
+        R_{j} = Q^{T}a_{j}
+    \end{align}
+    记录的是原列向量$a_{j}$ 在正交基 Q 下的坐标
+    这里我们观察这个公式 $Q^{T}a_{j}$  因为 $Q^{T}$ 是 Q 的转置
+    也就是存在下列: \\
+    \begin{align}
+        \begin{bmatrix}
+            (q_{1})^{T},a_{j} \\
+            (q_{2})^{T},a_{j} \\
+            \vdots            \\
+            (q_{n})^{T},a_{j} \\
+        \end{bmatrix}
+        =  \begin{bmatrix}
+               <q_{1},a_{j}> \\
+               <q_{2},a_{j}> \\
+               \vdots        \\
+               <q_{n},a_{j}> \\
+           \end{bmatrix}
+    \end{align}
+    因为 Q 是正交的 也就是存在占比等于坐标 ($<q_{1},a_{j}>$ 表示 $a_{j}$ 中 $q_{1}$的占比) \\
+    所以我们得到的 $R_{j}$ 就是 $a_{j}$ 在 Q 中的坐标(也就是坐标向量) \\
+    准确的来说: $R_{j}$ 首先是内积测量向量 因为 Q 存在基正交性 所以它也是坐标向量
 
+    3: 对角线元素意味什么? \\
+    在 Gram-Schmidt 中: \\
+    \begin{align}
+        w_{j} = a_{j} - \sum_{i = 1}^{j - 1}<q_{i},a_{j}>q_{i}
+    \end{align}
+
+    上面等式非常有意思 我们回顾一下一个非常有意思的概念: 我们求 $a_{j}$ 在 Col(Q) 的投影向量
+    需要把所有的 $a_{j}$ 对每个基向量的投影相加? $<q_{i},a_{j}>q_{i}$ 是 $a_{j}$ 对 $q_{i}$的投影向量 \\
+    设 p 为 $a_{j}$ 在 Col(Q) 的投影向量 \\
+    \begin{align}
+        p = c_{1}q_{1} + c_{2}q_{2} + \cdots + c_{j - 1}q_{j - 1}
+    \end{align}
+    那么:\\
+    \begin{align}
+        (a_{j} - p) \perp  Col(Q)
+    \end{align}
+    也就说对于任意 $q_{k} (k < j)$,存在: $<q_{k}, (a_{j} - p)> = 0$
+    \begin{align}
+        <q_{k},(a_{j} - p)> = 0                                                                                                     \\
+        <q_{k},a_{j}> - <q_{k},p> = 0                                                                                               \\
+        <q_{k},a_{j}> = <q_{k}, p>                                                                                                  \\
+        <q_{k},a_{j}> = <q_{k}, c_{1}q_{1} + c_{2}q_{2} + \cdots + c_{j - 1}q_{j - 1} >                                             \\
+        <q_{k},a_{j}> = <q_{k}, c_{1}q_{1}> + <q_{k}, c_{2}q_{2}> + \cdots + <q_{k}, c_{j - 1}q_{j - 1}>                            \\
+        <q_{k},a_{j}> = c_{1}<q_{k},q_{1}> + c_{2}<q_{k},q_{2}> + \cdots + c_{k}<q_{k},q_{k}> +  \cdots + c_{j - 1}<q_{k},q_{j - 1} \\
+        <q_{k},a_{j}> =  c_{k}<q_{k},q_{k}>                                                                                         \\
+        <q_{k},a_{j}> = c_{k}1                                                                                                      \\
+        c_{k} = <q_{k},a_{j}>
+    \end{align}
+    因为 Q 的基向量相互垂直 也就是 $<q_{k},q_{i}> = 0, i \neq k $, $<q_{k},q_{k}>  = 1 $ \\
+    把$c_{k} = <q_{k},a_{j}>$等式带入 p 式
+    \begin{align}
+        p = <q_{1},a_{j}>q_{1} +  <q_{2},a_{j}>q_{2} + \cdots  +  <q_{j - 1},a_{j}>q_{j - 1}
+    \end{align}
+    上面等式就解释了我们的问题 $a_{j}$ 在 Col(Q) 的投影向量 就是 $a_{j}$ 对每一个基向量的投影向量之和 $\to \sum_{i = 1}^{j - 1}<q_{i},a_{j}>q_{i}$, 但它是存在前提: Q 的基向量必须要互相正交
+
+    基于$w_{j}$ \\
+    \begin{align}
+        q_{j} = \frac{w_{j}}{||w_{j}||}
+    \end{align}
+    因此: \\
+    \begin{align}
+        r_{jj} = q_{j}^{T}a_{j}
+        = <q_{j}, a_{j}>
+    \end{align}
+    从 $r_{jj} = <q_{j}, a_{j}>$ 我们能得到 R 对角线基本信息 它是 $a_{j}$ 在新正交轴 $q_{j}$ 方向的投影标量\\
+    因为: \\
+    \begin{align}
+        a_{j} = \sum_{i = 1}^{j - 1}r_{ij}q_{i} + w_{j}
+    \end{align}
+    并且: \\
+    \begin{align}
+        w_{j} =  ||w_{j}||q_{j}
+    \end{align}
+    向量 = 长度 * 方向  \\
+    所以存在关键等式 : \\
+    \begin{align}
+        r_{jj} = ||w_{j}||
+    \end{align}
+    代数证明: \\
+    \begin{align}
+        r_{jj} = <q_{j}, a_{j}>        \\
+        = <q_{j}, p + w_{j}>           \\
+        = <q_{j}, p> + <q_{j},w_{j}>   \\
+        = 0  + <q_{j}, ||w_{j}||q_{j}> \\
+        = ||w_{j}||<q_{j}, q_{j}>      \\
+        = ||w_{j}|| 1                  \\
+        = ||w_{j}||                    \\
+    \end{align}
+    等式基于: $q_{j} \perp p, <q_{j}, q_{j}> = 1, w_{j} =  ||w_{j}||q_{j}$ \\
+    证毕
+
+    我们再来看一个有意思的点: $ a_{j} = \sum_{i = 1}^{j - 1}r_{ij}q_{i} + w_{j}$ \\
+    它可以做代数变形: \\
+    \begin{align}
+        a_{j} = \sum_{i = 1}^{j - 1}r_{ij}q_{i} + w_{j} \\
+        w_{j} = a_{j} - \sum_{i = 1}^{j - 1}r_{ij}q_{i}
+    \end{align}
+    我们已知: $\sum_{i = 1}^{j - 1}r_{ij}q_{i}$ 是 $a_{j}$ 对 $span(q_{i}, \cdots , q_{j -1})$ 的投影向量 \\
+    那么我们思考 如果 $w_{j} = 0$ 呢 ? 那么就是证明 $a_{j} \in span(q_{i}, \cdots , q_{j -1})$ 是没有新的维度方向,
+    $a_{j}$ 和 之前 $a_{1} \cdots a_{j-1}$ 存在线性相关  \\
+    已知: $r_{jj} = ||w_{j}||$ :\\
+    \begin{align}
+        r_{jj} = ||a_{j} - \sum_{i = 1}^{j - 1}r_{ij}q_{i}||
+    \end{align}
+    由上面代数式可得 $r_{jj}$ 包含来维度信息 如果 $r_{jj} > 0$ 则证明有新的维度和新的方向(而且是完全垂直的) \\
+    所以总结下: \\
+    \begin{tabular}{|c|c|c|c|}
+        \hline
+        条件           & 代数公式                                                    & 线代本质                 & 维度变化            \\
+        \hline
+        $r_{jj} = 0$ & $a_{j} = \sum_{i = 1}^{j - 1}r_{ij}q_{i}$               & $a_{j}$ 与 之前的列存在线性相关 & Rank = old Rank \\
+        \hline
+        $r_{jj} > 0$ & $a_{j} = \sum_{i = 1}^{j - 1}r_{ij}q_{i} + r_{jj}q_{j}$ & $a_{j}$ 与 之前的所有列线性无关 & Rank = Rank + 1 \\
+        \hline
+    \end{tabular}
+
+    4:实践与计算: \\
+    设: \\
+    \begin{align}
+        a_{1} = [1, 0, 1]^{T}, a_{2} = [1, 1, 0]^{T}, a_{3} = a_{1}+ a_{2} = [2, 1, 1]^{T}
+    \end{align}
+    构造 A:
+    \begin{align}
+        A = \begin{bmatrix}
+                1 & 1 & 2 \\
+                0 & 1 & 1 \\
+                1 & 0 & 1 \\
+            \end{bmatrix}
+    \end{align}
+    $Rank(A) = 2$, 因为 $ a_{3} - a_{2} - a_{1} = 0 $ \\
+
+    Gram-Schmidt : \\
+    step1: $q_{1}$ : \\
+    \begin{align}
+        w_{1} = a_{1}                   \\
+        q_{1} = \frac{w_{1}}{||w_{1}||} \\
+        =\frac{1}{\sqrt{2}}[1, 0, 1]^{T}
+    \end{align}
+
+    step2: $q_{2}$ \\
+    \begin{align}
+        w_{2} = a_{2} - proj_{q_{1}}(a_{2})                                 \\
+        = a_{2} - <q_{1},a_{2}>q_{1}                                        \\
+        = [1, 1, 0]^{T} - \frac{1}{\sqrt{2}}q_{1}                           \\
+        = [1, 1, 0]^{T} - \frac{1}{\sqrt{2}}\frac{1}{\sqrt{2}}[1, 0, 1]^{T} \\
+        = [\frac{1}{\sqrt{2}},1, -\frac{1}{\sqrt{2}}]                       \\
+        q_{2} =  \frac{w_{2}}{||w_{2}||}                                    \\
+        = \frac{1}{\sqrt{6}}[1, 2, -1]                                      \\
+    \end{align}
+
+    step3: $q_{3}$ \\
+    $ a_{3} - a_{2} - a_{1} = 0 $ \\
+    \begin{align}
+        w_{3} = a_{3} - <q_{1},a_{3}>q_{1} - <q_{2},a_{3}>q_{2}                                             \\
+        = (a_{1} + a_{2})  - <q_{1}, (a_{1}+ a_{2})>q_{1} - <q_{2},(a_{1} + a_{2})>q_{2}                    \\
+        = (a_{1} + a_{2}) - ((<q_{1},a_{1}> + <q_{1},a_{2}>)q_{1}) - ((<q_{2},a_{1}> + <q_{2},a_{2}>)q_{2}) \\
+    \end{align}
+    $\because$ \\
+    \begin{align}
+        a_{1} = <q_{1},a_{1}>q_{1}                                                           \\
+        a_{2} = <q_{1},a_{2}>q_{1} + <q_{2},a_{2}>q_{2}                                      \\
+        a_{1} + a_{2} =  <q_{1},a_{1}>q_{1} +  <q_{1},a_{2}>q_{1} + <q_{2},a_{2}>q_{2}       \\                                                                                                                                           \\
+        = <q_{1},a_{1}>q_{1} +  <q_{1},a_{2}>q_{1} + <q_{2},a_{2}>q_{2}                      \\
+        - <q_{1},a_{1}>q_{1} - <q_{1},a_{2}>q_{1}  - <q_{2},a_{1}>q_{2} - <q_{2},a_{2}>q_{2} \\
+        = -<q_{2},a_{1}>q_{2}
+    \end{align}
+    $\because: q_{2} \perp a_{1} =  0$ \\
+    \begin{align}
+        -<q_{2},a_{1}>q_{2} = 0         \\
+        q_{3} = \frac{w_{3}}{||w_{3}||} \\
+    \end{align}
+    因为 $\frac{0}{0}$ 是数学上的未定义
+
+    通过上面的代数运算 我们能得到一个证明: 线性相关是不会带来新的维度方向的 \\
+
+    step4: 计算 R \\
+    $Q = [q_{1}, q_{2} ] =  \begin{bmatrix}
+            \frac{1}{\sqrt{2}} & \frac{1}{\sqrt{6}}  \\
+            0                  & \frac{2}{\sqrt{6}}  \\
+            \frac{1}{\sqrt{2}} & -\frac{1}{\sqrt{6}} \\
+        \end{bmatrix}$ \\
+    $Col(A) = span(q_{1}, q_{2})  = Col(Q)$ \\
+    $R = Q^{T}A$ \\
+    $= Q^{T} A = \begin{bmatrix}
+            \frac{1}{\sqrt{2}} & 0                  & \frac{1}{\sqrt{2}}  \\
+            \frac{1}{\sqrt{6}} & \frac{2}{\sqrt{6}} & -\frac{1}{\sqrt{6}}
+        \end{bmatrix}
+        \begin{bmatrix}
+            1 & 1 & 2 \\
+            0 & 1 & 1 \\
+            1 & 0 & 1
+        \end{bmatrix}
+        = \begin{bmatrix}
+            \sqrt{2} & \frac{\sqrt{2}}{2} & \frac{3\sqrt{2}}{2} \\
+            0        & \frac{\sqrt{6}}{2} & \frac{\sqrt{6}}{2}
+        \end{bmatrix} $
+    我们可以进一步的对 R 处理: \\
+    \begin{align}
+        \begin{bmatrix}
+            \sqrt{2} & \frac{\sqrt{2}}{2} & \frac{3\sqrt{2}}{2} \\
+            0        & \frac{\sqrt{6}}{2} & \frac{\sqrt{6}}{2}
+        \end{bmatrix}
+        =  \begin{bmatrix}
+               \sqrt{2} & \frac{\sqrt{2}}{2} & \frac{3\sqrt{2}}{2} \\
+               0        & \frac{\sqrt{6}}{2} & \frac{\sqrt{6}}{2}  \\
+               0        & 0                  & 0                   \\
+           \end{bmatrix}
+    \end{align}
+    发现 $r_{33}$ = 0 ($q_{3}$ 是线性相关的) 并满足上角型 \\
+    而且我们发现 $R_{:3} = R_{:2} + R{:1}$ 第三列等于第二列加上第一列 \\
+    因为 $Q^{T}a_{3} = Q^{T}a_{1} + Q^{T}a_{2}$
+
+    5: 线性相关 对 least-squares 的影响 \\
+    已知: $a_{3} = a_{1} + a_{2}, a_{1} + a_{2} - a_{3} = 0$ \\
+    那么 $z = [1, 1, -1] \in  Null(A)$ \\
+    $\hat{c}$ 是莫个 $least-squares$ 的最优解: \\
+    对$\hat{c}$ 加上任意关于 t 倍数偏移量: \\
+    \begin{align}
+        A(\hat{c} + tz) = A\hat{c} + tAz =  A\hat{c} + 0 = A\hat{c}
+    \end{align}
+    也就是说到达 p 点的路径有无限个, 但 p 是唯一的 也就是: $\hat{c} + Null(A)$ 的集 \\
+
+    6: 线性相关 $A^{T}A$ 的影响: \\
+    已知: $Az = 0, z \neq 0 $ \\
+    \begin{align}
+        Az = 0           \\
+        A^{T}Az = A^{T}0 \\
+        A^{T}Az = 0      \\
+    \end{align}
+    所以我们能得到关系: \\
+    \begin{align}
+        Null(A) \subseteq Null(A^{T}A)
+    \end{align}
+
+    \begin{align}
+        A^{T}Az = 0      \\
+        z^{T}A^{T}Az = 0 \\
+        (Az)^{T} Az = 0  \\
+        ||Az||^{2} = 0   \\
+        Az = 0           \\
+    \end{align}
+    所以我们能得到关系: \\
+    \begin{align}
+        Null(A^{T}A) \subseteq Null(A)
+    \end{align}
+
+    so : $Null(A) = Null(A^{T}A)$
+    因为 A 存在线性相关那么 R 也存在线性相关(上已证) 那么 $R, R^{T}R$ 也是不可逆, 那么对于 $\hat{c}$ 的解是无法确定了(使用反向替换法)
 
 \end{flushleft}
+
 
 \end{document}
