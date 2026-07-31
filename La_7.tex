@@ -1,0 +1,161 @@
+\documentclass[12pt]{article}
+\usepackage[a4paper,margin=2.2cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{hyperref}
+\usepackage{cleveref}
+
+% 中文（xelatex）
+\usepackage{fontspec}
+\usepackage{xeCJK}
+
+\usepackage{fontspec}
+\usepackage{xeCJK}
+\setCJKmainfont{Noto Serif CJK SC}
+
+\title{Numerical QR}
+\date{}
+\begin{document}
+\maketitle
+\begin{flushleft}
+    1: 几乎线性相关的矩阵 \\
+    取: \\
+    \begin{align}
+        A_{\varepsilon} = \begin{bmatrix}
+                              1           & 1           & 1           \\
+                              \varepsilon & 0           & 0           \\
+                              0           & \varepsilon & 0           \\
+                              0           & 0           & \varepsilon
+                          \end{bmatrix} = [a_{1}, a_{2}, a_{3}]
+    \end{align}
+    其中: \\
+    \begin{align}
+        a_{1} = [1, \varepsilon, 0, 0]^{T} \\
+        a_{2} = [1, 0, \varepsilon, 0]^{T} \\
+        a_{3} = [1, 0, 0, \varepsilon]^{T}
+    \end{align}
+    只要: \\
+    \begin{align}
+        \varepsilon \neq 0
+    \end{align} \\
+    三列依然线性无关 : \\
+    \begin{align}
+        rank(A_{\varepsilon}) = 3
+    \end{align}
+    当 $\varepsilon$ 很小, 三列都非常接近: \\
+    \begin{align}
+        e_{1} = [1, 0 ,0 ,0]^{T}
+    \end{align}
+    它们几乎平行 \\
+
+    2: 几何的病态程度: \\
+
+    1.1 长度: \\
+    \begin{align}
+        ||a_{i}||^{2} = 1 + \varepsilon^{2}
+    \end{align}
+
+    1.2 列之间的位置关系(叉积): \\
+    \begin{align}
+        a_{i}^{T}a_{j} = 1  (i \neq j)
+    \end{align}
+    不正交 是锐角
+
+    1.3 角度 : \\
+    \begin{align}
+        \cos\theta  = \frac{<a_{i},a_{j}>}{||a_{i}||||a_{j}||}                   \\
+        = \frac{1}{\sqrt{1^{2} + \varepsilon^{2}}\sqrt{1^{2} + \varepsilon^{2}}} \\
+        = \frac{1}{1 +  \varepsilon^{2}}                                         \\
+    \end{align} \\
+    当 $\varepsilon \to 0$ 我们会得到 $\cos\theta \to 1,  \theta \to 0$
+
+    所以我们从几何上就可以发现 当$\varepsilon \to 0$, $a_{i}, a_{2}, a_{3}$ 越接近平行(角度为0 ) \\
+
+
+    3: Gram matrix 暴露出的结构
+    在 传统的正规方程法(Normal Equation), 求解最小二乘问题 (Least Squares Problem) 时 \\
+    关键代数式: \\
+    \begin{align}
+        A^{T}A\hat{c} = A^{T}u \\
+        (A^{T}A)\hat{c} = A^{T}u
+    \end{align}
+    而 $(A^{T}A)$ 就是 Gram matrix
+
+    Gram matrix 可以表现出几个关键的性质: \\
+    1: 列与列之间的正交程度 (其他元素与对角线元素越解决 越平行) \\
+    2: 因为存在列元素平方的运算, 在计算$\varepsilon$ 这种存在误差的输入时 会指数级拉大误差 \\
+
+    这里我们仔细思考并研究下2性质 : \\
+    \begin{align}
+        A_{\varepsilon}^{T}A =
+        \begin{bmatrix}
+            1 & \varepsilon & 0           & 0           \\
+            1 & 0           & \varepsilon & 0           \\
+            1 & 0           & 0           & \varepsilon \\
+        \end{bmatrix}\begin{bmatrix}
+                         1           & 1           & 1           \\
+                         \varepsilon & 0           & 0           \\
+                         0           & \varepsilon & 0           \\
+                         0           & 0           & \varepsilon
+                     \end{bmatrix}
+        = \begin{bmatrix}
+              1 + \varepsilon^{2} & 1                   & 1                   \\
+              1                   & 1 + \varepsilon^{2} & 1                   \\
+              1                   & 1                   & 1 + \varepsilon^{2}
+          \end{bmatrix}
+    \end{align} \\
+    这里我们通过 Gram matrix 会发现 A 列之间的关系是几乎平行的 \\
+    我们继续分解: \\
+    \begin{align}
+        \begin{bmatrix}
+            1 + \varepsilon^{2} & 1                   & 1                   \\
+            1                   & 1 + \varepsilon^{2} & 1                   \\
+            1                   & 1                   & 1 + \varepsilon^{2}
+        \end{bmatrix} = \begin{bmatrix}
+                            1 & 1 & 1 \\
+                            1 & 1 & 1 \\
+                            1 & 1 & 1
+                        \end{bmatrix} + \begin{bmatrix}
+                                            1 & 0 & 0 \\
+                                            0 & 1 & 0 \\
+                                            0 & 0 & 1
+                                        \end{bmatrix}\varepsilon^{2}
+    \end{align}
+    那么我们能得到 $\begin{bmatrix}
+            1 & 1 & 1 \\
+            1 & 1 & 1 \\
+            1 & 1 & 1
+        \end{bmatrix}$ 的 rank = 1, 特征值是$[3, 0, 0] + [\varepsilon^{2},\varepsilon^{2},\varepsilon^{2}]$ \\
+    = $[3 + \varepsilon^{2}, \varepsilon^{2}, \varepsilon^{2}]$ \\
+    这个特征值组是属于$A_{\varepsilon}^{T}A$ \\
+    那么 $A_{\varepsilon}$ 的奇异值呢(对$A_{\varepsilon}^{T}A$ 特征组开平方)? (这里我们还没学习到奇异值, 都可以得到现有公式):\\
+    \begin{align}
+        \sigma = [\sqrt{3 + \varepsilon^{2}}, \varepsilon, \varepsilon]
+    \end{align}
+    (奇异值有一个很重要概念: $max(\sigma)$ 代表矩阵在最长方向上把空间放大了多少倍, 对于奇异值而言, 作用的单位并不是一个单个向量,
+    而是多个向量(组), 它是可以表示一直几何形状的, 最长方向上把空间放大了多少倍 指的是变化成新的几何形状 方向最长的那个向量. \\
+    $min(\sigma)$  代表矩阵在最短方向上把空间缩小了多少倍 \\
+    空间就是这个几何形状提供的概念  2d 是面积 3d是体积 ....) \\
+    那么我们可以算出: $Condition Number k_{2}$ (误差放大器)\\
+    \begin{align}
+        K_{2}(A_{\varepsilon}) = \frac{max(\sigma)}{min(\sigma)} = \frac{\sqrt{3 + \varepsilon^{2}}}{\varepsilon}
+    \end{align}
+    那么 $A_{\varepsilon}^{T}A$ 的奇异值组呢 ?
+    这里我们可以先采用现有定理: 对于任意实对称矩阵（并且特征值全部非负），它的奇异值等于它的特征值 \\
+    \begin{align}
+        K_{2}(A_{\varepsilon}^{T}A) = \frac{max(\sigma)}{min(\sigma)} = \frac{3 + \varepsilon^{2}}{\varepsilon^{2}}
+    \end{align}
+
+    所以我么能发现一个很有意思的现象:  $ K_{2}(A_{\varepsilon}^{T}A) ≈ K_{2}(A_{\varepsilon})^{2}$ 是一种平方指数的误差放大 \\
+    这正是 normal equation 数值上危险的原因
+    这里面还是有一个有意思的问题: 为什么$Condition Number k_{2}$ 是误差放大器 是什么性质导致的(我们还没学习到奇异值).
+
+
+
+
+
+
+
+\end{flushleft}
+
+
+\end{document}
