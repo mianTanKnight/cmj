@@ -16,6 +16,166 @@
 \date{}
 \begin{document}
 \maketitle
+
+\section{QR 的温故}
+\begin{flushleft}
+
+    1.1 R 的 "创造" \\
+    存在 Q, A (Q 是基于 A 通过 Classical Gram-Schmidt 创建的正交基底矩阵) \\
+    存在关键关系: \\
+    \begin{align}
+        Col(Q) = Col(A)
+    \end{align}
+    存在两个向量 $v_{a}$(基于 A 基底),$v_{q}$(基于 Q 基底) \\
+    那么存在关键关系: \\
+    存在一个绝对向量坐标点 $P \in (Col(Q) = Col(A))$ \\
+    \begin{align}
+        P = Qv_{q} = Av_{a}
+    \end{align}
+    设 Q, A 都是三维矩阵 \\
+    \begin{align}
+        A = [a_{1}, a_{2}, a_{3}] \\
+        Q = [q_{1}, q_{2}, q_{3}] \\
+    \end{align} \\
+    设 $P = a_{1}$ \\
+    \begin{align}
+        a_{1} = q_{1}r_{11} + q_{2}r_{21} + q_{3}r_{31}
+    \end{align}
+    那么 $a_{2}, a_{3}$ 依次 \\
+    \begin{align}
+        a_{1} = q_{1}r_{11} + q_{2}r_{21} + q_{3}r_{31}  \\
+        a_{2} = q_{1}r_{12}  + q_{2}r_{22} + q_{3}r_{32} \\
+        a_{3} = q_{1}r_{13}  + q_{2}r_{23} + q_{3}r_{33} \\
+    \end{align} \\
+    那么 A \\
+    \begin{align}
+        A = [q_{1}r_{11} + q_{2}r_{21} + q_{3}r_{31}, q_{1}r_{12}  + q_{2}r_{22} + q_{3}r_{32},q_{1}r_{13}  + q_{2}r_{23} + q_{3}r_{33}] \\
+        = [q_{1},q_{2},q_{3}] \begin{bmatrix}
+                                  r_{11} & r_{12} & r_{13} \\
+                                  r_{21} & r_{22} & r_{23} \\
+                                  r_{31} & r_{32} & r_{33} \\
+                              \end{bmatrix}                                                                                   \\
+    \end{align} \\
+    \begin{align}
+        R = \begin{bmatrix}
+                r_{11} & r_{12} & r_{13} \\
+                r_{21} & r_{22} & r_{23} \\
+                r_{31} & r_{32} & r_{33} \\
+            \end{bmatrix}
+    \end{align}
+    $A = QR (R \in \mathbb{R}^{3 \times 3})$ \\
+    $Av_{a} = QRv_{a}$ \\
+    $Qv_{q} = QRv_{a} = Q(Rv_{a})$ \\
+    结论 : R 就是这样一个把基底 由 A 换成 Q 的过渡矩阵
+
+    1.2 R 的 形状 \\
+    已知 $A = QR$ : \\
+    那么 $Q^{T}A = Q^{T}QR \to Q^{T}A = IR  \to  Q^{T}A = R$
+    $Q^{T}A = \begin{bmatrix}
+            <q_{1},a_{1}> & <q_{1},a_{2}> & <q_{1},a_{3}> \\
+            <q_{2},a_{1}> & <q_{2},a_{2}> & <q_{2},a_{3}> \\
+            <q_{3},a_{1}> & <q_{3},a_{2}> & <q_{3},a_{3}> \\
+        \end{bmatrix}$ \\
+    我们现在分析 $Q^{T}A$ 这个关键的等式, 基于 Q 矩阵 到底是怎么通过 A 构成的 \\
+    \begin{align}
+        w_{1} = a_{1}                                                                \\
+        q_{1} = \frac{w_{1}}{||w_{1}||}                                              \\
+        w_{2} = a_{2} - proj_{q_{1}}(a_{2})                                          \\
+        q_{2} = \frac{w_{2}}{||w_{2}||}                                              \\
+        q_{2} \perp a_{1}                                                            \\
+        <q_{2}, a_{1}> = 0                                                           \\
+        q_{j} = \frac{w_{j}}{r_{jj}}                                                 \\
+        w_{3} = a_{3} - proj_{q_{1}}(a_{3}) - proj_{q_{2}}(a_{3})                    \\
+        <w_{3}, q_{1}> = <a_{3} - proj_{q_{1}}(a_{3}) - proj_{q_{2}}(a_{3}), q_{1}>  \\
+        = <a_{3} - <q_{1},a_{3}>q_{1} - <q_{2},a_{3}>q_{2}, q_{1}>                   \\
+        = <a_{3}, q_{1}> - <q_{1}, a_{3}><q_{1}, q_{1}> - <q_{2},a_{3}><q_{1},q_{2}> \\
+        = <a_{3}, q_{1}> - <q_{1}, a_{3}>                                            \\
+        = 0                                                                          \\
+        w_{3} \perp q_{1}                                                            \\
+        q_{3} = \frac{w_{3}}{||w_{3}||}                                              \\
+        q_{3} \perp a_{1}                                                            \\
+        <q_{3}, a_{1}> = 0                                                           \\
+        <q_{3}, q_{2}> = 0                                                           \\
+    \end{align}
+
+    $Q^{T}A = \begin{bmatrix}
+            <q_{1},a_{1}> & <q_{1},a_{2}> & <q_{1},a_{3}> \\
+            0             & <q_{2},a_{2}> & <q_{2},a_{3}> \\
+            0             & 0             & <q_{3},a_{3}> \\
+        \end{bmatrix}$ \\
+    所以我们使用代数证明 R 一定是: 上三角型矩阵 \\
+
+    1.3 $R_{j}$(列)的含义 \\
+    已知 $Q = [q_{1}, q_{2}, q_{3}]$ 为正交矩阵(满足 $Q^{T}Q = I$), $A = [a_{1}, a_{2}, a_{3}] = QR$ \\
+    在 $Col(Q) 子空间中, q_{1}, q_{2}, q_{3}$ 是基组 那么存在 $Col(A)$ 基向量 $a_{j}$ 的唯一坐标向量 $c_{j} = [c_{1j}, c_{2j}, c_{3j}]^{T}$ \\
+    \begin{align}
+        a_{j} = c_{1j}q_{1} + c_{2j}q_{2} + c_{3j}q_{3} \; \text{(F1)}
+    \end{align}
+    这里有一个重要的点: 我们的目的是为了求解什么?  为了求解 $a_{j}$ 中 $q_{1},q_{2},q_{3}$ 中的各自占比 也就是 $[c_{1j}, c_{2j}, c_{3j}]^{T}$ \\
+    那么我们需要使用什么工具才能完成这个比例的提取呢? 内积是标准工具! \\
+    也就是如果我想求 $c_{1j}$($q_{1}$在 $a_{j}$ 中的占比), 那么存在关键代数式 : $q_{1}^{T}a_{j}$ 会得到一个常量\\
+    那么存在关键代数: \\
+    \begin{align}
+        q_{i}^{T}a_{j} = q_{i}^{T}(c_{1j}q_{1} + c_{2j}q_{2} + c_{3j}q_{3}) \; \text{(F2)}
+    \end{align}
+    我们对 F2 进行进一步的代数变形:\\
+    \begin{align}
+        q_{i}^{T}a_{j} = q_{i}^{T}(c_{1j}q_{1} + c_{2j}q_{2} + c_{3j}q_{3})        \\
+        = q_{i}^{T}c_{1j}q_{1} + q_{i}^{T}c_{2j}q_{2} + q_{i}^{T}c_{3j}q_{3}       \\
+        = c_{1j}(q_{i}^{T}q_{1}) + c_{2j}(q_{i}^{T}q_{2}) + c_{3j}(q_{i}^{T}q_{3}) \\
+    \end{align}
+    我们把 $i = 1, 2, 3$ 代入, 会得到: \\
+    \begin{align}
+        q_{1}^{T}a_{j} = c_{1j} + 0 + 0 \\
+        q_{2}^{T}a_{j} = 0 + c_{2j} + 0 \\
+        q_{3}^{T}a_{j} = 0 + 0 + c_{3j} \\
+    \end{align}
+    \begin{align}
+        a_{j} = [
+        <q_{1},a_{j}>, <q_{2},a_{j}>, <q_{3},a_{j}> ]^{T}
+        = Q^{T}a_{j}
+    \end{align}
+    根据 $A = QR \to a_{j} = QR_{j}$ \\
+    \begin{align}
+        Q^{T}a_{j} = Q^{T}QR_{j} = IR_{j} = R_{j} \\
+        R_{j} = [ <q_{1},a_{j}>, <q_{2},a_{j}>, <q_{3},a_{j}> ]^{T} = c_{j}
+    \end{align}
+    结论: $R_{j}$ 就是 $a_{j}$ 在 $Col(Q)$ 的 坐标 \\
+
+    1.4 $R_{jj}$ 对角线的含义 \\
+    R 存在一条对角线 $R_{jj}$ \\
+    对于 $R_{ij} (i < j)$
+    \begin{align}
+        R_{ij} = q_{i}^{T}a_{j}
+    \end{align}
+    那么 $R_{jj}$
+    \begin{align}
+        w_{jj} = a_{j} - \sum_{i = 1}^{j -1}R_{ij}q_{i} \\
+        R_{jj} = ||w_{jj}||
+    \end{align}
+    这里我们思考 $w_{jj}$ 的身份 :\\
+    它一定存在: $w_{jj} \perp span(q_{1},..., q_{j - 1})$
+    代数证明, 设 $1 <= k < j$ \\
+    \begin{align}
+        q_{k}^{T}w_{jj} = q_{k}^{T}(a_{j} - \sum_{i = 1}^{j -1}R_{ij}q_{i}) \\
+        = q_{k}^{T}a_{j} - \sum_{i = 1}^{j -1}R_{ij}q_{i}q_{k}^{T}          \\
+        = q_{k}^{T}a_{j} - \sum_{i = 1}^{j -1}R_{ij}(q_{i}q_{k}^{T})        \\
+        \text(if: \; i = k \to q_{i}q_{k}^{T} = 1                           \\
+        else:  \;  q_{i}q_{k}^{T} = 0 )                                     \\
+        = q_{k}^{T}a_{j} - R_{kj}                                           \\
+        = 0
+    \end{align}
+    也就说 $w_{jj}$ 是 $ a_{j}- span(q_{1},..., q_{j - 1})$ 的残差向量 \\
+    $R_{jj}$ 是它的模长 \\
+    因为 $R_{jj} = ||w_{jj}||$ 所以 $R_{jj} >= 0$ \\
+    if: $R_{jj} = 0$ \\
+    我们就可以确定 $a_{j} \in span(a_{1}, .... , a_{j -1})$, 并没有延展出新的维度方向 \\
+    else 反之 \\
+
+\end{flushleft}
+
+
+\section{Numerical QR}
 \begin{flushleft}
     1: 几乎线性相关的矩阵 \\
     取: \\
@@ -149,11 +309,19 @@
     这正是 normal equation 数值上危险的原因
     这里面还是有一个有意思的问题: 为什么$Condition Number k_{2}$ 是误差放大器 是什么性质导致的(我们还没学习到奇异值).
 
-
-
-
-
-
+    4: Classical Gram-Schmidt : \\
+    数学公式: \\
+    \begin{align}
+        r_{ij} = q_{i}^{T}a_{j}, i  <  j
+    \end{align}
+    然后一次性: \\
+    \begin{align}
+        w_{j} = a_{j}-  \sum_{i = 1}^{j - 1} r_{ij}q_{i}
+    \end{align}
+    最后: \\
+    \begin{align}
+        r_{jj} =  ||w_{j}||,\;  q_{j} = \frac{w_{j}}{r_{jj}}
+    \end{align}
 
 \end{flushleft}
 
