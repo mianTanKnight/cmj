@@ -158,8 +158,8 @@
     代数证明, 设 $1 <= k < j$ \\
     \begin{align}
         q_{k}^{T}w_{jj} = q_{k}^{T}(a_{j} - \sum_{i = 1}^{j -1}R_{ij}q_{i}) \\
-        = q_{k}^{T}a_{j} - \sum_{i = 1}^{j -1}R_{ij}q_{i}q_{k}^{T}          \\
-        = q_{k}^{T}a_{j} - \sum_{i = 1}^{j -1}R_{ij}(q_{i}q_{k}^{T})        \\
+        = q_{k}^{T}a_{j} - \sum_{i = 1}^{j -1}R_{ij}q_{k}^{T}q_{i}          \\
+        = q_{k}^{T}a_{j} - \sum_{i = 1}^{j -1}R_{ij}(q_{k}^{T}q_{i})        \\
         \text(if: \; i = k \to q_{i}q_{k}^{T} = 1                           \\
         else:  \;  q_{i}q_{k}^{T} = 0 )                                     \\
         = q_{k}^{T}a_{j} - R_{kj}                                           \\
@@ -322,6 +322,89 @@
     \begin{align}
         r_{jj} =  ||w_{j}||,\;  q_{j} = \frac{w_{j}}{r_{jj}}
     \end{align}
+
+    这里关键点是所有的投影系数都针对原始的: $a_{j}$ : \\
+    \begin{align}
+        w_{j} = a_{j} - \sum_{i = 1}^{j -1} q_{i}^{T}a_{j}q_{i}
+    \end{align}
+
+    5: Modified Gram-Schmidt \\
+    \begin{align}
+        r_{1j} = q_{1}^{T}a_{j}, \; v^{(1)} = a_{j} - r_{1j}q_{1}
+    \end{align}
+    这里我们要思考 $v^{(1)}$ 是什么 ? \\
+    它是 $a_{j}$ 剥离了 $a_{j}$ 在 $q_{1}$ 方向的投影向量 \\
+    \begin{align}
+        r_{2j} = q_{2}^{T}v^{(1)}, \; v^{(2)} = v^{(1)} - r_{2j}q_{2}
+    \end{align}
+    $r_{2j}$ 是 $q_{2}$ 在 $v^{(1)}$ 中的占比, \; $v^{(2)}$ 是剥离了在 $q_{1}, q_{2}$ 方向的投影向量 \\
+    所以 Modified Gram-Schmidt 对 Classical Gram-Schmidt 的最大进步是什么呢 ? \\
+    Classical Gram-Schmidt 中的 每一个 $r_{ij}$ 都是基于 $a_{j}$ 的运算
+    但  Modified Gram-Schmidt 只有第一个使用 $a_{j}$, 其余的都是使用$a_{j}$ "余数" 参与运算
+    如果 $a_{j}$ 存在一个误差 那么$a_{j}$的迭代余数 会把这个误差逐步缩小??
+
+    6: 证明 Classical Gram-Schmidt 与 Modified Gram-Schmidt 的区别 \\
+    在代数运算中: \\
+    \begin{align}
+        r_{2j}^{CGS} = q_{2}^{T}a_{j}             \\
+        r_{2j}^{MGS} = q_{2}^{T}(a_{j}- r_{1j}q1) \\
+        = q_{2}^{T}a_{j} - q_{2}^{T}r_{1j}q_{1}   \\
+        = q_{2}^{T}a_{j} -  q_{2}^{T}q_{1}r_{1j}
+        = q_{2}^{T}a_{j} - 0r_{1j}
+        = q_{2}^{T}a_{j}
+    \end{align}
+
+    在计算机环如果 $q_{1}, q_{2}$ 那么 $q_{1}^{T}q_{2}$(IEEE 754) 会得到一个极小的非0的误差, 即: \\
+    \begin{align}
+        q_{1}^{T}q_{2} = \varepsilon
+    \end{align}
+
+    分析 CGS: \\
+    \begin{align}
+        w = a_{3} - (q_{1}^{T}a_{3})q_{1} - (q_{2}^{T}a_{3})q_{2}
+    \end{align}
+    这里我们得到剥离掉 $q_{1}, q_{2}$ 的残差向量 w \\
+    $w \perp q_{1}, w \perp q_{2}$ \\
+    我们算一下 $q_{1}$ 在 w 中的占比, 理论上应该是 0
+    \begin{align}
+        q1^{T}w = q1^{T}(a_{3} - (q_{1}^{T}a_{3})q_{1} - (q_{2}^{T}a_{3})q_{2})           \\
+        q1^{T}w = q1^{T}a_{3} - (q_{1}^{T}a_{3})q1^{T}q_{1} - (q_{2}^{T}a_{3})q1^{T}q_{2} \\
+        = q1^{T}a_{3} -  (q_{1}^{T}a_{3})1 - (q_{2}^{T}a_{3})\varepsilon                  \\
+        = -\varepsilon(q_{2}^{T}a_{3})                                                    \\
+    \end{align}
+    这里我们能得到一个关键: w 中残留 关于 $q_{1}$ 的 $-\varepsilon(q_{2}^{T}a_{3})$ 占比的误差
+    类推 $q_{2}$ 我们可以得到: $-\varepsilon(q_{1}^{T}a_{3})$ 占比的误差
+    这个误差是随着 A 列数量增多, 而以指数级增长 \\
+
+    分析 MGS \\
+    \begin{align}
+        v^{(1)} =  a_{3} - (q1^{T}a_{3})q_{1}        \\
+        w^{MGS} =  v^{(1)} - (q_{2}^{T}v^{(1)})q_{2} \\
+    \end{align}
+    \begin{align}
+        q_{1}^{T}w^{MGS} = q_{1}^{T}(v^{(1)} -  (q_{2}^{T}v^{(1)})q_{2}) \\
+        = q_{1}^{T}v^{(1)} -  (q_{2}^{T}v^{(1)})q_{1}^{T}q_{2}           \\
+        = q_{1}^{T}v^{(1)}   -\varepsilon(q_{2}^{T}v^{(1)})              \\
+        \because q_{1}^{T}v^{(1)}  \approx 0                             \\
+        =  -\varepsilon(q_{2}^{T}v^{(1)})
+    \end{align}
+    类推 $q_{2}$ 我们可以得到: $-\varepsilon(q_{1}^{T}v^{(1)})$ 占比的误差
+
+    整理: \\
+    在浮点运算中, 已知向量 $q_{i}^{T}q_{j} = \varepsilon_{ij}$ \\
+    对于 CGS: \\
+    \begin{align}
+        q_{i}^{T}w_{j} =  - \sum_{k = 1}^{i -1} \varepsilon_{ik}(q_{k}^{T}a_{j})
+    \end{align}
+    误差被 $||a_{j}||$ 放大 \\
+    对于 MGS: \\
+    \begin{align}
+        q_{i}^{T}w_{j} =  - \sum_{k = 1}^{i -1} \varepsilon_{ik}(q_{k}^{T}v^{(i - 1)})
+    \end{align}
+    由于$v^{(i - 1)}$ 是已知扣除 i -1 个方向分量的残差, 其范数不超过 $||a_{j}||$ \\
+    故 MGS 的误差放大因子远小于 CGS
+
+
 
 \end{flushleft}
 
