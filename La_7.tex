@@ -214,7 +214,7 @@
         ||a_{i}||^{2} = 1 + \varepsilon^{2}
     \end{align}
 
-    1.2 列之间的位置关系(叉积): \\
+    1.2 列之间的位置关系(内积): \\
     \begin{align}
         a_{i}^{T}a_{j} = 1  (i \neq j)
     \end{align}
@@ -404,6 +404,82 @@
     由于$v^{(i - 1)}$ 是已知扣除 i -1 个方向分量的残差, 其范数不超过 $||a_{j}||$ \\
     故 MGS 的误差放大因子远小于 CGS
 
+
+    7: homework \\
+    \begin{align}
+        A_{\varepsilon} = \begin{bmatrix}
+                              1           & 1           & 1           \\
+                              \varepsilon & 0           & 0           \\
+                              0           & \varepsilon & 0           \\
+                              0           & 0           & \varepsilon
+                          \end{bmatrix} = [a_{1}, a_{2}, a_{3}] \\
+        rank(A_{\varepsilon}) = 3  (\varepsilon \neq 0)
+    \end{align}
+    推导出: \\
+    \begin{align}
+        A_{\varepsilon}^{T}A_{\varepsilon} = 11^{T} + \varepsilon^{2}I
+    \end{align}
+
+    证: \\
+    $\because A_{\varepsilon} \in \mathbb{R}^{4 \times 3},\; rank(A_{\varepsilon}) = 3$ \\
+    \begin{align}
+        A_{\varepsilon}^{T}A_{\varepsilon}                 \\
+        =  \begin{bmatrix}
+               <a_{1}, a_{1}> & <a_{1},a_{2}> & <a_{1}, a_{3}> \\
+               <a_{2}, a_{1}> & <a_{2},a_{2}> & <a_{2}, a_{3}> \\
+               <a_{3}, a_{1}> & <a_{3},a_{2}> & <a_{3}, a_{3}> \\
+           \end{bmatrix} \\
+        =  \begin{bmatrix}
+               1 + \varepsilon^{2} & 1                   & 1                   \\
+               1                   & 1 + \varepsilon^{2} & 1                   \\
+               1                   & 1                   & 1 + \varepsilon^{2} \\
+           \end{bmatrix}
+        = \begin{bmatrix}
+              1 & 1 & 1 \\
+              1 & 1 & 1 \\
+              1 & 1 & 1 \\
+          \end{bmatrix}  + \begin{bmatrix}
+                               \varepsilon^{2} & 0               & 0               \\
+                               0               & \varepsilon^{2} & 0               \\
+                               0               & 0               & \varepsilon^{2} \\
+                           \end{bmatrix}
+        = 11^{T} + \varepsilon^{2}I
+    \end{align}
+
+    解释为什么它的 eigenvalues 是：$3 + \varepsilon^{2},   \varepsilon^{2} ,  \varepsilon^{2} $ ?
+    因为 $11^{T}$ 是线性相关的 所以它 eigenvalues 组是: $[3, 0, 0]$ \\
+    $\varepsilon^{2}I$ 的 eigenvalues 组是 : $[\varepsilon^{2}, \varepsilon^{2}, \varepsilon^{2}]$
+    所以 $A_{\varepsilon}^{T}A_{\varepsilon}$ 的 eigenvalues 是: $[3, 0, 0] + [\varepsilon^{2}, \varepsilon^{2}, \varepsilon^{2}]$
+    = $3 + \varepsilon^{2},   \varepsilon^{2} ,  \varepsilon^{2} $ \\
+
+
+    1: 为什么 CGS 与 MGS 在 exact arithmetic 中相同 ?
+    在代数运算中: \\
+    \begin{align}
+        r_{2j}^{CGS} = q_{2}^{T}a_{j}             \\
+        r_{2j}^{MGS} = q_{2}^{T}(a_{j}- r_{1j}q1) \\
+        = q_{2}^{T}a_{j} - q_{2}^{T}r_{1j}q_{1}   \\
+        = q_{2}^{T}a_{j} -  q_{2}^{T}q_{1}r_{1j}
+        = q_{2}^{T}a_{j} - 0r_{1j}
+        = q_{2}^{T}a_{j}
+    \end{align}
+    中代数已经证明在 exact arithmetic 是等价的
+
+    2: 它们在 floating point 中的操作顺序有何不同？
+    CGS 采用的类似并行的模式 基于 $a_{j}$ 算出一批投影 然后全减掉 \\
+    MGS 采用的是串行的模式  $a_{j}$ 为初始值 然后循环减 并更新 $a_{j}$
+
+
+
+    3: 为什么 $A≈QR$ 不能证明 Q 仍然正交？
+    Q 的是否正交 和 $Col(A) = Col(Q)$ 是两个概念 \\
+    就算 Q 不是正交的 $Col(A) = Col(Q)$ 也依然成立 \\
+    是否正交必须要由 $ I - Q^{T}Q$ 的值判断 约接近 0 则越趋向正交 \\
+
+
+    4:当 ε 变小时，真正困难的是矩阵“数学上失去 rank”, 还是计算机越来越难区分不同方向?  \\
+    在 ε 变小时, 列关系依然是线性无关的 在数学上并不会失去 rank,  因为 0 和无限接近 0 在数学上不是等式关系 \\
+    但计算机有溢出和取舍的概念 所以在 ε 越小 计算机会在精度误差上的难以区分它们的不同 也就是方向的不同
 
 
 \end{flushleft}

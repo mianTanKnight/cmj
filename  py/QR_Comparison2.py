@@ -17,7 +17,6 @@ print(f"==================================================\n")
 ### CGS
 def cgs(A: np.ndarray):
     m, n = A.shape
-    # v_{q} (\in R^{m \times 1}) <- QR <- v_{a} (\in R^{n \times 1} )
     Q = np.zeros((m, n))
     R = np.zeros((n, n))
     # step1: a_{j}
@@ -34,7 +33,6 @@ def cgs(A: np.ndarray):
 ### MGS
 def mgs(A: np.ndarray):
     m, n = A.shape
-    # v_{q} (\in R^{m \times 1}) <- QR <- v_{a} (\in R^{n \times 1} )
     Q = np.zeros((m, n))
     R = np.zeros((n, n))
     for j in range(n):
