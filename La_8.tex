@@ -4,7 +4,6 @@
 \usepackage{hyperref}
 \usepackage{cleveref}
 
-% 中文（xelatex）
 \usepackage{fontspec}
 \usepackage{xeCJK}
 
@@ -17,6 +16,84 @@
 \begin{document}
 \maketitle
 
+\begin{flushleft}
+    1: 反射不是投影
+    向量 v : \\
+    \begin{align}
+        v  \in  \mathbb{R}^{m}
+    \end{align}
+    它决定了一个超平面 :\\
+    \begin{align}
+        v^{\perp} = {x \in \mathbb{R}^{m} : v^{T}x = 0 }
+    \end{align}
+    选定 v 是 "法向量" 所有与 v 成垂直关系的向量 x 的集($x \in \mathbb{R}^{m}$) 成为超平面 \\
+    对于任意 x :\\
+    \begin{align}
+        x \in \mathbb{R}^{m}
+    \end{align}
+    将它分解为: \\
+    \begin{align}
+        x  = x_{\perp} + x_{\parallel}
+    \end{align} \\
+    其中: \\
+    \begin{align}
+        x_{\parallel} = proj_{v}(x)                                      \\
+        = \frac{\vec{v}\vec{x}}{||\vec{v}||} \frac{\vec{v}}{||\vec{v}||} \\
+        = \frac{\vec{v}\vec{x}}{||\vec{v}||^{2}} \vec{v}                 \\
+        = \frac{v^{T}x}{v^{T}v} v                                        \\
+        = \frac{vv^{T}}{v^{T}v} x                                        \\
+    \end{align}
+    而: \\
+    \begin{align}
+        x_{\perp} = x  - x_{\parallel} (x_{\perp} \in v^{\perp})
+    \end{align}
 
+    这里我们要关注一些细节: \\
+    \begin{align}
+        x_{\parallel} \parallel \vec{v}, \perp  v^{\perp} \\
+        x_{\perp} \perp \vec{v}, \parallel v^{\perp}
+    \end{align}
+
+    我们要根据 $v^{\perp}$  超平面做反射 \\
+    那么我们需要 翻转 与 $v^{\perp}$ 成垂直关系的 $x_{\parallel}$ \\
+    保持与 $v^{\perp}$ 成平行关系的 $x_{\perp}$ \\
+
+    那么反射点: $Hx = x_{\perp} - x_{\parallel}$ \\
+    \begin{align}
+        Hx = x_{\perp} - x_{\parallel}         \\
+        x =  x_{\perp} + x_{\parallel}         \\
+        x_{\perp} = x - x_{\parallel}          \\
+        Hx = x - x_{\parallel} - x_{\parallel} \\
+        Hx = x - 2x_{\parallel}                \\
+        Hx = x - 2\frac{vv^{T}}{v^{T}v}x       \\
+        Hx = (I  - 2\frac{vv^{T}}{v^{T}v})x    \\
+        H  = I  - 2\frac{vv^{T}}{v^{T}v}       \\
+    \end{align}
+
+    所以我们会发现反射保留了 x (相对于 Hx) 的长度 和角度 但反了方向 \\
+
+
+    2: Householder matrix 核心性质 \\
+    令 $P_{v} = \frac{vv^{T}}{v^{T}v}$ \\
+    \begin{align}
+        P_{v} = \frac{vv^{T}}{v^{T}v}             \\
+        (P_{v})^{T} = (\frac{vv^{T}}{v^{T}v})^{T} \\
+        =  \frac{(vv^{T})^{T}}{v^{T}v}            \\
+        = \frac{(v^{T})^{T}v^{T}}{v^{T}v}         \\
+        = \frac{vv^{T}}{v^{T}v}                   \\
+        (P_{v})^{T} = P_{v}
+    \end{align}
+
+
+
+
+
+
+
+
+
+
+
+\end{flushleft}
 
 \end{document}
